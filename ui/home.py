@@ -31,10 +31,10 @@ def home_page(page, navbar):
         matplotlib_chart.visible = True
         page.update()
 
-    content = SafeArea(
-        content=Row(
+    content = [Row(
             [
                 navbar,
+                VerticalDivider(width=1),
                 Column(
                     [
                         Text("Hello world"),
@@ -45,28 +45,26 @@ def home_page(page, navbar):
                     bgcolor=colors.YELLOW,
 
                 )
-            ],
-            expand=True
+            ],expand=True
         )
-    ) if page.width > 550 else SafeArea(
+    ] if page.width > 550 else [SafeArea(
         content=Column(
+            [
+                Container(
+                    matplotlib_chart,
+                    bgcolor=colors.YELLOW,
 
-                [
-                    Container(
-                        matplotlib_chart,
-                        bgcolor=colors.YELLOW,
-
-                    ),
-                    Row(
-                        [
-                            Text("Hello world"),
-                            ElevatedButton("Show Chart", on_click=show_chart),
-                        ])
-                ],
+                ),
+                Row(
+                    [
+                        Text("Hello world"),
+                        ElevatedButton("Show Chart", on_click=show_chart),
+                    ]),
+            ],
         )
-    )
+    ), navbar]
     view = View(
         "/home",
-        controls=[content]
+        controls=content
     )
     return content

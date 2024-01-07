@@ -1,6 +1,6 @@
 import flet as ft
 from lib.control import AppControl
-global LOAD_PAGE
+
 
 
 def main(page: ft.Page):
