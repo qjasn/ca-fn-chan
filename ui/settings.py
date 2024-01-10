@@ -1,12 +1,12 @@
 from flet import *
 
 
-def settings_page(page, navbar):
+def settings_page(_page, navbar):
     def dark_mode_change(e):
-        _mode = page.client_storage.get("fx.darkMode")
-        page.client_storage.set("fx.darkMode", e.control.value)
-        page.theme_mode = e.control.value
-        page.update()
+        _mode = _page.client_storage.get("fx.darkMode")
+        _page.client_storage.set("fx.darkMode", e.control.value)
+        _page.theme_mode = e.control.value
+        _page.update()
 
     dark_mode_ui = RadioGroup(Column([
         Radio(value="SYSTEM", label="System"),
@@ -14,7 +14,7 @@ def settings_page(page, navbar):
         Radio(value="DARK", label="Dark")
 
     ], alignment=MainAxisAlignment.START),
-        value=page.client_storage.get("fx.darkMode"),
+        value=_page.client_storage.get("fx.darkMode"),
         on_change=dark_mode_change
     )
     content = Column(
@@ -31,4 +31,4 @@ def settings_page(page, navbar):
 
     return [Row([
         navbar, VerticalDivider(width=1), content
-    ], expand=True)] if page.width > 550 else [SafeArea(content), navbar]
+    ], expand=True)] if _page.width > 550 else [SafeArea(content), navbar]

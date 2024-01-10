@@ -2,7 +2,6 @@ import flet as ft
 from lib.control import AppControl
 
 
-
 def main(page: ft.Page):
     _AppControl = AppControl(page)
     _AppControl.init()

@@ -1,69 +1,106 @@
-import io
-
+from matplot.test import MatPlotUi
 from flet import *
-from flet.matplotlib_chart import MatplotlibChart
-import matplotlib
-import matplotlib.pyplot as plt
-import numpy as np
-
-matplotlib.use("svg")
 
 
-def home_page(page, navbar):
-    fig, ax = plt.subplots()
+class HomePage:
+    def __init__(self, page):
+        self.page = page
+        self.lists = []
+        self.dialog = AlertDialog(
+            modal=True,
+            title=Text("Enter the function"),
+            content=TextField(label="Function", value="y = x"),
+            actions=[
+                TextButton("OK", on_click=self.close_dlf)
+            ]
+        )
 
-    fruits = ["apple", "blueberry", "cherry", "orange"]
-    counts = [40, 100, 30, 55]
-    bar_labels = ["red", "blue", "_red", "orange"]
-    bar_colors = ["tab:red", "tab:blue", "tab:red", "tab:orange"]
+    def close_dlf(self, e):
+        self.dialog.open = False
+        self.page.update()
 
-    ax.bar(fruits, counts, label=bar_labels, color=bar_colors)
+    def add(self, e):
+        self.page.dialog = self.dialog
+        self.dialog.open = True
+        self.page.update()
 
-    ax.set_ylabel("fruit supply")
-    ax.set_title("Fruit supply by kind and color")
-    ax.legend(title="Fruit color")
-    s = io.StringIO()
-    fig.savefig(s, format="svg", transparent=True)
-    svg = s.getvalue()
-    matplotlib_chart = Image(src=svg, visible=True)
+
+def home_page(_page, navbar):
+    math = MatPlotUi(_page)
+    matplotlib_chart = math.draw()
+    control = HomePage(_page)
 
     def show_chart(e):
         matplotlib_chart.visible = True
-        page.update()
+        print(e)
+        _page.update()
 
+    input_ui = Column(
+        controls=[
+            Text("Press the Add button to add a new function", style=TextThemeStyle.BODY_SMALL,
+                 text_align=TextAlign.CENTER),
+            Divider(),
+            Row(
+                [
+                    IconButton(
+                        icon=icons.ADD, on_click=control.add
+                    )
+                ],
+                alignment=MainAxisAlignment.END
+            ),
+        ],
+        expand=True,
+        alignment=MainAxisAlignment.START,
+    )
     content = [Row(
-            [
-                navbar,
-                VerticalDivider(width=1),
-                Column(
-                    [
-                        Text("Hello world"),
-                        ElevatedButton("Show Chart", on_click=show_chart),
-                    ]),
-                Container(
-                    matplotlib_chart,
-                    bgcolor=colors.YELLOW,
 
-                )
-            ],expand=True
-        )
-    ] if page.width > 550 else [SafeArea(
+        [
+            navbar,
+            VerticalDivider(width=1),
+            Row(
+                [
+                    input_ui
+                ],
+                width=((_page.width - 100) / 7) * 1.8,
+                alignment=MainAxisAlignment.START,
+            ),
+            VerticalDivider(width=1),
+            Row(
+                [
+                    Container(
+                        matplotlib_chart,
+                        bgcolor=colors.YELLOW,
+                        height=_page.height,
+                        expand=True
+                    )
+                ],
+                expand = True,
+                alignment=MainAxisAlignment.END
+            )
+        ], expand=True
+    )
+    ] if _page.width > 550 else [SafeArea(
         content=Column(
             [
-                Container(
-                    matplotlib_chart,
-                    bgcolor=colors.YELLOW,
-
-                ),
-                Row(
+                Column(
                     [
-                        Text("Hello world"),
-                        ElevatedButton("Show Chart", on_click=show_chart),
+                        Container(
+                            matplotlib_chart,
+                            bgcolor=colors.YELLOW,
+                            width=_page.width,
+                            height=((_page.height - 150) / 7) * 4.5
+                        ),
+                    ]
+                ),
+                Divider(height=1),
+                Column(
+                    [
+                        input_ui
                     ]),
             ],
         )
     ), navbar]
-    view = View(
+    View(
         "/home",
         controls=content
     )
