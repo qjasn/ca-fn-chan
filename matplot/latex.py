@@ -17,12 +17,16 @@ class Latex:
         self.name = name
         self.args = args
         self.latex = None
+        _text = "".join(text.split("return")[1].split(" "))
         if all(["=" not in text, args in text]):
+            self.text = text
+        elif _text.isnumeric():
             self.text = text
         else:
             page.dialog = ft.AlertDialog(
                 title=ft.Text("Please enter a right function"),
-                modal=True
+                modal=False,
+                open=True
             )
             page.update()
 
@@ -39,7 +43,6 @@ class Latex:
         print(self.latex)
 
     def output_svg(self):
-        print(self.page.theme_mode)
         if self.page.theme_mode == "SYSTEM":
             if self.page.platform_brightness == ft.ThemeMode.DARK:
                 color = "white"

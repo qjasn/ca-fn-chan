@@ -12,7 +12,6 @@ class MatPlotUi:
     def __init__(self,page):
         self.fig = None
         self.page = page
-        print([item.name for item in mfm.fontManager.ttflist])
 
     def draw(self):
         fig, ax = plt.subplots()
