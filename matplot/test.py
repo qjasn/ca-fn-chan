@@ -3,7 +3,8 @@ import io
 import matplotlib
 from flet_core import Image
 from matplotlib import pyplot as plt
-
+import matplotlib.font_manager as mfm
+from flet import matplotlib_chart
 matplotlib.use("svg")
 
 
@@ -11,6 +12,7 @@ class MatPlotUi:
     def __init__(self,page):
         self.fig = None
         self.page = page
+        print([item.name for item in mfm.fontManager.ttflist])
 
     def draw(self):
         fig, ax = plt.subplots()

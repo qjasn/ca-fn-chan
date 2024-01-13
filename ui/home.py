@@ -1,5 +1,8 @@
+from matplot import latex
 from matplot.test import MatPlotUi
 from flet import *
+
+from ui.equation import EquationUI
 
 
 class HomePage:
@@ -37,6 +40,7 @@ def home_page(_page, navbar):
 
     input_ui = Column(
         controls=[
+            EquationUI(name="f", args="x", text="return x ** 2 + 3 * x + 4 ", page=_page).create_ui(),
             Text("Press the Add button to add a new function", style=TextThemeStyle.BODY_SMALL,
                  text_align=TextAlign.CENTER),
             Divider(),
@@ -74,7 +78,7 @@ def home_page(_page, navbar):
                         expand=True
                     )
                 ],
-                expand = True,
+                expand=True,
                 alignment=MainAxisAlignment.END
             )
         ], expand=True
