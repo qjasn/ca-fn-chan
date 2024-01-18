@@ -1,6 +1,6 @@
 from flet import *
 
-from lib.app_str import UString
+from basic.app_str import UString
 
 
 def settings_page(_page, navbar):

@@ -7,7 +7,7 @@ import latexify
 import matplotlib.font_manager as mfm
 from flet_core import Image
 
-from lib.is_dark import is_dark
+from basic.is_dark import is_dark
 from matplot.mathtext import math_to_image
 
 

@@ -8,8 +8,8 @@ import numpy as np
 from flet_core import Image, ImageFit, Container
 from matplotlib import pyplot as plt
 
-from lib.app_str import UString
-from lib.is_dark import is_dark
+from basic.app_str import UString
+from basic.is_dark import is_dark
 
 matplotlib.use("svg")
 

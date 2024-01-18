@@ -1,6 +1,6 @@
 from copy import copy
 
-from lib.app_str import UString
+from basic.app_str import UString
 from matplot.basic_graphic import MatPlotUi
 from flet import *
 

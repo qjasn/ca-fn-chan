@@ -1,7 +1,7 @@
 import flet as ft
 
-from lib.app_str import UString
-from lib.control import AppControl
+from basic.app_str import UString
+from basic.control import AppControl
 
 
 def main(page: ft.Page):

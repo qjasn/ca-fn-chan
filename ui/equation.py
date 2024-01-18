@@ -1,6 +1,6 @@
 from flet_core import *
 
-from lib.app_str import UString
+from basic.app_str import UString
 from matplot.latex import Latex
 
 
