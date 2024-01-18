@@ -1,11 +1,13 @@
 from flet import *
 
+from lib.app_str import UString
+
 
 def settings_page(_page, navbar):
     def dark_mode_change(e):
         _mode = _page.client_storage.get("fx.darkMode")
         _page.client_storage.set("fx.darkMode", e.control.value)
-        _page.theme_mode = e.control.value
+        _page.theme_mode = UString.darkMode[e.control.value]
         _page.update()
 
     dark_mode_ui = RadioGroup(Column([

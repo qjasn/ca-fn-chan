@@ -7,7 +7,7 @@ from matplot.latex import Latex
 class EquationUI:
     delete = []
 
-    def __init__(self, name, args, text, page):
+    def __init__(self, name, args, text, page, subscript=False):
         self.lists = UString.lists
         self.ui = None
         self.equation = {
@@ -17,7 +17,7 @@ class EquationUI:
         }
         self.page = page
         self.latex = Latex(name=name, args=args, text=text, page=page)
-        self.latex.init()
+        self.latex.init(subscript)
         self.latex_image = self.latex.output_svg()
 
     def on_change(self, e):
@@ -48,6 +48,7 @@ class EquationUI:
                                 text="Delete",
                                 on_click=lambda e: (
                                     UString.lists.remove(_list),
+                                    print(UString.a_e),
                                     UString.a_e.remove(_list["name"]),
                                     element.content.controls.remove(self.ui),
                                     self.page.update())
