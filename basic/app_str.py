@@ -1,6 +1,6 @@
 from flet_core import Page, ThemeMode
 
-
+# 此Class用来存放全局变量，以保证不同功能的Class可以访问相同的变量
 class UString:
     lists = []
     t = 0
