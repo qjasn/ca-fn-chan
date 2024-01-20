@@ -5,7 +5,7 @@ from matplot.basic_graphic import MatPlotUi
 from matplot.draw_user_function import DrawUserFunction
 from matplot.latex import Latex
 
-# 该类主要负责控制渲染Latex
+# 该类主要负责构建函数表达式的控件
 class EquationUI:
     delete = []
 
