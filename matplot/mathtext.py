@@ -1,6 +1,9 @@
 """
 Copy from Matplotlib
-Change by Asahi Qin,to make it support transparent background
+Change by Asahi Qin
+
+复制自Matplotlib库
+Asahi Qin（作者）对此进行了修改，使其支持输出透明背景的图片与预处理一些不能被matplotlib直接渲染的latex
 """
 
 import matplotlib
@@ -33,6 +36,7 @@ def math_to_image(s, filename_or_obj, prop=None, dpi=None, format=None,
         Decide the image's background
     """
     from matplotlib import figure
+    # 预处理不能渲染的latex关键字（即直接移除）
     s = s.replace(r"\mathopen{}\left",r"\left")
     s = s.replace(r"\mathclose{}\right",r"\right")
     parser = MathTextParser('path')
