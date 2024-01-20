@@ -26,7 +26,7 @@ class EquationUI:
         print(self)
 
     def on_click(self, _list=None, element=None):
-        # 该函数在点击delete时调用
+        # 该函数在点击 删除 时调用
         UString.lists.remove(_list) # 从lists删除对应的结构化函数
         print(UString.a_e)
         UString.a_e.remove(_list["name"]) # 删除存在的函数名称
@@ -61,7 +61,7 @@ class EquationUI:
                     Container(
                         content=PopupMenuButton(items=[
                             PopupMenuItem(
-                                text="Delete",
+                                text="删除",
                                 on_click=lambda e: self.on_click(_list, element)
                             )
                         ]
