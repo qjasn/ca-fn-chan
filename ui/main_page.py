@@ -1,15 +1,20 @@
 from copy import copy
 
+import numpy as np
+
 from basic.app_str import UString
 from matplot.basic_graphic import MatPlotUi
 from flet import *
 
+from matplot.define_user_function import DefineUserFunction
+from matplot.draw_user_function import DrawUserFunction
 from ui.equation import EquationUI
 
 
-class HomePage:
+class MainPage:
 
     def __init__(self, page, element):
+        UString.matplot_chart = MatPlotUi(page)
         self.lists = UString.lists
         self.page = page
         self.ui = Column(controls=[], scroll=ScrollMode.ALWAYS,
@@ -119,10 +124,18 @@ class HomePage:
             }
             UString.lists.append(content)
             UString.a_e.append(self.name.value)
-            print(self.lists)
+            DrawUserFunction(content, self.page).draw(UString.matplot_chart.return_ax())
+            UString.matplot_chart.update_draw()
         self.close_bs(None)
         self.equals.content = self.create_ui()
         self.page.update()
+
+    def matplot_ui(self):
+        print(UString.lists)
+        for content in UString.lists:
+            DrawUserFunction(content, self.page).draw(UString.matplot_chart.return_ax())
+            UString.matplot_chart.update_draw()
+        return UString.matplot_chart.update_draw()
 
     def create_ui(self):
         if not self.lists:
@@ -137,13 +150,13 @@ class HomePage:
         return self.ui
 
 
-def home_page(_page, navbar):
+def main_page(_page, navbar):
     print(UString.width)
-    matplot_chart = MatPlotUi(_page).draw()
-
     equals = Container()
-    _control = HomePage(_page, equals)
+    _control = MainPage(_page, equals)
     equals.content = _control.create_ui()
+    UString.matplot_chart.draw()
+    matplot_chart = _control.matplot_ui()
 
     def add(e):
         _control.show_bs(None)

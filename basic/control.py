@@ -23,8 +23,10 @@ class AppControl:
         _page.update()
 
     def on_resize(self, resize):
+        UString.resize = True
         UString.width = self.page.width
         UString.height = self.page.height
         _page = self.page
         self.route.update_ui()
+        UString.resize = False
         _page.update()

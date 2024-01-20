@@ -14,6 +14,8 @@ class UString:
         "LIGHT": ThemeMode.LIGHT,
         "DARK": ThemeMode.DARK
     }
+    resize = False
+    matplot_chart = None
 
     def __init__(self, page: Page):
         UString.width = page.width

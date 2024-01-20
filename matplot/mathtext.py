@@ -3,7 +3,7 @@ Copy from Matplotlib
 Change by Asahi Qin,to make it support transparent background
 """
 
-
+import matplotlib
 from matplotlib.mathtext import MathTextParser
 
 
@@ -33,7 +33,8 @@ def math_to_image(s, filename_or_obj, prop=None, dpi=None, format=None,
         Decide the image's background
     """
     from matplotlib import figure
-
+    s = s.replace(r"\mathopen{}\left",r"\left")
+    s = s.replace(r"\mathclose{}\right",r"\right")
     parser = MathTextParser('path')
     width, height, depth, _, _ = parser.parse(s, dpi=72, prop=prop)
 

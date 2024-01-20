@@ -1,6 +1,6 @@
 from flet import TemplateRoute
 import flet as ft
-from ui.home import home_page, HomePage
+from ui.main_page import main_page, MainPage
 from ui.settings import settings_page
 
 
@@ -31,7 +31,7 @@ class Navigation:
             _page.views.append(_root_view)
             _page.update()
             self.root_view = _root_view
-            home = home_page(_page, self.nav_ui_init())
+            home = main_page(_page, self.nav_ui_init())
             self.root_view.controls = home
             self.content = "home"
             print(self.root_view.controls)
@@ -39,7 +39,7 @@ class Navigation:
             self.root_view = _root_view
             _page.update()
         elif _t_route.match("/home"):
-            home = home_page(_page, self.nav_ui_init())
+            home = main_page(_page, self.nav_ui_init())
             _root_view.controls = home
             self.content = "home"
             print(_root_view.controls)
@@ -69,7 +69,7 @@ class Navigation:
         if _content == "root":
             _root_view.update()
         elif _content == "home":
-            _root_view.controls = home_page(_page, self.nav_ui_init())
+            _root_view.controls = main_page(_page, self.nav_ui_init())
             _root_view.update()
         elif _content == "settings":
             _root_view.controls = settings_page(_page, self.nav_ui_init())

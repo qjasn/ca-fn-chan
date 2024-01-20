@@ -1,6 +1,8 @@
 from flet_core import *
 
 from basic.app_str import UString
+from matplot.basic_graphic import MatPlotUi
+from matplot.draw_user_function import DrawUserFunction
 from matplot.latex import Latex
 
 
@@ -21,7 +23,18 @@ class EquationUI:
         self.latex_image = self.latex.output_svg()
 
     def on_change(self, e):
-        print(e)
+        print(self)
+
+    def on_click(self, _list=None, element=None):
+        UString.lists.remove(_list)
+        print(UString.a_e)
+        UString.a_e.remove(_list["name"])
+        element.content.controls.remove(self.ui)
+        UString.matplot_chart.draw(True)
+        for content in UString.lists:
+            DrawUserFunction(content, self.page).draw(UString.matplot_chart.return_ax())
+            UString.matplot_chart.update_draw()
+        self.page.update()
 
     def create_ui(self, _list, element):
         self.ui = Row(
@@ -46,12 +59,7 @@ class EquationUI:
                         content=PopupMenuButton(items=[
                             PopupMenuItem(
                                 text="Delete",
-                                on_click=lambda e: (
-                                    UString.lists.remove(_list),
-                                    print(UString.a_e),
-                                    UString.a_e.remove(_list["name"]),
-                                    element.content.controls.remove(self.ui),
-                                    self.page.update())
+                                on_click=lambda e: self.on_click(_list, element)
                             )
                         ]
 
