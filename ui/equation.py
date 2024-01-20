@@ -33,7 +33,7 @@ class EquationUI:
         UString.matplot_chart.draw(True)
         for content in UString.lists:
             DrawUserFunction(content, self.page).draw(UString.matplot_chart.return_ax())
-            UString.matplot_chart.update_draw()
+        UString.matplot_chart.update_draw()
         self.page.update()
 
     def create_ui(self, _list, element):
