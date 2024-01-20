@@ -11,7 +11,7 @@
     4. 计算复杂代数式（未实现）
 - 具体实现方法：
     1. 利用Matplotlib实现函数绘制，并利用Matplotlib的mathtext功能实现Latex（部分）渲染
-    2. 利用flet作为应用UI
+    2. 利用flet构建应用UI与多平台支持
     3. 使用latexify作为函数表达式转为Latex
 
 
@@ -22,8 +22,15 @@
 
 ### macOS与Linux
 ``` bash
-git clone https://github/qjasn/flet-tools.git # 克隆本项目
-cd flet-tools
-python3 -m venv flet-tools
-source 
+git clone https://github.com/qjasn/flet-tools.git # 克隆本项目
+cd flet-tools # 进入本项目根目录
+python3 -m venv .venv # 建立虚拟python环境
+source .venv/bin/activate # 进入虚拟python环境
+pip install -r requirements.txt # 安装依赖（部分一）
+git clone https://github.com/qjasn/latexify_get_from_code.git # 克隆作者的fork
+pip install ./latexify_get_from_code # 安装作者修改后的latexify
+flet run # 运行该应用
 ```
+
+### Windows
+暂未实现
