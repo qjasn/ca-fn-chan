@@ -7,7 +7,7 @@ from matplot.latex import Latex
 
 
 # 该类主要负责构建函数表达式的控件
-class EquationUI:
+class FunctionUI:
     delete = []
 
     def __init__(self, name, args, text, page, subscript=False):
