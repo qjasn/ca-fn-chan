@@ -14,15 +14,17 @@ from ui.equation import EquationUI
 class MainPage:
 
     def __init__(self, page, element):
+        self.matplot_chart = None
         UString.matplot_chart = MatPlotUi(page)
         self.lists = UString.lists
         self.page = page
         self.ui = Column(controls=[], scroll=ScrollMode.ALWAYS,
-                         height=(page.height - 70) if page.width > 550 else ((page.height - 150) / 7) * 2.5 - 20) # 渲染框大小
-        self.name = TextField(label="名称", width=70) # 定义函数名称输入框
-        self.args = TextField(label="参数", value="x", width=70) # 定义函数参数输入框
-        self.text = TextField(label="函数内容", value="x") # 定义函数内容输入框
-        self.equals = element # latex显示UI的引用
+                         height=(page.height - 70) if page.width > 550 else ((
+                                                                                     page.height - 150) / 7) * 2.5 - 20)  # 渲染框大小
+        self.name = TextField(label="名称", width=70)  # 定义函数名称输入框
+        self.args = TextField(label="参数", value="x", width=70)  # 定义函数参数输入框
+        self.text = TextField(label="函数内容", value="x")  # 定义函数内容输入框
+        self.equals = element  # latex显示UI的引用
         # 函数输入模态框UI构建
         self.bs = BottomSheet(
             Container(
@@ -75,20 +77,20 @@ class MainPage:
         print("Dismissed!")
 
     def show_bs(self, e):
-        _value = list(set(UString.f_n) - set(UString.a_e)) # 取补集查看默认的能用的函数名称
+        _value = list(set(UString.f_n) - set(UString.a_e))  # 取补集查看默认的能用的函数名称
         _f_n = copy(UString.f_n)
         if not _value:
-            #如果没有可用的函数名称了，就加上下表，扩展默认函数名称列表
+            # 如果没有可用的函数名称了，就加上下表，扩展默认函数名称列表
             UString.t += 1
             for a in _f_n:
                 print(_f_n)
                 UString.f_n.append("{}_{}".format(a, UString.t))
-            _value = list(set(UString.f_n) - set(UString.a_e)) # 扩展完后再更新一下
+            _value = list(set(UString.f_n) - set(UString.a_e))  # 扩展完后再更新一下
         print(UString.f_n)
         self.name = TextField(label="Name", value=_value[0], width=70)
         self.bs.content.content.controls[2].controls[0].content.controls[1].content.controls = [self.name, Text("("),
                                                                                                 self.args, Text(") ="),
-                                                                                                self.text] # 这一段是不是很震惊，那么我要告诉你了，这是我写的最失败的一段代码，根本不具有任何可维护性与扩展性，后面有时间了会改掉
+                                                                                                self.text]  # 这一段是不是很震惊，那么我要告诉你了，这是我写的最失败的一段代码，根本不具有任何可维护性与扩展性，后面有时间了会改掉
         self.page.update()
         self.bs.open = True
         self.bs.update()
@@ -103,7 +105,7 @@ class MainPage:
             self.args.value == "",
             self.text.value == "",
         ]):
-        # 判断输入是否为空
+            # 判断输入是否为空
             self.page.dialog = AlertDialog(
                 modal=False,
                 title=Text("错误"),
@@ -130,8 +132,8 @@ class MainPage:
             # 将这个结构化的函数加入全局变量方便其它函数与Class访问
             UString.lists.append(content)
             UString.a_e.append(self.name.value)
-            DrawUserFunction(content, self.page).draw(UString.matplot_chart.return_ax()) # 绘制新函数的图像
-            UString.matplot_chart.update_draw() # 更新图像
+            DrawUserFunction(content, self.page).draw(UString.matplot_chart.return_ax())  # 绘制新函数的图像
+            UString.matplot_chart.update_draw()  # 更新图像
         self.close_bs(None)
         self.equals.content = self.create_ui()
         self.page.update()
@@ -142,7 +144,11 @@ class MainPage:
         for content in UString.lists:
             DrawUserFunction(content, self.page).draw(UString.matplot_chart.return_ax())
             UString.matplot_chart.update_draw()
-        return UString.matplot_chart.update_draw()
+        self.matplot_chart = UString.matplot_chart.update_draw()
+        return self.matplot_chart
+
+    def nav_change(self):
+        return self.matplot_chart, self.ui
 
     def create_ui(self):
         # 构建函数显示UI
@@ -161,11 +167,18 @@ class MainPage:
 
 def main_page(_page, navbar):
     print(UString.width)
-    equals = Container() # latex公式
-    _control = MainPage(_page, equals)
-    equals.content = _control.create_ui()
-    UString.matplot_chart.draw()
-    matplot_chart = _control.matplot_ui() # 函数图像UI
+    equals = Container()  # latex公式
+    if UString.main_page_control is None:
+        UString.main_page_control = MainPage(_page, equals)
+    _control = UString.main_page_control
+    if UString.nav_change:
+        matplot_chart, equals.content = _control.nav_change()
+    else:
+        UString.main_page_control = MainPage(_page, equals)
+        _control = UString.main_page_control
+        equals.content = _control.create_ui()
+        UString.matplot_chart.draw()
+        matplot_chart = _control.matplot_ui()  # 函数图像UI
 
     def add(e):
         _control.show_bs(None)

@@ -1,5 +1,7 @@
 from flet import TemplateRoute
 import flet as ft
+
+from basic.app_str import UString
 from ui.main_page import main_page, MainPage
 from ui.settings import settings_page
 
@@ -89,11 +91,13 @@ class Navigation:
     def nav_change(self, e):
         # 在导航栏的选项改变时触发
         print(e)
+        UString.nav_change = True
         self.index = self.navbar.selected_index
         if self.navbar.selected_index == 0:
             self.page.go("/home")
         else:
             self.page.go("/settings")
+        UString.nav_change = False
 
     def nav_ui_init(self):
         # 构建导航栏的UI
@@ -103,7 +107,7 @@ class Navigation:
                 selected_index=self.index,
                 destinations=[
                     ft.NavigationDestination(icon=ft.icons.FUNCTIONS, label="f(x)"),
-                    ft.NavigationDestination(icon=ft.icons.SETTINGS, label="Settings")
+                    ft.NavigationDestination(icon=ft.icons.SETTINGS, label="设置")
                 ],
                 on_change=self.nav_change
             )
@@ -119,7 +123,7 @@ class Navigation:
                 height=self.page.height,
                 destinations=[
                     ft.NavigationRailDestination(icon=ft.icons.FUNCTIONS, label="f(x)"),
-                    ft.NavigationRailDestination(icon=ft.icons.SETTINGS, label="Settings")
+                    ft.NavigationRailDestination(icon=ft.icons.SETTINGS, label="设置")
                 ]
             )
             return self.navbar
