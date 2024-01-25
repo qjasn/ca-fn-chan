@@ -2,6 +2,7 @@ from copy import copy
 
 from basic.app_str import UString
 from matplot.draw_user_function import DrawUserFunction
+from ui.equation_ui import EquationUI
 from ui.function_ui import FunctionUI
 from flet import *
 
@@ -14,14 +15,14 @@ class AddMath:
                          height=(page.height - 120) if page.width > 550 else ((
                                                                                       page.height - 150) / 7) * 2.5 - 70)  # 渲染框大小
         self.textInputs = {
-            "fx":{
-                "name":TextField(label="名称", width=70),  # 定义函数名称输入框
-                "args":TextField(label="参数", value="x", width=70),  # 定义函数参数输入框
-                "text":TextField(label="函数内容", value="x")  # 定义函数内容输入框
+            "fx": {
+                "name": TextField(label="名称", width=70),  # 定义函数名称输入框
+                "args": TextField(label="参数", value="x", width=70),  # 定义函数参数输入框
+                "text": TextField(label="函数内容", value="x")  # 定义函数内容输入框
             },
-            "equ":{
-                "equ":TextField(label="内容"),
-                "args":TextField(label="求解参数",width=100,value="x")
+            "equ": {
+                "equ": TextField(label="内容", value="x = 1"),
+                "args": TextField(label="求解参数", width=100, value="x")
             }
         }
         self.equals = element  # latex显示UI的引用
@@ -81,15 +82,15 @@ class AddMath:
                                    self.textInputs["fx"]["text"]]
         elif mode == "equ":
             self.button.on_click = self.add_equation
-            self.input.controls = [self.textInputs["equ"]["equ"],self.textInputs["equ"]["args"]]
+            self.input.controls = [self.textInputs["equ"]["equ"], self.textInputs["equ"]["args"]]
         self.page.update()
         self.bs.open = True
         self.bs.update()
 
-    def add_equation(self,e):
+    def add_equation(self, e):
         _equ = self.textInputs["equ"]["equ"]
         _args = self.textInputs["equ"]["args"]
-        if any([_equ.value == "",_args.value == ""]):
+        if any([_equ.value == "", _args.value == ""]):
             # 判断输入是否为空
             self.page.dialog = AlertDialog(
                 modal=False,
@@ -97,6 +98,15 @@ class AddMath:
                 content=Text("任何一个输入值都不能为空"),
                 open=True
             )
+        else:
+            content = {
+                "equ": _equ.value,
+                "args": _args.value,
+                "mode": "equ"
+            }
+            UString.lists.append(content)
+            self.close_bs(None)
+            self.equals.content = self.create_ui()
             self.page.update()
 
     def close_bs(self, e):
@@ -155,6 +165,9 @@ class AddMath:
                 self.ui.controls.append(
                     FunctionUI(name=i["name"], args=i["args"], text="return {}".format(i["text"]),
                                page=self.page, subscript=True).create_ui(i, self.equals))
+            elif i["mode"] == "equ":
+                self.ui.controls.append(
+                    EquationUI(page=self.page, equ=i["equ"], args=i["args"]).create_ui(self.equals,i))
         return self.ui
 
     def nav_change(self):

@@ -19,8 +19,8 @@ class MainPage:
         # 从全局变量中构建函数图像的UI，该方法在初始化/页面分辨率改变时会触发
         print(UString.lists)
         for content in UString.lists:
-            DrawUserFunction(content, self.page).draw(UString.matplot_chart.return_ax())
-            UString.matplot_chart.update_draw()
+            if content["mode"] == "fx":
+                DrawUserFunction(content, self.page).draw(UString.matplot_chart.return_ax())
         self.matplot_chart = UString.matplot_chart.update_draw()
         return self.matplot_chart
 
