@@ -38,6 +38,7 @@ def main_page(_page, navbar):
     if all([UString.nav_change, not UString.change_dark]):
         matplot_chart = _control.nav_change()
         equals.content = UString.math_list.create_ui()
+        UString.change_dark = False
     else:
         UString.main_page_control = MainPage(_page)
         UString.math_list = AddMath(_page, equals)
