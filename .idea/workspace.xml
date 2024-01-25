@@ -8,9 +8,12 @@
       <change afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/basic/app_str.py" beforeDir="false" afterPath="$PROJECT_DIR$/basic/app_str.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/basic/navigation.py" beforeDir="false" afterPath="$PROJECT_DIR$/basic/navigation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/equation.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/equation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matplot/basic_graphic.py" beforeDir="false" afterPath="$PROJECT_DIR$/matplot/basic_graphic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/add_math.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/add_math.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ui/main_page.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/main_page.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/settings.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,6 +52,7 @@
   "keyToString": {
     "ASKED_ADD_EXTERNAL_FILES": "true",
     "Python.main.executor": "Run",
+    "Python.main_page.executor": "Run",
     "Python.test.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -61,7 +65,7 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.main">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="flet-tools" />
       <option name="ENV_FILES" value="" />
@@ -200,7 +204,31 @@
       <option name="project" value="LOCAL" />
       <updated>1705754890379</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Update">
+      <option name="closed" value="true" />
+      <created>1705806433239</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1705806433239</updated>
+    </task>
+    <task id="LOCAL-00012" summary="为添加方程与工具功能铺路">
+      <option name="closed" value="true" />
+      <created>1705846315601</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1705846315601</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Update">
+      <option name="closed" value="true" />
+      <created>1706026353927</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1706026353927</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -216,6 +244,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="为添加方程与工具功能铺路" />
     <MESSAGE value="Update" />
     <option name="LAST_COMMIT_MESSAGE" value="Update" />
   </component>

@@ -9,6 +9,7 @@ def settings_page(_page, navbar):
         _mode = _page.client_storage.get("fx.darkMode")
         _page.client_storage.set("fx.darkMode", e.control.value)
         _page.theme_mode = UString.darkMode[e.control.value]
+        UString.change_dark = True
         _page.update()
 
     dark_mode_ui = RadioGroup(Column([

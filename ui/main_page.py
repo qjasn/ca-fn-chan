@@ -35,7 +35,7 @@ def main_page(_page, navbar):
         UString.main_page_control = MainPage(_page)
         UString.math_list = AddMath(_page, equals)
     _control = UString.main_page_control
-    if UString.nav_change:
+    if all([UString.nav_change, not UString.change_dark]):
         matplot_chart = _control.nav_change()
         equals.content = UString.math_list.create_ui()
     else:
@@ -46,8 +46,8 @@ def main_page(_page, navbar):
         UString.matplot_chart.draw()
         matplot_chart = _control.matplot_ui()  # 函数图像UI
 
-    def add(e):
-        UString.math_list.show_bs(None)
+    def add(e, mode="fx"):
+        UString.math_list.show_bs(None, mode)
 
     def tab_change(e):
         MainPage.s_index = e.control.selected_index
@@ -60,30 +60,22 @@ def main_page(_page, navbar):
                         equals,
                         Row(
                             controls=[
-                                MenuBar([SubmenuButton(
-                                    content=Text("新建"),
-                                    leading=Icon(icons.ADD),
-                                    on_focus=lambda e: print(e),
-                                    controls=[
-                                        SubmenuButton(
-                                            content=Text("函数"),
-                                            leading=Icon(icons.FUNCTIONS),
-                                            controls=[
-                                                MenuItemButton(
-                                                    on_click=add,
-                                                    on_hover=None,
-                                                    content=Text("自定义函数")
-                                                )
-                                            ]
+                                PopupMenuButton(
+                                    icon=icons.ADD,
+                                    tooltip="新建",
+                                    items=[
+                                        PopupMenuItem(
+                                            icon=icons.FUNCTIONS,
+                                            text="函数",
+                                            on_click=lambda e: add(e, "fx")
                                         ),
-                                        MenuItemButton(
-                                            content=Text("方程"),
-                                            leading=Icon(icons.FUNCTIONS),
-                                            on_click=lambda e: print("add e"),
-                                            on_hover=None,
+                                        PopupMenuItem(
+                                            icon=icons.EXPOSURE,
+                                            text="方程",
+                                            on_click=lambda e: add(e, "equ")
                                         )
                                     ]
-                                )])
+                                )
                             ],
                             alignment=MainAxisAlignment.END
                         ),

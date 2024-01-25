@@ -13,9 +13,17 @@ class AddMath:
         self.ui = Column(controls=[], scroll=ScrollMode.ALWAYS,
                          height=(page.height - 120) if page.width > 550 else ((
                                                                                       page.height - 150) / 7) * 2.5 - 70)  # 渲染框大小
-        self.name = TextField(label="名称", width=70)  # 定义函数名称输入框
-        self.args = TextField(label="参数", value="x", width=70)  # 定义函数参数输入框
-        self.text = TextField(label="函数内容", value="x")  # 定义函数内容输入框
+        self.textInputs = {
+            "fx":{
+                "name":TextField(label="名称", width=70),  # 定义函数名称输入框
+                "args":TextField(label="参数", value="x", width=70),  # 定义函数参数输入框
+                "text":TextField(label="函数内容", value="x")  # 定义函数内容输入框
+            },
+            "equ":{
+                "equ":TextField(label="内容"),
+                "args":TextField(label="求解参数",width=100,value="x")
+            }
+        }
         self.equals = element  # latex显示UI的引用
         self.button = TextButton("确认", on_click=self.add_function)  # 模态框输入按钮
         self.input = Row(scroll=ScrollMode.ALWAYS)  # 模态框显示UI
@@ -67,13 +75,29 @@ class AddMath:
                     UString.f_n.append("{}_{}".format(a, UString.t))
                 _value = list(set(UString.f_n) - set(UString.a_e))  # 扩展完后再更新一下
             print(UString.f_n)
-            self.name = TextField(label="Name", value=_value[0], width=70)
-            self.input.controls = [self.name, Text("("),
-                                   self.args, Text(") ="),
-                                   self.text]
+            self.textInputs["fx"]["name"] = TextField(label="Name", value=_value[0], width=70)
+            self.input.controls = [self.textInputs["fx"]["name"], Text("("),
+                                   self.textInputs["fx"]["args"], Text(") ="),
+                                   self.textInputs["fx"]["text"]]
+        elif mode == "equ":
+            self.button.on_click = self.add_equation
+            self.input.controls = [self.textInputs["equ"]["equ"],self.textInputs["equ"]["args"]]
         self.page.update()
         self.bs.open = True
         self.bs.update()
+
+    def add_equation(self,e):
+        _equ = self.textInputs["equ"]["equ"]
+        _args = self.textInputs["equ"]["args"]
+        if any([_equ.value == "",_args.value == ""]):
+            # 判断输入是否为空
+            self.page.dialog = AlertDialog(
+                modal=False,
+                title=Text("错误"),
+                content=Text("任何一个输入值都不能为空"),
+                open=True
+            )
+            self.page.update()
 
     def close_bs(self, e):
         self.bs.open = False
@@ -81,9 +105,9 @@ class AddMath:
 
     def add_function(self, e):
         if any([
-            self.name.value == "",
-            self.args.value == "",
-            self.text.value == "",
+            self.textInputs["fx"]["name"].value == "",
+            self.textInputs["fx"]["args"].value == "",
+            self.textInputs["fx"]["text"].value == "",
         ]):
             # 判断输入是否为空
             self.page.dialog = AlertDialog(
@@ -93,7 +117,7 @@ class AddMath:
                 open=True
             )
             self.page.update()
-        elif self.name.value in UString.a_e:
+        elif self.textInputs["fx"]["name"].value in UString.a_e:
             # 判断函数名称是否存在
             self.page.dialog = AlertDialog(
                 modal=False,
@@ -106,13 +130,13 @@ class AddMath:
             # 将输入的值结构化，具体规范见app_str.py
             content = {
                 "mode": "fx",
-                "name": self.name.value,
-                "args": self.args.value,
-                "text": self.text.value,
+                "name": self.textInputs["fx"]["name"].value,
+                "args": self.textInputs["fx"]["args"].value,
+                "text": self.textInputs["fx"]["text"].value,
             }
             # 将这个结构化的函数加入全局变量方便其它函数与Class访问
             UString.lists.append(content)
-            UString.a_e.append(self.name.value)
+            UString.a_e.append(self.textInputs["fx"]["name"].value)
             DrawUserFunction(content, self.page).draw(UString.matplot_chart.return_ax())  # 绘制新函数的图像
             UString.matplot_chart.update_draw()  # 更新图像
         self.close_bs(None)

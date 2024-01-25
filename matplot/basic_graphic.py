@@ -61,26 +61,26 @@ class MatPlotUi:
                                                       int((_height / _step) / 2) + 1, num=int(_height / _step / 2))])
         
         """
-        xticks = []
+        x_ticks = []
         i = 0
         while i <= x2:
-            xticks.append(i)
+            x_ticks.append(i)
             i += 2
         i = 0
         while i >= x1:
-            xticks.append(i)
+            x_ticks.append(i)
             i -= 2
-        plt.xticks(ticks=xticks)
-        yticks = []
+        plt.xticks(ticks=x_ticks)
+        y_ticks = []
         i = 0
         while i <= y2:
-            yticks.append(i)
+            y_ticks.append(i)
             i += 2
         i = 0
         while i >= y1:
-            yticks.append(i)
+            y_ticks.append(i)
             i -= 2
-        plt.yticks(ticks=yticks)
+        plt.yticks(ticks=y_ticks)
 
         s = io.StringIO()
         plt.savefig(s, format="svg", bbox_inches="tight", transparent=True)

@@ -20,7 +20,8 @@ class UString:
     matplot_chart = None  # 全局的函数图像控件，在main_page.py中被赋予值
     nav_change = False  # 在路由更改时为True
     main_page_control = None  # MainPage的总控
-    math_list = None # 数学公式的添加与UI构建控制
+    math_list = None  # 数学公式的添加与UI构建控制
+    change_dark = False  # 在页面显示模式更改时为True
 
     def __init__(self, page: Page):
         UString.width = page.width

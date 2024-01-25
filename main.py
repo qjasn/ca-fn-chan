@@ -16,7 +16,10 @@ def main(page: ft.Page):
         _AppControl.on_resize(None),
         UString(page)
     )
-    page.on_platform_brightness_change = _AppControl.on_resize
+    page.on_platform_brightness_change = lambda e: (
+        _AppControl.route.update_ui(),
+        page.update()
+    )
 
 
 ft.app(target=main)
