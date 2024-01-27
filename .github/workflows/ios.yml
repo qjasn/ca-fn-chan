@@ -1,0 +1,10 @@
+name: iOS and macOS Build Actions
+run-name: {{ github.actor }} is building ios app
+jobs:
+  prepare_environment:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        python-version:
+    steps:
+      - run: python3 --version
