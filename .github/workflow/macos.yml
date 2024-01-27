@@ -1,4 +1,4 @@
-name: iOS and macOS Builder
+name: macOS Builder
 run-name: ${{ github.actor }} is building 
 on: [release,push]
 jobs:
@@ -15,5 +15,10 @@ jobs:
           channel: 'stable'
       - run: python --version
       - run: pip --version
-      - run: pip install -r requirements.txt
+      - run: pip install flet
       - run: flet build macos
+      - uses: actions/upload-artifact@v4
+        with:
+          path: build/macos
+          name: fletCalc-test
+          retention-days: 3
