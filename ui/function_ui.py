@@ -31,11 +31,10 @@ class FunctionUI:
     def on_click(self, _list=None, element=None):
         # 该函数在点击 删除 时调用
         UString.lists.remove(_list)  # 从lists删除对应的结构化函数
-        print(UString.a_e)
+        UString.draw_class[_list["name"]].delete()  # 清除函数图像
         UString.a_e.remove(_list["name"])  # 删除存在的函数名称
         UString.draw_class.pop(_list["name"])
         element.content.controls.remove(self.ui)  # 从页面删除此元素
-        UString.draw_class[_list["name"]].delete()  # 清除函数图像
         UString.matplot_chart.update_draw()  # 更新UI
         self.page.update()
 

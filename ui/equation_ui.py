@@ -84,7 +84,7 @@ class EquationUI:
                                     height=self.max_height,
                                 )
                             ], scroll=ScrollMode.AUTO,
-                            width=(((self.page.width - 100) / 7) * 1.8 - 35) if self.page.width > 550 else (
+                                width=(((self.page.width - 100) / 7) * 1.8 - 35) if self.page.width > 550 else (
                                     self.page.width - 55)
                         )
                         ], top=5
@@ -101,9 +101,8 @@ class EquationUI:
 
                     )
                 ], width=(((self.page.width - 100) / 7) * 1.8) if self.page.width > 550 else self.page.width,
-                    height=50
                 )
             ],
-            height=50
+            height=(self.latex_image[1] + self.max_height) + 45
         )
         return self.ui
