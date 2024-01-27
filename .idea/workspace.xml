@@ -4,21 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3c777c51-1a31-4eaf-b929-7ea4cf71828e" name="更改" comment="Update">
-      <change beforePath="$PROJECT_DIR$/.idea/flet-tools.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/flet-tools.iml" afterDir="false" />
+    <list default="true" id="3c777c51-1a31-4eaf-b929-7ea4cf71828e" name="更改" comment="更改函数删除时的图像调用,提高应用渲染速度&#10;完善函数显示功能">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/basic/app_str.py" beforeDir="false" afterPath="$PROJECT_DIR$/basic/app_str.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/basic/is_dark.py" beforeDir="false" afterPath="$PROJECT_DIR$/basic/is_dark.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/basic/navigation.py" beforeDir="false" afterPath="$PROJECT_DIR$/basic/navigation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/matplot/basic_graphic.py" beforeDir="false" afterPath="$PROJECT_DIR$/matplot/basic_graphic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/matplot/draw_user_function.py" beforeDir="false" afterPath="$PROJECT_DIR$/matplot/draw_user_function.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/matplot/latex.py" beforeDir="false" afterPath="$PROJECT_DIR$/matplot/latex.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/matplot/mathtext.py" beforeDir="false" afterPath="$PROJECT_DIR$/matplot/mathtext.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/add_math.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/add_math.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/equation_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/equation_ui.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/function_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/function_ui.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ui/main_page.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/main_page.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -258,7 +246,15 @@
       <option name="project" value="LOCAL" />
       <updated>1706204617995</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="更改函数删除时的图像调用,提高应用渲染速度&#10;完善函数显示功能">
+      <option name="closed" value="true" />
+      <created>1706353588301</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1706353588301</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -276,6 +272,7 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="为添加方程与工具功能铺路" />
     <MESSAGE value="Update" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update" />
+    <MESSAGE value="更改函数删除时的图像调用,提高应用渲染速度&#10;完善函数显示功能" />
+    <option name="LAST_COMMIT_MESSAGE" value="更改函数删除时的图像调用,提高应用渲染速度&#10;完善函数显示功能" />
   </component>
 </project>

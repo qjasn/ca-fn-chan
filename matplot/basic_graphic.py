@@ -47,11 +47,6 @@ class MatPlotUi:
         self.ax.grid(linewidth=0.3)
         plt.xticks(color=color)
         plt.yticks(color=color)
-        # Draw arrows (as black triangles: ">k"/"^k") at the end of the axes.  In each
-        # case, one of the coordinates (0) is a data coordinate (i.e., y = 0 or x = 0,
-        # respectively) and the other one (1) is an axes coordinate (i.e., at the very
-        # right/top of the axes).  Also, disable clipping (clip_on=False) as the marker
-        # actually spills out of the axes.
         x1, x2, y1, y2 = -(_width / _step) / 2, (_width / _step) / 2, -(_height / _step) / 2, (_height / _step) / 2
         self.ax.axis([x1, x2, y1, y2])
         """
@@ -106,6 +101,7 @@ class MatPlotUi:
 
     def update_draw(self):
         color = "white" if is_dark(self.page) else "black"
+        self.ax.spines[["left", "bottom"]].set_color(color)
         if self.page.width > 550:
             _width = UString.width
             _width = ((_width - 100) / 7) * 5.2
@@ -116,6 +112,8 @@ class MatPlotUi:
             __width = self.page.width
             _height = ((self.page.height - 150) / 7) * 4.5
         _step = UString.step
+        plt.xticks(color=color)
+        plt.yticks(color=color)
         s = io.StringIO()
         plt.savefig(s, format="svg", bbox_inches="tight", transparent=True)
         svg = s.getvalue()
