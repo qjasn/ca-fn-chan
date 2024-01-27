@@ -1,7 +1,5 @@
 import numpy as np
 
-import matplot.define_user_function
-import matplot.basic_graphic
 from basic.app_str import UString
 from matplot.define_user_function import DefineUserFunction
 

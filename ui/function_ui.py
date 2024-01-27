@@ -1,7 +1,6 @@
 from flet_core import *
 
 from basic.app_str import UString
-from matplot.draw_user_function import DrawUserFunction
 from matplot.latex import Latex
 
 

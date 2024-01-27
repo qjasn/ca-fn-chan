@@ -1,10 +1,8 @@
 import io
 import re
-
 import xml.etree.ElementTree as ET
 
 import matplotlib
-import numpy as np
 from flet_core import Image, ImageFit, Container
 from matplotlib import pyplot as plt
 

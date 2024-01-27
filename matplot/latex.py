@@ -3,7 +3,7 @@ import re
 import xml.etree.ElementTree as ET
 
 import flet as ft
-import latexify
+from matplot.latexify_expand import *
 import matplotlib.font_manager as mfm
 from flet_core import Image
 
@@ -44,7 +44,7 @@ class Latex:
         _ags = self.args
         _latex = None
         try:
-            self.latex = latexify.get_latex_with_code(_name, _ags, _text)
+            self.latex = get_latex_with_code(_name, _ags, _text)
             if subscript:
                 self.latex = self.latex.replace("\_", "_")
             self.latex = r"${}$".format(self.latex)
