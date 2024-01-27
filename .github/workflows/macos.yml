@@ -1,6 +1,6 @@
 name: macOS Builder
 run-name: ${{ github.actor }} is building 
-on: [release,push]
+on: [release]
 jobs:
   Explore-GitHub-Actions:
     runs-on: macos-latest
