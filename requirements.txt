@@ -3,4 +3,3 @@ matplotlib
 lxml
 sympy
 latexify-py
-numpy

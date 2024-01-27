@@ -1,5 +1,3 @@
-import numpy as np
-
 from basic.app_str import UString
 from matplot.define_user_function import DefineUserFunction
 
@@ -10,6 +8,13 @@ class DrawUserFunction:
         self.function = function
         self.name = function["name"]
         self.page = page
+
+    def x_range(self, start, end, item: int):
+        _step = (end - start) / item
+        output = [start]
+        for i in range(0, item):
+            output.append(start + i * _step)
+        return output
 
     def draw(self):
         ax = UString.matplot_chart.return_ax()
@@ -24,7 +29,7 @@ class DrawUserFunction:
             _height = ((self.page.height - 150) / 7) * 4.5
         x1, x2, y1, y2 = -(_width / UString.step) / 2, (_width / UString.step) / 2, -(_height / UString.step) / 2, (
                 _height / UString.step) / 2
-        x = np.linspace(int(x1) - 1, int(x2) + 1, int(_width))
+        x = self.x_range(int(x1) - 1, int(x2) + 1, int(_width))
         y = []
         arg = self.function["args"].split(",")[0].replace(" ", "")
         for i in x:
