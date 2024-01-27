@@ -12,3 +12,5 @@ jobs:
           cache: 'pip'
       - run: python --version
       - run: pip --version
+      - run: pip install -r requirements.txt
+      - run: flet build macos
