@@ -48,7 +48,6 @@ class Latex:
             if subscript:
                 self.latex = self.latex.replace("\_", "_")
             self.latex = r"${}$".format(self.latex)
-            print(self.latex)
             return self.latex
         except Exception as e:
             if not self.error:
@@ -78,4 +77,4 @@ class Latex:
         root = ET.fromstring(svg)
         w = float(re.findall(r"\d+", root.attrib["width"])[0])
         h = float(re.findall(r"\d+", root.attrib["height"])[0])
-        return Image(src=svg, aspect_ratio=w / h, fit=ft.ImageFit.FILL)
+        return [Image(src=svg, aspect_ratio=w / h, fit=ft.ImageFit.FILL), (17 / 58) * h]

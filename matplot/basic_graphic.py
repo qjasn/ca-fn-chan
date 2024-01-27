@@ -16,6 +16,7 @@ matplotlib.use("svg")
 
 class MatPlotUi:
     def __init__(self, page):
+        self.ax = None
         self.ui = None
         self.fig = None
         self.page = page
@@ -121,7 +122,6 @@ class MatPlotUi:
         root = ET.fromstring(svg)
         w = float(re.findall(r"\d+", root.attrib["width"])[0])
         h = float(re.findall(r"\d+", root.attrib["height"])[0])
-        print(_width)
         self.ui.content = Image(svg, aspect_ratio=w / h, fit=ImageFit.COVER)
         self.ui.height = _height
         self.ui.width = __width

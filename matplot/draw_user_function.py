@@ -8,11 +8,13 @@ from matplot.define_user_function import DefineUserFunction
 
 class DrawUserFunction:
     def __init__(self, function, page):
+        self.plot = None
         self.function = function
+        self.name = function["name"]
         self.page = page
 
-    def draw(self, ax):
-        print(self.function)
+    def draw(self):
+        ax = UString.matplot_chart.return_ax()
         if self.page.width > 550:
             _width = UString.width
             _width = ((_width - 100) / 7) * 5.2
@@ -29,4 +31,11 @@ class DrawUserFunction:
         arg = self.function["args"].split(",")[0].replace(" ", "")
         for i in x:
             y.append(DefineUserFunction().exec(self.function["name"], {arg: i}))
-        ax.plot(x, y)
+        self.plot = ax.plot(x, y)[-1]
+
+    def delete(self):
+        self.plot.remove()
+
+    def visible(self, _bool):
+        self.plot.set_visible(_bool)
+        self.page.update()

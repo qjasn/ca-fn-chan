@@ -1,4 +1,5 @@
 import io
+import operator
 
 from sympy import *
 from flet import *
@@ -28,16 +29,17 @@ class EquationUI:
             _equ = equ.replace(i, 'self.map["{}"]'.format(i))
         self.pares = parse_expr(equ, transformations="all")
         self.latex = latex(self.pares)
-        print(str(self.latex))
         for i in args.split(","):
             _solve = _solve + "self.map['{}'],".format(i)
         exec("result = solve(self.pares,({}),dict=True)".format(_solve))
         self.solve = locals()["result"]
-        _image = []
+        _image, height = [], []
         for i in self.solve:
             for a in args.split(","):
-                _image.append(self.latex_ui(latex(Eq(self.map[a], i[self.map[a]]))))
+                _image.append(self.latex_ui(latex(Eq(self.map[a], i[self.map[a]])))[0])
+                height.append(self.latex_ui(latex(Eq(self.map[a], i[self.map[a]])))[1])
         self.solve_img = _image
+        index, self.max_height = max(enumerate(height), key=operator.itemgetter(1))
         self.latex_image = self.latex_ui(self.latex)
 
     def latex_ui(self, _latex):
@@ -50,7 +52,7 @@ class EquationUI:
         root = ET.fromstring(svg)
         w = float(re.findall(r"\d+", root.attrib["width"])[0])
         h = float(re.findall(r"\d+", root.attrib["height"])[0])
-        return Image(src=svg, aspect_ratio=w / h, fit=ImageFit.FILL)
+        return [Image(src=svg, aspect_ratio=w / h, fit=ImageFit.FILL), (15 / 58) * h]
 
     def on_click(self, _list=None, element=None):
         UString.lists.remove(_list)
@@ -65,8 +67,8 @@ class EquationUI:
                         [
                             Row([
                                 Container(
-                                    content=self.latex_image,
-                                    height=15,
+                                    content=self.latex_image[0],
+                                    height=self.latex_image[1],
                                 )
                             ], scroll=ScrollMode.AUTO,
                                 width=(((self.page.width - 100) / 7) * 1.8 - 35) if self.page.width > 550 else (
@@ -79,7 +81,7 @@ class EquationUI:
                                     content=Row(
                                         self.solve_img
                                     ),
-                                    height=15,
+                                    height=self.max_height,
                                 )
                             ], scroll=ScrollMode.AUTO,
                             width=(((self.page.width - 100) / 7) * 1.8 - 35) if self.page.width > 550 else (

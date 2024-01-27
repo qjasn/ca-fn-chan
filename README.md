@@ -7,12 +7,12 @@
 - 功能：
     1. 绘制函数图像（已实现）
     2. 获取函数详细信息（奇偶性，对称性，极值等）（未实现）
-    3. 解方程（未实现）
-    4. 计算复杂代数式（未实现）
+    3. 解方程（已实现）
 - 具体实现方法：
     1. 利用Matplotlib实现函数绘制，并利用Matplotlib的mathtext功能实现Latex（部分）渲染
     2. 利用flet构建应用UI与多平台支持
     3. 使用latexify作为函数表达式转为Latex
+    4. 使用sympy实现解方程
 
 
 * 注：该应用的latexify库与mathtext函数都是经过作者修改过的，其中mathtext函数已经内嵌进了本项目（位于matplot/mathtext.py），而latexify由于增加功能较多，需要克隆作者的fork并在利用pip在本地安装

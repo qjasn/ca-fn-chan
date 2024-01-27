@@ -1,7 +1,6 @@
 from flet_core import *
 
 from basic.app_str import UString
-from matplot.basic_graphic import MatPlotUi
 from matplot.draw_user_function import DrawUserFunction
 from matplot.latex import Latex
 
@@ -21,21 +20,22 @@ class FunctionUI:
         self.page = page
         self.latex = Latex(name=name, args=args, text=text, page=page)  # 将参数转化为latex
         self.latex.init(subscript)  # 初始化Latex类
-        self.latex_image = self.latex.output_svg()  # 获取渲染后的svg图像
+        self.latex_image = self.latex.output_svg()[0]  # 获取渲染后的svg图像
+        self.h = self.latex.output_svg()[1]
 
     def on_change(self, e):
-        print(self)
+        UString.draw_class[self.equation["name"]].visible(e.control.value)
+        UString.matplot_chart.update_draw()  # 更新UI
+        self.page.update()
 
     def on_click(self, _list=None, element=None):
         # 该函数在点击 删除 时调用
         UString.lists.remove(_list)  # 从lists删除对应的结构化函数
         print(UString.a_e)
         UString.a_e.remove(_list["name"])  # 删除存在的函数名称
+        UString.draw_class.pop(_list["name"])
         element.content.controls.remove(self.ui)  # 从页面删除此元素
-        UString.matplot_chart.draw(True)  # 清除函数图像
-        # 在移除之后重新绘制函数图像
-        for content in UString.lists:
-            DrawUserFunction(content, self.page).draw(UString.matplot_chart.return_ax())
+        UString.draw_class[_list["name"]].delete()  # 清除函数图像
         UString.matplot_chart.update_draw()  # 更新UI
         self.page.update()
 
@@ -52,7 +52,7 @@ class FunctionUI:
                         ),
                         Container(
                             content=self.latex_image,
-                            height=20
+                            height=self.h
                         )
                     ], scroll=ScrollMode.ALWAYS,
                         width=(((self.page.width - 100) / 7) * 1.8 - 35) if self.page.width > 550 else (

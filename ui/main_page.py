@@ -17,10 +17,10 @@ class MainPage:
 
     def matplot_ui(self):
         # 从全局变量中构建函数图像的UI，该方法在初始化/页面分辨率改变时会触发
-        print(UString.lists)
-        for content in UString.lists:
-            if content["mode"] == "fx":
-                DrawUserFunction(content, self.page).draw(UString.matplot_chart.return_ax())
+        if not UString.change_dark:
+            for content in UString.lists:
+                if content["mode"] == "fx":
+                    DrawUserFunction(content, self.page).draw()
         self.matplot_chart = UString.matplot_chart.update_draw()
         return self.matplot_chart
 
@@ -29,7 +29,6 @@ class MainPage:
 
 
 def main_page(_page, navbar):
-    print(UString.width)
     equals = Container()  # latex公式
     if any([UString.main_page_control is None, UString.math_list is None]):
         UString.main_page_control = MainPage(_page)

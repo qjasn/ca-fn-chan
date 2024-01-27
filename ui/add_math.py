@@ -32,7 +32,7 @@ class AddMath:
         self.bs = BottomSheet(
             Container(
                 Column([
-                    Text("请输入数学公式", style=TextThemeStyle.BODY_MEDIUM),
+                    Text("请输入数学公式", theme_style=TextThemeStyle.BODY_MEDIUM),
                     Divider(height=1),
                     Row(
                         scroll=ScrollMode.ALWAYS,
@@ -60,8 +60,7 @@ class AddMath:
         page.overlay.append(self.bs)
 
     def bs_dismissed(self, e):
-        print(e)
-        print("Dismissed!")
+        pass
 
     def show_bs(self, e, mode="fx"):
         if mode == "fx":
@@ -72,10 +71,8 @@ class AddMath:
                 # 如果没有可用的函数名称了，就加上下表，扩展默认函数名称列表
                 UString.t += 1
                 for a in _f_n:
-                    print(_f_n)
                     UString.f_n.append("{}_{}".format(a, UString.t))
                 _value = list(set(UString.f_n) - set(UString.a_e))  # 扩展完后再更新一下
-            print(UString.f_n)
             self.textInputs["fx"]["name"] = TextField(label="Name", value=_value[0], width=70)
             self.input.controls = [self.textInputs["fx"]["name"], Text("("),
                                    self.textInputs["fx"]["args"], Text(") ="),
@@ -114,10 +111,11 @@ class AddMath:
         self.bs.update()
 
     def add_function(self, e):
+        _text = self.textInputs["fx"]
         if any([
-            self.textInputs["fx"]["name"].value == "",
-            self.textInputs["fx"]["args"].value == "",
-            self.textInputs["fx"]["text"].value == "",
+            _text["name"].value == "",
+            _text["args"].value == "",
+            _text["text"].value == "",
         ]):
             # 判断输入是否为空
             self.page.dialog = AlertDialog(
@@ -127,7 +125,7 @@ class AddMath:
                 open=True
             )
             self.page.update()
-        elif self.textInputs["fx"]["name"].value in UString.a_e:
+        elif _text["name"].value in UString.a_e:
             # 判断函数名称是否存在
             self.page.dialog = AlertDialog(
                 modal=False,
@@ -140,14 +138,15 @@ class AddMath:
             # 将输入的值结构化，具体规范见app_str.py
             content = {
                 "mode": "fx",
-                "name": self.textInputs["fx"]["name"].value,
-                "args": self.textInputs["fx"]["args"].value,
-                "text": self.textInputs["fx"]["text"].value,
+                "name": _text["name"].value,
+                "args": _text["args"].value,
+                "text": _text["text"].value,
             }
             # 将这个结构化的函数加入全局变量方便其它函数与Class访问
             UString.lists.append(content)
-            UString.a_e.append(self.textInputs["fx"]["name"].value)
-            DrawUserFunction(content, self.page).draw(UString.matplot_chart.return_ax())  # 绘制新函数的图像
+            UString.a_e.append(_text["name"].value)
+            UString.draw_class.update({_text["name"].value: DrawUserFunction(content, self.page)})
+            UString.draw_class[_text["name"].value].draw()  # 绘制新函数的图像
             UString.matplot_chart.update_draw()  # 更新图像
         self.close_bs(None)
         self.equals.content = self.create_ui()
@@ -167,7 +166,7 @@ class AddMath:
                                page=self.page, subscript=True).create_ui(i, self.equals))
             elif i["mode"] == "equ":
                 self.ui.controls.append(
-                    EquationUI(page=self.page, equ=i["equ"], args=i["args"]).create_ui(self.equals,i))
+                    EquationUI(page=self.page, equ=i["equ"], args=i["args"]).create_ui(self.equals, i))
         return self.ui
 
     def nav_change(self):

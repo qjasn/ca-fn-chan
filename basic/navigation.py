@@ -5,18 +5,19 @@ from basic.app_str import UString
 from ui.main_page import main_page, MainPage
 from ui.settings import settings_page
 
+
 # 该Class负责应用整体的导航（路由），即多页面的切换
 class Navigation:
     def __init__(self, page):
-        self.index = 0 # 导航栏的选定值
-        self.navbar = None # 导航栏的定义，在self.nav_init_ui中得到具体的值
-        self.content = "root" # 当前页面的名称
+        self.index = 0  # 导航栏的选定值
+        self.navbar = None  # 导航栏的定义，在self.nav_init_ui中得到具体的值
+        self.content = "root"  # 当前页面的名称
         print("Load navigation class")
-        self.page = page # 获取页面page控制的引用
+        self.page = page  # 获取页面page控制的引用
         self.root_view = ft.View(
             '/',
             controls=[ft.Text("Loading Page")]
-        ) # 根视图的ui与其引用
+        )  # 根视图的ui与其引用
 
     def init_route(self):
         # 初始化路由
@@ -27,7 +28,6 @@ class Navigation:
 
     def change_route(self, route):
         # 路由被改变时触发的函数
-        print(route)
         _page = self.page
         # flet提供的路由模版
         _t_route = TemplateRoute(_page.route)
@@ -38,10 +38,9 @@ class Navigation:
             _page.views.append(_root_view)
             _page.update()
             self.root_view = _root_view
-            home = main_page(_page, self.nav_ui_init()) # 调用main_page构建ui
+            home = main_page(_page, self.nav_ui_init())  # 调用main_page构建ui
             self.root_view.controls = home
-            self.content = "home" # 设置目前页面名称
-            print(self.root_view.controls)
+            self.content = "home"  # 设置目前页面名称
             self.root_view.update()
             self.root_view = _root_view
             _page.update()
@@ -50,7 +49,6 @@ class Navigation:
             home = main_page(_page, self.nav_ui_init())
             _root_view.controls = home
             self.content = "home"
-            print(_root_view.controls)
             _root_view.update()
             self.root_view = _root_view
         elif _t_route.match("/settings"):
@@ -68,7 +66,6 @@ class Navigation:
 
     def view_pop(self, view):
         # 返回上一个页面的函数
-        print(view)
         self.page.views.pop()
         top_view = self.page.views[-1]
         self.page.go(top_view.route)
@@ -90,7 +87,6 @@ class Navigation:
 
     def nav_change(self, e):
         # 在导航栏的选项改变时触发
-        print(e)
         UString.nav_change = True
         self.index = self.navbar.selected_index
         if self.navbar.selected_index == 0:
