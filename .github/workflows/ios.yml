@@ -11,3 +11,4 @@ jobs:
           python-version: '3.9'
           cache: 'pip'
       - run: python --version
+      - run: pip --version
