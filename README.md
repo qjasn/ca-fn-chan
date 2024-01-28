@@ -38,7 +38,7 @@ flet run # 运行该应用
 git clone https://github.com/qjasn/flet-tools.git # 克隆本项目
 cd flet-tools # 进入本项目根目录
 python3 -m venv .venv # 建立虚拟python环境
-.\test_env\Scripts\Activate.ps1 # 进入虚拟python环境
+.\.venv\Scripts\Activate.ps1 # 进入虚拟python环境
 pip install -r requirements.txt # 安装依赖
 flet run # 运行该应用
 ```
