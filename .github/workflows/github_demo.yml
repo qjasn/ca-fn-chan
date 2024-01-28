@@ -5,12 +5,12 @@ env:
   Platform: macOS
 jobs:
   Github-Runif-macOS:
-    if: env.Platform == "macOS"
+    if: ${{ env.Platform == "macOS" }}
     runs-on: macos-latest
     steps:
       - run: echo macOS
   Github-Runif-windows:
-    if: env.Platform == "Windows"
+    if: ${{ env.Platform == "Windows" }}
     runs-on: windows-latest
     steps:
       - run: echo windows
