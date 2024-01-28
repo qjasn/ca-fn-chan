@@ -34,3 +34,11 @@ flet run # 运行该应用
 
 ### Windows
 暂未实现
+
+## 编译说明：
+目前支持macOS  
+
+- fork此项目
+- 新建一个release
+- 进入Github Action，项目开始编译
+- 编译结束后下载macos.zip解压即位app包
