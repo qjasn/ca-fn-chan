@@ -5,15 +5,24 @@ env:
   platform: macOS
 
 jobs:
+  prepare-platform:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "$platform"
+    outputs:
+      platform: ${{ env.platform }}
+    
   macOS-build:
-    if: ${{ env.platform == 'macOS' }}
+    needs: [prepare-platform]
+    if: ${{ needs.prepare-platform.outputs.platform == 'macOS' }}
     runs-on: macos-latest
     steps:
       - name: "Running Environment"
         run: echo "macOS"
-
+      
   Linux-bulid:
-    if: ${{ env.platform == 'Linux' }}
+    needs: [prepare-platform]
+    if: ${{ needs.prepare-platform.outputs.platform == 'Linux' }}
     runs-on: ubuntu-latest
     steps:
       - name: "Running Envrionment"
