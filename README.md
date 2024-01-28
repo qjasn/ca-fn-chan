@@ -15,10 +15,10 @@
     4. 使用sympy实现解方程
 
 
-* 注：该应用的latexify库与mathtext函数都是经过作者修改过的，其中mathtext函数已经内嵌进了本项目（位于matplot/mathtext.py），而latexify由于增加功能较多，需要克隆作者的fork并在利用pip在本地安装
+* 注：该应用的latexify库与mathtext函数都是经过作者修改过的，latexify与mathtext函数已经内嵌进了本项目（位于matplot/mathtext.py）
 
 ## 调试说明
-请确保你已经安装了python3.9与pip
+请确保你已经安装了python3.11,pip与git
 
 ### macOS与Linux
 ``` bash
@@ -26,19 +26,77 @@ git clone https://github.com/qjasn/flet-tools.git # 克隆本项目
 cd flet-tools # 进入本项目根目录
 python3 -m venv .venv # 建立虚拟python环境
 source .venv/bin/activate # 进入虚拟python环境
-pip install -r requirements.txt # 安装依赖（部分一）
-git clone https://github.com/qjasn/latexify_get_from_code.git # 克隆作者的fork
-pip install ./latexify_get_from_code # 安装作者修改后的latexify
+pip install -r requirements.txt # 安装依赖
 flet run # 运行该应用
 ```
 
 ### Windows
-暂未实现
+
+请确保你已经安装了python3.11,pip与git
+
+``` powershell
+git clone https://github.com/qjasn/flet-tools.git # 克隆本项目
+cd flet-tools # 进入本项目根目录
+python3 -m venv .venv # 建立虚拟python环境
+.\test_env\Scripts\Activate.ps1 # 进入虚拟python环境
+pip install -r requirements.txt # 安装依赖
+flet run # 运行该应用
+```
 
 ## 编译说明：
-目前支持macOS  
 
+### 本地编译说明：
+（仅理论，作者未成功编译过任何一个二进制包）
+
+**请提前安装好flutter的stable版本（3.2.6）**
+
+#### macOS
+仅可用于macOS
+确保你已经安装了brew
+``` bash
+brew install cocoapods
+flet build macos
+```
+编译后的二进制文件在`build/macos`
+
+#### Windows
+仅可用于Windows
+``` powershell
+flet build windows
+```
+编译后的二进制文件在`build/windows`
+
+#### Linux
+适用于Ubuntu
+``` bash
+apt install libgtk-3-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
+flet build linux
+```
+编译后的二进制文件在`build/linux`
+
+#### iOS
+仅可用于macOS
+``` bash
+brew install autoconf automake libtool pkg-config
+brew link libtool
+brew cocoapods
+pip install git+https://github.com/flet-dev/python-for-ios.git
+toolchain build matplotlib numpy
+export SERIOUS_PYTHON_IOS_DIST="`realpath dist`"
+flet build ipa
+```
+编译后的二进制文件在`build/ipa`
+
+#### Android
+（可用于macOS与Linux）
+请参考 https://flet.dev/docs/guides/python/packaging-app-for-distribution/#android
+
+### 云端编译说明
+(目前仅支持编译Windows，macOS与Linux平台）
 - fork此项目
-- 新建一个release
-- 进入Github Action，项目开始编译
-- 编译结束后下载macos.zip解压即位app包
+- 进入GitHub Acton
+- 选择flet App Builder
+- 点击标题下的build.yml
+- 进入后编辑文件
+- 更改`env`下的`platform`
+  - 选项有`windows`,`macOS`,`Linux`（未进行测试），iOS与Android正在编写
