@@ -1,0 +1,85 @@
+name: macOS Builder
+run-name: ${{ github.actor }} is building 
+on: [release,push]
+env:
+  platform: iOS
+
+jobs:
+  prepare-platform:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "$platform"
+    outputs:
+      platform: ${{ env.platform }}
+
+  macOS-build:
+    needs: [ prepare-platform ]
+    if: ${{ needs.prepare-platform.outputs.platform == 'macOS' }}
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+      - run: python --version
+      - run: pip --version
+      - name: "Preparing Pip Environment"
+        run: pip install flet
+      - run: flet build macos
+      - uses: actions/upload-artifact@v4
+        with:
+          path: build/macos
+          name: fletCalc-test
+          retention-days: 3
+
+  iOS-build:
+    needs: [ prepare-platform ]
+    if: ${{ needs.prepare-platform.outputs.platform == 'iOS' }}
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+      - run: python --version
+      - run: pip --version
+      - name: "Preparing Pip Environment"
+        run: pip install flet
+      - run: flet build macos --org com.asahi_qin
+      - uses: actions/upload-artifact@v4
+        with:
+          path: build/ipa
+          name: fletCalc-test
+          retention-days: 3
+
+  Linux-bulid:
+    needs: [ prepare-platform ]
+    if: ${{ needs.prepare-platform.outputs.platform == 'Linux' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+      - name: "Preparing Environment"
+        run: apt install libgtk-3-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
+      - name: "Preparing Pip Environment"
+        run: pip install flet
+      - run: flet build macos
+      - uses: actions/upload-artifact@v4
+        with:
+          path: build/linux
+          name: fletCalc-test
+          retention-days: 3

@@ -163,7 +163,7 @@ class AddMath:
             if i["mode"] == "fx":
                 self.ui.controls.append(
                     FunctionUI(name=i["name"], args=i["args"], text="return {}".format(i["text"]),
-                               page=self.page, subscript=True).create_ui(i, self.equals))
+                               page=self.page, subscript=True,use_math_symbols=True).create_ui(i, self.equals))
             elif i["mode"] == "equ":
                 self.ui.controls.append(
                     EquationUI(page=self.page, equ=i["equ"], args=i["args"]).create_ui(self.equals, i))

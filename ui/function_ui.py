@@ -8,7 +8,7 @@ from matplot.latex import Latex
 class FunctionUI:
     delete = []
 
-    def __init__(self, name, args, text, page, subscript=False):
+    def __init__(self, name, args, text, page, subscript=False, use_math_symbols=False):
         self.lists = UString.lists
         self.ui = None
         self.equation = {
@@ -18,7 +18,7 @@ class FunctionUI:
         }  # 设置此类预备转化为latex的对象，其中说明见 basic/app_str.py
         self.page = page
         self.latex = Latex(name=name, args=args, text=text, page=page)  # 将参数转化为latex
-        self.latex.init(subscript)  # 初始化Latex类
+        self.latex.init(subscript,use_math_symbols)  # 初始化Latex类
         self.latex_image = self.latex.output_svg()[0]  # 获取渲染后的svg图像
         self.h = self.latex.output_svg()[1]
 

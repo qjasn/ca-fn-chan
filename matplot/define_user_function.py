@@ -1,6 +1,5 @@
 from basic.app_str import UString
-from numpy import *
-
+from sympy import *
 
 class DefineUserFunction:
 
@@ -8,7 +7,7 @@ class DefineUserFunction:
         self.function = UString.lists
 
     def exec(self, name: str, args):
-        for i in UString.lists:
+        for i in self.function:
             if i["mode"] == "fx":
                 if i["name"] == name:
                     fn = {

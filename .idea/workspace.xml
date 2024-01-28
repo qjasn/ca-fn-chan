@@ -4,13 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3c777c51-1a31-4eaf-b929-7ea4cf71828e" name="更改" comment="Fix bug">
-      <change afterPath="$PROJECT_DIR$/matplot/latexify_expand.py" afterDir="false" />
+    <list default="true" id="3c777c51-1a31-4eaf-b929-7ea4cf71828e" name="更改" comment="remove numpy">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/github_demo.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/github_demo.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/macos.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/macos.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/matplot/basic_graphic.py" beforeDir="false" afterPath="$PROJECT_DIR$/matplot/basic_graphic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/matplot/draw_user_function.py" beforeDir="false" afterPath="$PROJECT_DIR$/matplot/draw_user_function.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matplot/define_user_function.py" beforeDir="false" afterPath="$PROJECT_DIR$/matplot/define_user_function.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/matplot/latex.py" beforeDir="false" afterPath="$PROJECT_DIR$/matplot/latex.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/add_math.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/add_math.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ui/function_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/function_ui.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -109,7 +109,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-50da183f06c8-d3b881c8e49f-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-233.13135.95" />
+        <option value="bundled-python-sdk-5a2391486177-d3b881c8e49f-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-233.13763.11" />
       </set>
     </attachedChunks>
   </component>
@@ -274,7 +274,23 @@
       <option name="project" value="LOCAL" />
       <updated>1706355101225</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Fix bug">
+      <option name="closed" value="true" />
+      <created>1706368178193</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1706368178193</updated>
+    </task>
+    <task id="LOCAL-00021" summary="remove numpy">
+      <option name="closed" value="true" />
+      <created>1706375137109</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1706375137109</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -294,6 +310,7 @@
     <MESSAGE value="Update" />
     <MESSAGE value="更改函数删除时的图像调用,提高应用渲染速度&#10;完善函数显示功能" />
     <MESSAGE value="Fix bug" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix bug" />
+    <MESSAGE value="remove numpy" />
+    <option name="LAST_COMMIT_MESSAGE" value="remove numpy" />
   </component>
 </project>

@@ -20,11 +20,13 @@ class Latex:
         self.args = args
         self.latex = None
         _text = "".join(text.split("return")[1].split(" "))
+        _text = _text.replace("pi", "0")
         if all(["=" not in text, args in text]):
             self.text = text
         elif _text.isnumeric():
             self.text = text
         else:
+            self.text = text
             self.warning("Make sure your symbol in the equation")
 
     def warning(self, e: str):
@@ -38,13 +40,13 @@ class Latex:
         )
         page.update()
 
-    def init(self, subscript=False):
+    def init(self, subscript=False, use_math_symbols=False):
         _name = self.name
         _text = self.text
         _ags = self.args
         _latex = None
         try:
-            self.latex = get_latex_with_code(_name, _ags, _text)
+            self.latex = get_latex_with_code(_name, _ags, _text,use_math_symbols=use_math_symbols)
             if subscript:
                 self.latex = self.latex.replace("\_", "_")
             self.latex = r"${}$".format(self.latex)
