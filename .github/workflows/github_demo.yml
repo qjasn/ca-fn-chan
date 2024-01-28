@@ -2,18 +2,18 @@ name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: [push]
 env:
-  Platform: macOS
+  platform: macOS
 
 jobs:
   macOS-build:
-    if: ${{ env.Platform == 'macOS' }}
+    if: ${{ env.platform == 'macOS' }}
     runs-on: macos-latest
     steps:
       - name: "Running Environment"
         run: echo "macOS"
 
   Linux-bulid:
-    if: ${{ env.Platform == 'Linux' }}
+    if: ${{ env.platform == 'Linux' }}
     runs-on: ubuntu-latest
     steps:
       - name: "Running Envrionment"
