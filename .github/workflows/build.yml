@@ -2,7 +2,7 @@ name: flet App Builder
 run-name: ${{ github.actor }} is Running Building
 on: [release,push]
 env:
-  platform: iOS
+  platform: windows
 
 jobs:
   prepare-platform:
@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: '3.11'
           cache: 'pip'
       - uses: subosito/flutter-action@v2
         with:
@@ -44,7 +44,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: '3.11'
           cache: 'pip'
       - uses: subosito/flutter-action@v2
         with:
@@ -68,7 +68,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: '3.11'
           cache: 'pip'
       - uses: subosito/flutter-action@v2
         with:
@@ -77,9 +77,31 @@ jobs:
         run: apt install libgtk-3-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
       - name: "Preparing Pip Environment"
         run: pip install flet
-      - run: flet build macos
+      - run: flet build linux
       - uses: actions/upload-artifact@v4
         with:
           path: build/linux
+          name: fletCalc-test
+          retention-days: 3
+
+  windows-bulid:
+    needs: [ prepare-platform ]
+    if: ${{ needs.prepare-platform.outputs.platform == 'windows' }}
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+      - name: "Preparing Pip Environment"
+        run: pip install flet
+      - run: flet build windows
+      - uses: actions/upload-artifact@v4
+        with:
+          path: build/windows
           name: fletCalc-test
           retention-days: 3

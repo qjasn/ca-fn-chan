@@ -1,5 +1,6 @@
 flet
 matplotlib
+numpy
 lxml
 sympy
 latexify-py
