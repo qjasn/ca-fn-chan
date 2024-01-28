@@ -79,7 +79,7 @@ flet build linux
 ``` bash
 brew install autoconf automake libtool pkg-config
 brew link libtool
-brew cocoapods
+brew install cocoapods
 pip install git+https://github.com/flet-dev/python-for-ios.git
 toolchain build matplotlib numpy
 export SERIOUS_PYTHON_IOS_DIST="`realpath dist`"
