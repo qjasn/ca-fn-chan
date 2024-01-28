@@ -6,15 +6,15 @@ env:
 
 jobs:
   macOS-build:
-    runs-on: macos-latest
     if: ${{ env.Platform == 'macOS' }}
+    runs-on: macos-latest
     steps:
       - name: "Running Environment"
         run: echo "macOS"
 
   Linux-bulid:
-    runs-on: ubuntu-latest
     if: ${{ env.Platform == 'Linux' }}
+    runs-on: ubuntu-latest
     steps:
       - name: "Running Envrionment"
         run: echo "Linux"
