@@ -1,5 +1,5 @@
-name: macOS Builder
-run-name: ${{ github.actor }} is building 
+name: flet App Builder
+run-name: ${{ github.actor }} is Running Building
 on: [release,push]
 env:
   platform: iOS
@@ -53,7 +53,7 @@ jobs:
       - run: pip --version
       - name: "Preparing Pip Environment"
         run: pip install flet
-      - run: flet build macos --org com.asahi_qin
+      - run: flet build ipa --org com.asahi_qin
       - uses: actions/upload-artifact@v4
         with:
           path: build/ipa
