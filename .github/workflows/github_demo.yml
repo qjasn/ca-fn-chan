@@ -2,17 +2,16 @@ name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: [push]
 env:
-  Platform: macOS
+  Platform: Linux
+
 jobs:
-  Github-Runif-macOS:
-    if: ${{ env.Platform == "macOS" }}
-    runs-on: macos-latest
+  greeting_job:
+    runs-on: ubuntu-latest
+    env:
+      Greeting: Hello
     steps:
-      - run: echo macOS
-  Github-Runif-windows:
-    if: ${{ env.Platform == "Windows" }}
-    runs-on: windows-latest
-    steps:
-      - run: echo windows
+      - name: "Running Environment"
+        if: ${{ env.Platform == 'Linux' }}
+        run: echo "$Platform"
     
         
