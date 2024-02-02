@@ -3,6 +3,7 @@ from flet import *
 from basic.app_str import UString
 from matplot.basic_graphic import MatPlotUi
 from matplot.function.draw_user_function import DrawUserFunction
+from matplot.tools.control import Tools
 from ui.math.add_math import AddMath
 
 
@@ -47,6 +48,7 @@ def main_page(_page, navbar):
         equals.content = UString.math_list.create_ui()
         UString.change_dark = False
     else:
+        MainPage.tools = Tools(_page)
         UString.main_page_control = MainPage(_page)
         UString.math_list = AddMath(_page, equals)
         _control = UString.main_page_control
@@ -101,9 +103,7 @@ def main_page(_page, navbar):
         controls=[
             Container(
                 Column(
-                    [
-
-                    ],
+                    controls=[],
                     alignment=MainAxisAlignment.START
                 ),
                 expand=True
@@ -126,7 +126,8 @@ def main_page(_page, navbar):
                                         ),
                                         items=[
                                             PopupMenuItem(
-                                                content=Text("多项式拟合曲线")
+                                                content=Text("多项式拟合曲线"),
+                                                on_click=lambda x: MainPage.tools.open_bs("fit_poly")
                                             )
                                         ]
                                     )
