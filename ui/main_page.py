@@ -20,6 +20,8 @@ class MainPage:
         for content in UString.lists:
             if content["mode"] == "fx":
                 DrawUserFunction(content, self.page).draw()
+            if content["mode"] == "point":
+                DrawUserFunction(content,self.page,"point").draw()
         self.matplot_chart = UString.matplot_chart.update_draw()
         return self.matplot_chart
 
@@ -79,6 +81,11 @@ def main_page(_page, navbar):
                                             icon=icons.EXPOSURE,
                                             text="方程",
                                             on_click=lambda e: add(e, "equ")
+                                        ),
+                                        PopupMenuItem(
+                                            icon=icons.CIRCLE,
+                                            text="点",
+                                            on_click=lambda e: add(e, "point")
                                         )
                                     ]
                                 )

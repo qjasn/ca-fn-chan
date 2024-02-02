@@ -75,7 +75,6 @@ class MatPlotUi:
             y_ticks.append(i)
             i -= 2
         plt.yticks(ticks=y_ticks)
-
         s = io.StringIO()
         plt.savefig(s, format="svg", bbox_inches="tight", transparent=True)
         svg = s.getvalue()
@@ -99,7 +98,6 @@ class MatPlotUi:
 
     def update_draw(self):
         color = "white" if is_dark(self.page) else "black"
-        self.ax.spines[["left", "bottom"]].set_color(color)
         if self.page.width > 550:
             _width = UString.width
             _width = ((_width - 100) / 7) * 5.2
@@ -110,6 +108,34 @@ class MatPlotUi:
             __width = self.page.width
             _height = ((self.page.height - 150) / 7) * 4.5
         _step = UString.step
+        self.ax.spines[["left", "bottom"]].set_color(color)
+        self.ax.spines[["left", "bottom"]].set_position(("data", 0))
+        # Hide the top and right spines.
+        self.ax.spines[["top", "right"]].set_visible(False)
+        self.ax.grid(linewidth=0.3)
+        plt.xticks(color=color)
+        plt.yticks(color=color)
+        x1, x2, y1, y2 = -(_width / _step) / 2, (_width / _step) / 2, -(_height / _step) / 2, (_height / _step) / 2
+        x_ticks = []
+        i = 0
+        while i <= x2:
+            x_ticks.append(i)
+            i += 2
+        i = 0
+        while i >= x1:
+            x_ticks.append(i)
+            i -= 2
+        plt.xticks(ticks=x_ticks)
+        y_ticks = []
+        i = 0
+        while i <= y2:
+            y_ticks.append(i)
+            i += 2
+        i = 0
+        while i >= y1:
+            y_ticks.append(i)
+            i -= 2
+        plt.yticks(ticks=y_ticks)
         plt.xticks(color=color)
         plt.yticks(color=color)
         s = io.StringIO()

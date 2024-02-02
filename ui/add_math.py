@@ -1,10 +1,12 @@
 from copy import copy
 
+from flet import *
+
 from basic.app_str import UString
 from matplot.draw_user_function import DrawUserFunction
 from ui.equation_ui import EquationUI
 from ui.function_ui import FunctionUI
-from flet import *
+from ui.point_ui import PointUI
 
 
 class AddMath:
@@ -23,6 +25,11 @@ class AddMath:
             "equ": {
                 "equ": TextField(label="内容", value="x = 1"),
                 "args": TextField(label="求解参数", width=100, value="x")
+            },
+            "point": {
+                "x": TextField(label="x", value="1", width=100),
+                "y": TextField(label="y", value="1", width=100),
+                "name": TextField(label="Name", value="1", width=200),
             }
         }
         self.equals = element  # latex显示UI的引用
@@ -80,9 +87,62 @@ class AddMath:
         elif mode == "equ":
             self.button.on_click = self.add_equation
             self.input.controls = [self.textInputs["equ"]["equ"], self.textInputs["equ"]["args"]]
+        elif mode == "point":
+            self.button.on_click = self.add_point
+            _value = list(set(UString.p_n) - set(UString.p_e))  # 取补集查看默认的能用的函数名称
+            _p_n = copy(UString.p_n)
+            if not _value:
+                # 如果没有可用的函数名称了，就加上下表，扩展默认函数名称列表
+                UString.p_t += 1
+                for a in _p_n:
+                    UString.p_n.append("{}_{}".format(a, UString.p_t))
+                _value = list(set(UString.p_n) - set(UString.p_e))  # 扩展完后再更新一下
+            self.textInputs["point"]["name"].value = _value[0]
+            self.input.controls = [self.textInputs["point"]["name"], Text("("),
+                                   self.textInputs["point"]["x"], Text(","),
+                                   self.textInputs["point"]["y"], Text(")")]
+
         self.page.update()
         self.bs.open = True
         self.bs.update()
+
+    def add_point(self, e):
+        x = self.textInputs["point"]["x"]
+        y = self.textInputs["point"]["y"]
+        name = self.textInputs["point"]["name"]
+        if any([x.value == "", y.value == "", name.value == ""]):
+            # 判断输入是否为空
+            self.page.dialog = AlertDialog(
+                modal=False,
+                title=Text("错误"),
+                content=Text("任何一个输入值都不能为空"),
+                open=True
+            )
+        elif name.value in UString.p_e:
+            # 判断函数名称是否存在
+            self.page.dialog = AlertDialog(
+                modal=False,
+                title=Text("错误"),
+                content=Text("函数名称已经存在"),
+                open=True
+            )
+            self.page.update()
+        else:
+            content = {
+                "x": x.value,
+                "y": y.value,
+                "name": name.value,
+                "mode": "point"
+            }
+            UString.lists.append(content)
+            UString.p_e.append(name.value)
+            UString.draw_class.update({name.value: DrawUserFunction(content, self.page, "point")})
+            UString.draw_class[name.value].draw()  # 绘制新函数的图像
+            self.close_bs(None)
+            UString.matplot_chart.update_draw()  # 更新图像
+        self.close_bs(None)
+        self.equals.content = self.create_ui()
+        self.page.update()
 
     def add_equation(self, e):
         _equ = self.textInputs["equ"]["equ"]
@@ -163,10 +223,14 @@ class AddMath:
             if i["mode"] == "fx":
                 self.ui.controls.append(
                     FunctionUI(name=i["name"], args=i["args"], text="return {}".format(i["text"]),
-                               page=self.page, subscript=True,use_math_symbols=True).create_ui(i, self.equals))
+                               page=self.page, subscript=True, use_math_symbols=True).create_ui(i, self.equals))
             elif i["mode"] == "equ":
                 self.ui.controls.append(
                     EquationUI(page=self.page, equ=i["equ"], args=i["args"]).create_ui(self.equals, i))
+            elif i["mode"] == "point":
+                self.ui.controls.append((
+                    PointUI(page=self.page, name=i["name"], x=i["x"], y=i["y"]).create_ui(i, self.equals)
+                ))
         return self.ui
 
     def nav_change(self):
