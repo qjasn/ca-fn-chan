@@ -2,7 +2,7 @@ from flet import TemplateRoute
 import flet as ft
 
 from basic.app_str import UString
-from ui.main_page import main_page, MainPage
+from ui.main_page import main_page
 from ui.settings import settings_page
 
 

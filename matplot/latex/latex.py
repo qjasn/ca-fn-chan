@@ -3,12 +3,12 @@ import re
 import xml.etree.ElementTree as ET
 
 import flet as ft
-from matplot.latexify_expand import *
+from matplot.latex.latexify_expand import *
 import matplotlib.font_manager as mfm
 from flet_core import Image
 
 from basic.is_dark import is_dark
-from matplot.mathtext import math_to_image
+from matplot.latex.mathtext import math_to_image
 
 
 class Latex:

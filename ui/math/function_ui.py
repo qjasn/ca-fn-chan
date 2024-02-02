@@ -1,7 +1,7 @@
 from flet_core import *
 
 from basic.app_str import UString
-from matplot.latex import Latex
+from matplot.latex.latex import Latex
 
 
 # 该类主要负责构建函数表达式的控件

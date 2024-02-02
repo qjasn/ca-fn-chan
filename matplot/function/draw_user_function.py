@@ -1,5 +1,5 @@
 from basic.app_str import UString
-from matplot.define_user_function import DefineUserFunction
+from matplot.function.define_user_function import DefineUserFunction
 from sympy import *
 
 

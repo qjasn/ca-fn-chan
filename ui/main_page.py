@@ -2,8 +2,8 @@ from flet import *
 
 from basic.app_str import UString
 from matplot.basic_graphic import MatPlotUi
-from matplot.draw_user_function import DrawUserFunction
-from ui.add_math import AddMath
+from matplot.function.draw_user_function import DrawUserFunction
+from ui.math.add_math import AddMath
 
 
 class MainPage:
@@ -21,7 +21,7 @@ class MainPage:
             if content["mode"] == "fx":
                 DrawUserFunction(content, self.page).draw()
             if content["mode"] == "point":
-                DrawUserFunction(content,self.page,"point").draw()
+                DrawUserFunction(content, self.page, "point").draw()
         self.matplot_chart = UString.matplot_chart.update_draw()
         return self.matplot_chart
 
@@ -73,17 +73,14 @@ def main_page(_page, navbar):
                                     tooltip="新建",
                                     items=[
                                         PopupMenuItem(
-                                            icon=icons.FUNCTIONS,
                                             text="函数",
                                             on_click=lambda e: add(e, "fx")
                                         ),
                                         PopupMenuItem(
-                                            icon=icons.EXPOSURE,
                                             text="方程",
                                             on_click=lambda e: add(e, "equ")
                                         ),
                                         PopupMenuItem(
-                                            icon=icons.CIRCLE,
                                             text="点",
                                             on_click=lambda e: add(e, "point")
                                         )
@@ -99,6 +96,51 @@ def main_page(_page, navbar):
         ],
         expand=True,
         alignment=MainAxisAlignment.START,
+    )
+    tools_ui = Column(
+        controls=[
+            Container(
+                Column(
+                    [
+
+                    ],
+                    alignment=MainAxisAlignment.START
+                ),
+                expand=True
+            ),
+            Container(
+                Column(
+                    [
+                        Divider(height=1),
+                        Container(
+                            Row(
+                                controls=[
+                                    PopupMenuButton(
+                                        content=Container(
+                                            content=Text("函数"),
+                                            width=70,
+                                            border=border.all(1, colors.BLUE),
+                                            padding=10,
+                                            border_radius=10,
+                                            alignment=alignment.center
+                                        ),
+                                        items=[
+                                            PopupMenuItem(
+                                                content=Text("多项式拟合曲线")
+                                            )
+                                        ]
+                                    )
+                                ],
+                                scroll=ScrollMode.ALWAYS,
+                                height=40
+                            )
+                        )
+                    ]
+                )
+            )
+        ],
+        expand=True,
+        alignment=MainAxisAlignment.END
     )
     content = [Row(
 
@@ -118,7 +160,7 @@ def main_page(_page, navbar):
                             ),
                             Tab(
                                 text="工具",
-                                content=Text("Editing")
+                                content=tools_ui
                             )
                         ]
                     )
@@ -166,7 +208,7 @@ def main_page(_page, navbar):
                                 ),
                                 Tab(
                                     text="工具",
-                                    content=Text("Editing")
+                                    content=tools_ui
                                 )
                             ]
                         )

@@ -6,7 +6,7 @@ from flet import *
 
 from basic.app_str import UString
 from basic.is_dark import is_dark
-from matplot.mathtext import math_to_image
+from matplot.latex.mathtext import math_to_image
 import matplotlib.font_manager as mfm
 
 import re

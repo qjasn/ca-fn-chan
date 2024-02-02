@@ -3,10 +3,10 @@ from copy import copy
 from flet import *
 
 from basic.app_str import UString
-from matplot.draw_user_function import DrawUserFunction
-from ui.equation_ui import EquationUI
-from ui.function_ui import FunctionUI
-from ui.point_ui import PointUI
+from matplot.function.draw_user_function import DrawUserFunction
+from ui.math.equation_ui import EquationUI
+from ui.math.function_ui import FunctionUI
+from ui.math.point_ui import PointUI
 
 
 class AddMath:
@@ -14,8 +14,8 @@ class AddMath:
         self.lists = UString.lists
         self.page = page
         self.ui = Column(controls=[], scroll=ScrollMode.ALWAYS,
-                         height=(page.height - 120) if page.width > 550 else ((
-                                                                                      page.height - 150) / 7) * 2.5 - 70)  # 渲染框大小
+                         height=(page.height - 120) if page.width > 550
+                         else ((page.height - 150) / 7) * 2.5 - 70)  # 渲染框大小
         self.textInputs = {
             "fx": {
                 "name": TextField(label="名称", width=70),  # 定义函数名称输入框

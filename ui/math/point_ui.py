@@ -4,11 +4,11 @@ import xml.etree.ElementTree as ET
 
 import matplotlib.font_manager as mfm
 from flet import *
-from sympy import pi, latex, sympify
+from sympy import latex, sympify
 
 from basic.app_str import UString
 from basic.is_dark import is_dark
-from matplot.mathtext import math_to_image
+from matplot.latex.mathtext import math_to_image
 
 
 class PointUI:
