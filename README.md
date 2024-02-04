@@ -24,6 +24,7 @@
 
 ## 调试说明
 请确保你已经安装了python3.11,pip与git
+
 ** 注意：Linux与 Web以及未安装字体包的Windows很大可能会出现中文字体显示问题**
 
 ### macOS与Linux
