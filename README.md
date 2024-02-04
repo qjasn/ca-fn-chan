@@ -8,20 +8,21 @@
     1. 绘制函数图像（已实现），导出函数图像（未实现）
     2. 获取函数详细信息（奇偶性，对称性，极值等）（未实现）
     3. 解方程（已实现）
-    4. 内嵌python运行
+    4. 内嵌python运行 （未实现）
+    5. 拟合曲线 （未实现）
 - 具体实现方法：
     1. 利用Matplotlib实现函数绘制，并利用Matplotlib的mathtext功能实现Latex（部分）渲染
     2. 利用flet构建应用UI与多平台支持
     3. 使用latexify/sympy作为函数表达式转为Latex
     4. 使用sympy实现解方程
     5. 使用scipy与numpy实现函数相关操作
-    6. 使用numpy生成列表等
-
+    6. 使用numpy生成列表
 
 * 注：该应用的latexify库与mathtext函数都是经过作者修改过的，latexify与mathtext函数已经内嵌进了本项目（位于matplot/mathtext.py），其中latexify-py库的fork在qjasn/latex-get-from-code中
 
 ## 调试说明
 请确保你已经安装了python3.11,pip与git
+** 注意：Linux与 Web以及未安装字体包的Windows很大可能会出现中文字体显示问题**
 
 ### macOS与Linux
 ``` bash
@@ -38,6 +39,7 @@ flet run # 运行该应用
 请确保你已经安装了python3.11,pip与git
 
 ``` powershell
+# 请在powershell下运行
 git clone https://github.com/qjasn/flet-tools.git # 克隆本项目
 cd flet-tools # 进入本项目根目录
 python3 -m venv .venv # 建立虚拟python环境
@@ -45,6 +47,15 @@ python3 -m venv .venv # 建立虚拟python环境
 pip install -r requirements.txt # 安装依赖
 flet run # 运行该应用
 ```
+
+iOS、Android与Web调试
+（iOS与Android请安装Flet应用）
+``` bash
+flet run --ios # iOS
+flet run --android # Android
+flet run --web # Web
+```
+运行完后，Web会自动打开网页，移动端设备请遵循https://flet.dev/docs/guides/python/testing-on-ios或https://flet.dev/docs/guides/python/testing-on-android继续下面的步骤
 
 ## 编译说明：
 
@@ -103,3 +114,5 @@ flet build ipa
 - 进入后编辑文件
 - 更改`env`下的`platform`
   - 选项有`windows`,`macOS`,`Linux`（未进行测试），iOS与Android正在编写
+
+* 注意：编译后的macOS app在Apple Silicon上运行后如果numpy/scipy报错，请勾选使用Rosetta2运行
