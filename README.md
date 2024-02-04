@@ -5,17 +5,20 @@
 ## 项目介绍
 - 背景：在我们的日常学习生活中，需要函数图像辅助我们理解函数
 - 功能：
-    1. 绘制函数图像（已实现）
+    1. 绘制函数图像（已实现），导出函数图像（未实现）
     2. 获取函数详细信息（奇偶性，对称性，极值等）（未实现）
     3. 解方程（已实现）
+    4. 内嵌python运行
 - 具体实现方法：
     1. 利用Matplotlib实现函数绘制，并利用Matplotlib的mathtext功能实现Latex（部分）渲染
     2. 利用flet构建应用UI与多平台支持
-    3. 使用latexify作为函数表达式转为Latex
+    3. 使用latexify/sympy作为函数表达式转为Latex
     4. 使用sympy实现解方程
+    5. 使用scipy与numpy实现函数相关操作
+    6. 使用numpy生成列表等
 
 
-* 注：该应用的latexify库与mathtext函数都是经过作者修改过的，latexify与mathtext函数已经内嵌进了本项目（位于matplot/mathtext.py）
+* 注：该应用的latexify库与mathtext函数都是经过作者修改过的，latexify与mathtext函数已经内嵌进了本项目（位于matplot/mathtext.py），其中latexify-py库的fork在qjasn/latex-get-from-code中
 
 ## 调试说明
 请确保你已经安装了python3.11,pip与git
@@ -81,7 +84,7 @@ brew install autoconf automake libtool pkg-config
 brew link libtool
 brew install cocoapods
 pip install git+https://github.com/flet-dev/python-for-ios.git
-toolchain build matplotlib numpy
+toolchain build matplotlib numpy scipy
 export SERIOUS_PYTHON_IOS_DIST="`realpath dist`"
 flet build ipa
 ```
