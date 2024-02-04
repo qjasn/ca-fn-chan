@@ -20,7 +20,7 @@
     5. 使用scipy与numpy实现函数相关操作
     6. 使用numpy生成列表
 
-* 注：该应用的latexify库与mathtext函数都是经过作者修改过的，latexify与mathtext函数已经内嵌进了本项目（位于matplot/mathtext.py），其中latexify-py库的fork在qjasn/latex-get-from-code中
+* 注：该应用的latexify库与mathtext函数都是经过作者修改过的，latexify与mathtext函数已经内嵌进了本项目（位于matplot/mathtext.py），其中latexify-py库的fork在qjasn/latexify_get_from_code中
 
 ## 调试说明
 请确保你已经安装了python3.11,pip与git
