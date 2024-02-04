@@ -55,7 +55,7 @@ flet run --ios # iOS
 flet run --android # Android
 flet run --web # Web
 ```
-运行完后，Web会自动打开网页，移动端设备请遵循https://flet.dev/docs/guides/python/testing-on-ios或https://flet.dev/docs/guides/python/testing-on-android继续下面的步骤
+运行完后，Web会自动打开网页，移动端设备请遵循 https://flet.dev/docs/guides/python/testing-on-ios 或 https://flet.dev/docs/guides/python/testing-on-android 继续下面的步骤
 
 ## 编译说明：
 
