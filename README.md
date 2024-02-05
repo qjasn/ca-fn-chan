@@ -1,5 +1,5 @@
 # 算方阐
-## CaFnChan
+**CaFnChan**
 
 基于python的函数图像计算器
 
