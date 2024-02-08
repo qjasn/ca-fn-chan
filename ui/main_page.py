@@ -102,10 +102,7 @@ def main_page(_page, navbar):
     tools_ui = Column(
         controls=[
             Container(
-                Column(
-                    controls=[],
-                    alignment=MainAxisAlignment.START
-                ),
+                MainPage.tools.create_ui(),
                 expand=True
             ),
             Container(

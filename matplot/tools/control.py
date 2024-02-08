@@ -18,6 +18,10 @@ class Tools:
                 )
             ],
         )
+        self.element = Column(
+            alignment=MainAxisAlignment.START
+        )
+
         self.bs = BottomSheet(
             Container(
                 Column([
@@ -42,16 +46,22 @@ class Tools:
 
     def open_bs(self, mode):
         if mode == "fit_poly":
-            Tools.running_class = FitPolyUi(self.bs)
+            Tools.running_class = FitPolyUi(self.bs, self.page)
             self.bs_content.controls[0].content = Row(
                 controls=Tools.running_class.fit_poly_ui()
             )
+            self.ok_button.on_click = lambda x: (
+                self.close_bs(None),
+                Tools.tool_lists.append(Tools.running_class.onclick()),
+                self.create_ui(),
+            )
+            print(Tools.tool_lists)
         self.bs.open = True
         self.bs.update()
 
     def create_ui(self):
-        self.page.update()
-        ui = Column()
+        self.element.controls = []
         for i in Tools.tool_lists:
-            ui.controls.append(i)
-        return ui
+            self.element.controls.append(i)
+        self.page.update()
+        return self.element

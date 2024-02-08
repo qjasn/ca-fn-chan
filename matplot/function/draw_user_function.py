@@ -43,7 +43,7 @@ class DrawUserFunction:
         elif self.mode == "point":
             x = float(self.content["x"])
             y = float(self.content["y"])
-            self.plot = ax.scatter(1, 1)
+            self.plot = ax.scatter(x,y)
             ax.spines[["left", "bottom"]].set_position(("data", 0))
             ax.spines[["top", "right"]].set_visible(False)
         else:
