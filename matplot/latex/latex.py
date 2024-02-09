@@ -5,7 +5,7 @@ import xml.etree.ElementTree as ET
 import flet as ft
 from matplot.latex.latexify_expand import *
 import matplotlib.font_manager as mfm
-from flet_core import Image
+from flet_core import Image, ImageFit
 
 from basic.is_dark import is_dark
 from matplot.latex.mathtext import math_to_image
@@ -46,7 +46,7 @@ class Latex:
         _ags = self.args
         _latex = None
         try:
-            self.latex = get_latex_with_code(_name, _ags, _text,use_math_symbols=use_math_symbols)
+            self.latex = get_latex_with_code(_name, _ags, _text, use_math_symbols=use_math_symbols)
             if subscript:
                 self.latex = self.latex.replace("\_", "_")
             self.latex = r"${}$".format(self.latex)
@@ -80,3 +80,16 @@ class Latex:
         w = float(re.findall(r"\d+", root.attrib["width"])[0])
         h = float(re.findall(r"\d+", root.attrib["height"])[0])
         return [Image(src=svg, aspect_ratio=w / h, fit=ft.ImageFit.FILL), (17 / 58) * h]
+
+
+def latex_ui(page, _latex):
+    color = "white" if is_dark(page) else "black"
+    prop = mfm.FontProperties(family='DejaVu Sans Mono', size=64, style="normal")
+    _latex = r"${}$".format(_latex)
+    s = io.StringIO()
+    math_to_image(_latex, s, format="svg", color=color, prop=prop, transparent=True)
+    svg = s.getvalue()
+    root = ET.fromstring(svg)
+    w = float(re.findall(r"\d+", root.attrib["width"])[0])
+    h = float(re.findall(r"\d+", root.attrib["height"])[0])
+    return [Image(src=svg, aspect_ratio=w / h, fit=ImageFit.FILL), (15 / 58) * h]

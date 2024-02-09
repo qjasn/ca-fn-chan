@@ -37,10 +37,12 @@ class MainPage:
 def main_page(_page, navbar):
     equals = Container()  # latex公式
     if any([UString.main_page_control is None, UString.math_list is None]):
+        # 初次进入调用
         UString.main_page_control = MainPage(_page)
         UString.math_list = AddMath(_page, equals)
-    _control = UString.main_page_control
+    _control = UString.main_page_control # 更新control
     if any([UString.nav_change, UString.change_dark]):
+        # 导航更换与暗黑模式切换调用
         if UString.change_dark:
             matplot_chart = _control.dark_mode_change()
         elif UString.nav_change:
@@ -48,6 +50,7 @@ def main_page(_page, navbar):
         equals.content = UString.math_list.create_ui()
         UString.change_dark = False
     else:
+        # 初次进入调用
         MainPage.tools = Tools(_page)
         UString.main_page_control = MainPage(_page)
         UString.math_list = AddMath(_page, equals)
@@ -99,6 +102,7 @@ def main_page(_page, navbar):
         expand=True,
         alignment=MainAxisAlignment.START,
     )
+    # 工具UI
     tools_ui = Column(
         controls=[
             Container(
@@ -112,6 +116,7 @@ def main_page(_page, navbar):
                         Container(
                             Row(
                                 controls=[
+                                    # 函数工具相关
                                     PopupMenuButton(
                                         content=Container(
                                             content=Text("函数"),

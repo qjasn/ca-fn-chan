@@ -20,7 +20,6 @@ class PointUI:
         x_latex = str(latex(sympify(x)))
         y_latex = str(latex(sympify(y)))
         self.latex_text = r"{}:({},{})".format(name, x_latex, y_latex)
-        print(self.latex_text)
         self.latex_image = self.latex_ui(self.latex_text)
 
     def latex_ui(self, _latex):

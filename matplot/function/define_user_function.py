@@ -1,6 +1,16 @@
 from basic.app_str import UString
 from sympy import *
 
+
+def exec_plain(args, plain):
+    exec("""
+def result({}):
+    y = {}
+    return y
+""".format(args, plain))
+    return locals()["result"]
+
+
 class DefineUserFunction:
 
     def __init__(self):

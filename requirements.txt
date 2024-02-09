@@ -4,3 +4,4 @@ numpy
 lxml
 sympy
 latexify-py
+scipy

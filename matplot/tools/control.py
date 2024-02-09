@@ -52,7 +52,7 @@ class Tools:
             )
             self.ok_button.on_click = lambda x: (
                 self.close_bs(None),
-                Tools.tool_lists.append(Tools.running_class.onclick()),
+                Tools.tool_lists.append(Tools.running_class.onclick(self.element)),
                 self.create_ui(),
             )
             print(Tools.tool_lists)
