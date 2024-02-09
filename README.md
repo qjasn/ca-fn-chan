@@ -1,7 +1,12 @@
-# 算方阐
-**CaFnChan**
+<p align="center">
+  <a href="https://github.com/qjasn/ca-fn-chan/">
+    <img width="200" height="200" src="https://github.com/qjasn/ca-fn-chan/blob/main/assets/icon.jpg" alt="TAICHI-flet">
+  </a>
+</p>
 
-基于python的函数图像计算器
+<h1 align="center">算方阐</h1>
+<h3 align="center">CaFnChan</h3>
+<p align="center">基于python的函数图像计算器</p>
 
 **注意：该项目是作者的参赛项目，在正式参赛前不会接受任何贡献，该项目采用GPL2.0协议开源，请不要用此项目作为你个人的参赛项目**
 
