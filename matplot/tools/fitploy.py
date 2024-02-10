@@ -12,6 +12,8 @@ from basic.app_str import UString
 
 class FitPolyUi:
     def __init__(self, bs, page):
+        self.function_text = None
+        self.result_function = None
         self._content = None
         self.max_height = None
         self.return_ui = None
@@ -104,7 +106,7 @@ class FitPolyUi:
         )
         self._page.update()
 
-    def onclick(self, element):
+    def onclick(self, element, lists, running_class):
         points = self.points.value
         options = self.option.value
         liner = self._page.client_storage.get("fx.liner")
@@ -117,8 +119,7 @@ class FitPolyUi:
         # 点的数量与对应函数处理
         if options == "polynomial_function":
             if len(points.split(",")) < int(self.input_ui.controls[0].value):
-                print(points)
-                print(int(self.input_ui.controls[0].value))
+
                 self.warning("函数最高次大于输入点的数量")
                 raise KeyError
         elif options == "linear_function":
@@ -134,6 +135,7 @@ class FitPolyUi:
         # 线性函数
         if options == "linear_function":
             self._content = latex_ui(self._page, "f(x) = ax + b")
+            self.function_text = "ax + b"
             if liner == "liner-sci-liner":
                 result = linregress(x_l, y_l)
                 _popt = [result[0], result[1]]
@@ -147,8 +149,10 @@ class FitPolyUi:
                 result[0] = round(float(result[0]), 10)
                 result[1] = round(float(result[1]), 10)
                 _popt = result
-            self.solve_img = latex_ui(self._page, "a={},b={}".format(_popt[0], _popt[1]))[0]
-            self.max_height = latex_ui(self._page, "a={},b={}".format(_popt[0], _popt[1]))[1]
+            result_function = "a={},b={}".format(_popt[0], _popt[1])
+            self.result_function = result_function
+            self.solve_img = latex_ui(self._page, result_function)[0]
+            self.max_height = latex_ui(self._page, result_function)[1]
         # 非线性多项式函数
         elif options == "polynomial_function":
             character = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"]
@@ -192,19 +196,20 @@ class FitPolyUi:
                     else:
                         fx_text += r"{}*x**{}+".format(c, _degree - i)
                 fx = exec_plain(args, fx_text)
-                print(args, fx_text, x_l, y_l)
                 result, _ = curve_fit(fx, x_l, y_l)
                 for i in result:
                     _popt.append(round(i, 10))
             for i, v in enumerate(_popt):
                 result_text += "{} = {} ".format(character[i], v)
+            self.function_text = function_text
+            self.result_function = result_text
             self._content = latex_ui(self._page, "f(x) = {}".format(function_text))
             self.solve_img = latex_ui(self._page, result_text)[0]
             self.max_height = latex_ui(self._page, result_text)[1]
-        self.create_ui(element)
+        self.create_ui(element, lists, running_class)
         return self.return_ui
 
-    def create_ui(self, element):
+    def create_ui(self, element, lists, running_class):
         self.return_ui = Row(
             [
                 Stack([
@@ -238,7 +243,7 @@ class FitPolyUi:
                         content=PopupMenuButton(items=[
                             PopupMenuItem(
                                 text="删除",
-                                on_click=lambda e: self.delete(element)
+                                on_click=lambda e: self.delete(element, lists, running_class)
                             )
                         ]
 
@@ -251,9 +256,20 @@ class FitPolyUi:
             height=(self._content[1] + self.max_height) + 45
         )
 
-    def delete(self, element):
+    def delete(self, element, lists, running_class):
         element.controls.remove(self.return_ui)
+        lists.remove(self.return_ui)
+        running_class.remove(self)
         self._page.update()
+
+    def update_ui(self, element, lists, running_class):
+        function_text = self.function_text
+        result_text = self.result_function
+        self._content = latex_ui(self._page, "f(x) = {}".format(function_text))
+        self.solve_img = latex_ui(self._page, result_text)[0]
+        self.max_height = latex_ui(self._page, result_text)[1]
+        self.create_ui(element, lists, running_class)
+        return self.return_ui
 
 
 class MathFunction:

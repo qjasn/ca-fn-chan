@@ -16,10 +16,13 @@ def main(page: ft.Page):
         _AppControl.on_resize(None),
         UString(page)
     )
-    page.on_platform_brightness_change = lambda e: (
-        _AppControl.route.update_ui(),
+
+    def dark_change(e):
+        UString.change_dark = True
+        _AppControl.route.update_ui()
         page.update()
-    )
+
+    page.on_platform_brightness_change = dark_change
 
 
 ft.app(target=main)

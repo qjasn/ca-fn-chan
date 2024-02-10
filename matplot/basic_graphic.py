@@ -149,6 +149,6 @@ class MatPlotUi:
         self.ui.width = __width
         try:
             self.ui.update()
-            return "Update Successfully"
+            return self.ui
         except Exception:
             return self.ui

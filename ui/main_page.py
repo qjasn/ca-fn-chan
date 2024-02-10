@@ -9,6 +9,7 @@ from ui.math.add_math import AddMath
 
 class MainPage:
     s_index = 0
+    tools = None
 
     def __init__(self, page):
         self.matplot_chart = None
@@ -36,28 +37,31 @@ class MainPage:
 
 def main_page(_page, navbar):
     equals = Container()  # latex公式
-    if any([UString.main_page_control is None, UString.math_list is None]):
+    if any([UString.main_page_control is None, UString.math_list is None, MainPage.tools is None]):
         # 初次进入调用
         UString.main_page_control = MainPage(_page)
         UString.math_list = AddMath(_page, equals)
-    _control = UString.main_page_control # 更新control
+        MainPage.tools = Tools(_page)
+    _control = UString.main_page_control  # 更新control
     if any([UString.nav_change, UString.change_dark]):
         # 导航更换与暗黑模式切换调用
         if UString.change_dark:
             matplot_chart = _control.dark_mode_change()
-        elif UString.nav_change:
+        if UString.nav_change:
             matplot_chart = _control.nav_change()
         equals.content = UString.math_list.create_ui()
         UString.change_dark = False
+        MainPage.tools.update_ui()
+        tools_container = MainPage.tools.element
     else:
         # 初次进入调用
-        MainPage.tools = Tools(_page)
         UString.main_page_control = MainPage(_page)
         UString.math_list = AddMath(_page, equals)
         _control = UString.main_page_control
         equals.content = UString.math_list.create_ui()
         UString.matplot_chart.draw()
         matplot_chart = _control.matplot_ui()  # 函数图像UI
+        tools_container = MainPage.tools.create_ui()
 
     def add(e, mode="fx"):
         UString.math_list.show_bs(None, mode)
@@ -106,7 +110,7 @@ def main_page(_page, navbar):
     tools_ui = Column(
         controls=[
             Container(
-                MainPage.tools.create_ui(),
+                tools_container,
                 expand=True
             ),
             Container(
