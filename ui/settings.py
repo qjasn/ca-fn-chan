@@ -20,6 +20,10 @@ def settings_page(_page, navbar):
         _mode = _page.client_storage.get("fx.polynomial")
         _page.client_storage.set("fx.polynomial", e.control.value)
 
+    def fourier_update(e):
+        _mode = _page.client_storage.get("fx.fourier")
+        _page.client_storage.set("fx.fourier", e.control.value)
+
     dark_mode_ui = RadioGroup(Column([
         Radio(value="SYSTEM", label="跟随系统"),
         Radio(value="LIGHT", label="明亮"),
@@ -46,6 +50,14 @@ def settings_page(_page, navbar):
         value=_page.client_storage.get("fx.polynomial"),
         on_change=polyfit_polynomial_update
     )
+    fourier_transform_set = Dropdown(
+        options=[
+            dropdown.Option("enable-fourier", text="启用[默认]"),
+            dropdown.Option("disable-fourier", text="关闭")
+        ],
+        value=_page.client_storage.get("fx.fourier"),
+        on_change=fourier_update
+    )
     content = Column(
         [
             Column([
@@ -70,9 +82,18 @@ def settings_page(_page, navbar):
                         polynomial_fn_set
                     ],
                     scroll=ScrollMode.ALWAYS
+                ),
+                Row(
+                    [
+                        Text("正余弦函数傅立叶变换预处理:"),
+                        fourier_transform_set
+                    ]
                 )
             ],
-                alignment=MainAxisAlignment.START)],
+                alignment=MainAxisAlignment.START,
+                scroll=ScrollMode.ALWAYS
+            )],
+        scroll=ScrollMode.ALWAYS,
         alignment=MainAxisAlignment.START,
         expand=True
     )

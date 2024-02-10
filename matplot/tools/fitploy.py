@@ -2,7 +2,8 @@ from flet import *
 from scipy.optimize import curve_fit
 from scipy.stats import linregress
 import numpy as np
-from sympy import *
+from numpy import *
+from sympy import sympify, lambdify
 
 from matplot.function.define_user_function import exec_plain
 from matplot.latex.latex import latex_ui
@@ -12,6 +13,9 @@ from basic.app_str import UString
 
 class FitPolyUi:
     def __init__(self, bs, page):
+        self.function = None
+        self.plot = None
+        self._popt = None
         self.function_text = None
         self.result_function = None
         self._content = None
@@ -119,7 +123,6 @@ class FitPolyUi:
         # 点的数量与对应函数处理
         if options == "polynomial_function":
             if len(points.split(",")) < int(self.input_ui.controls[0].value):
-
                 self.warning("函数最高次大于输入点的数量")
                 raise KeyError
         elif options == "linear_function":
@@ -136,6 +139,7 @@ class FitPolyUi:
         if options == "linear_function":
             self._content = latex_ui(self._page, "f(x) = ax + b")
             self.function_text = "ax + b"
+            self.function = MathFunction.linear_function
             if liner == "liner-sci-liner":
                 result = linregress(x_l, y_l)
                 _popt = [result[0], result[1]]
@@ -176,38 +180,95 @@ class FitPolyUi:
                     function_text += r"{}".format(c)
                 else:
                     function_text += r"{} x^{}+".format(c, _degree - i)
-            print(function_text)
             self._content = latex_ui(self._page, function_text)
             _popt = []
+            args = "x,"
+            for i in character[:(_degree + 1)]:
+                args += "{},".format(i)
+            fx_text = ""
+            for i, c in enumerate(character[:(_degree + 1)]):
+                if _degree - i == 1:
+                    fx_text += r"{}*x+".format(c)
+                elif _degree - i == 0:
+                    fx_text += r"{}".format(c)
+                else:
+                    fx_text += r"{}*x**{}+".format(c, _degree - i)
+            fx = exec_plain(args, fx_text)
             if polynomial == "polynomial-num-polyfit":
                 result = np.polyfit(x_l, y_l, int(degree))
                 for i in result:
                     _popt.append(round(i, 10))
             if polynomial == "polynomial-sci-curve":
-                args = "x,"
-                for i in character[:(_degree + 1)]:
-                    args += "{},".format(i)
-                fx_text = ""
-                for i, c in enumerate(character[:(_degree + 1)]):
-                    if _degree - i == 1:
-                        fx_text += r"{}*x+".format(c)
-                    elif _degree - i == 0:
-                        fx_text += r"{}".format(c)
-                    else:
-                        fx_text += r"{}*x**{}+".format(c, _degree - i)
-                fx = exec_plain(args, fx_text)
                 result, _ = curve_fit(fx, x_l, y_l)
                 for i in result:
                     _popt.append(round(i, 10))
             for i, v in enumerate(_popt):
-                result_text += "{} = {} ".format(character[i], v)
+                result_text += "{} = {},".format(character[i], v)
+            self.function = fx
             self.function_text = function_text
             self.result_function = result_text
             self._content = latex_ui(self._page, "f(x) = {}".format(function_text))
             self.solve_img = latex_ui(self._page, result_text)[0]
             self.max_height = latex_ui(self._page, result_text)[1]
+        elif options == "sine_function" or options == "cosine_function":
+            if options.startswith("sine"):
+                self.function_text = "a sin(b x + c) + d"
+                self.function = MathFunction.sine_function
+            else:
+                self.function_text = "a cos(b x + c) + d"
+                self.function = MathFunction.cosine_function
+            if self._page.client_storage.get("fx.fourier").startswith("enable"):
+                fs = np.fft.fftfreq(len(x_l), x_l[1] - x_l[0])
+                abs_y = abs(np.fft.fft(y_l))
+                freq = abs(fs[np.argmax(abs_y[1:]) + 1])
+                a0 = max(y_l) - min(y_l)
+                a1 = 2 * pi * freq
+                a2 = 0
+                a3 = np.mean(y_l)
+                p0 = [a0, a1, a2, a3]
+                if options.startswith("sine"):
+                    _popt, _ = curve_fit(MathFunction.sine_function, x_l, y_l, p0=p0)
+                else:
+                    _popt, _ = curve_fit(MathFunction.cosine_function, x_l, y_l, p0=p0)
+                self.result_function = "a = {}, b = {}, c = {}, d = {}".format(_popt[0], _popt[1], _popt[2], _popt[3])
+            else:
+                if options.startswith("sine"):
+                    _popt, _ = curve_fit(MathFunction.sine_function, x_l, y_l)
+                else:
+                    _popt, _ = curve_fit(MathFunction.cosine_function, x_l, y_l)
+
+                self.result_function = "a = {}, b = {}, c = {}, d = {}".format(_popt[0], _popt[1], _popt[2], _popt[3])
+            function_text = self.function_text
+            result_text = self.result_function
+            self._content = latex_ui(self._page, "f(x) = {}".format(function_text))
+            self.solve_img = latex_ui(self._page, result_text)[0]
+            self.max_height = latex_ui(self._page, result_text)[1]
+        self._popt = _popt
         self.create_ui(element, lists, running_class)
         return self.return_ui
+
+    def draw(self):
+        ax = UString.matplot_chart.return_ax()
+        if self._page.width > 550:
+            _width = UString.width
+            _width = ((_width - 100) / 7) * 5.2
+            __width = _width - 50
+            _height = UString.height
+        else:
+            _width = self._page.width
+            __width = self._page.width
+            _height = ((self._page.height - 150) / 7) * 4.5
+        ax = UString.matplot_chart.return_ax()
+        x1, x2, y1, y2 = -(_width / UString.step) / 2, (_width / UString.step) / 2, -(_height / UString.step) / 2, (
+                _height / UString.step) / 2
+        x = np.linspace(int(x1) - 1, int(x2) + 1, int(_width))
+        y = [self.function(a, *self._popt) for a in x]
+        self.plot = ax.plot(x, y)[-1]
+        self._page.update()
+
+    def disable_draw(self):
+        self.plot.remove()
+        self._page.update()
 
     def create_ui(self, element, lists, running_class):
         self.return_ui = Row(
@@ -244,6 +305,10 @@ class FitPolyUi:
                             PopupMenuItem(
                                 text="删除",
                                 on_click=lambda e: self.delete(element, lists, running_class)
+                            ),
+                            PopupMenuItem(
+                                text="Draw",
+                                on_click=lambda e: self.draw()
                             )
                         ]
 

@@ -26,6 +26,8 @@ class AppControl:
             _page.client_storage.set("fx.liner", "liner-sci-liner")
         if _page.client_storage.get("fx.polynomial") is None:
             _page.client_storage.set("fx.polynomial", "polynomial-num-polyfit")
+        if _page.client_storage.get("fx.fourier") is None:
+            _page.client_storage.set("fx.fourier", "enable-fourier")
         _page.theme_mode = UString.darkMode[_page.client_storage.get("fx.darkMode")]
         # 初始化路由
         self.route.init_route()
