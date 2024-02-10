@@ -1,4 +1,8 @@
-"""Generate LaTeX code."""
+"""
+Rewrite by Asahi_Qin
+该文件是Latexify的扩展库，可以实现从文本生成latex
+作者Asahi_Qin
+"""
 
 from __future__ import annotations
 
