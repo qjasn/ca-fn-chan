@@ -2,6 +2,13 @@ from flet import *
 
 from matplot.tools.fitploy import FitPolyUi
 
+"""
+通用说明：
+对于构建工具的Class说明：
+1. 要有构建输入框UI的函数（即下面的fit_poly_ui）
+2. 要有onclick函数，需要返回一个flet ui实例,其中存储结果相关内容至self
+3. 要有update_ui函数，返回一个flet ui实例，内容与onclick返回的内容相同，但使用的是self已经算好的内容
+"""
 
 class Tools:
     tool_lists = []
