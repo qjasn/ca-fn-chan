@@ -1,3 +1,5 @@
+import uuid
+
 from flet import *
 from scipy.optimize import curve_fit
 from scipy.stats import linregress
@@ -6,6 +8,7 @@ from numpy import *
 from sympy import sympify, lambdify
 
 from matplot.function.define_user_function import exec_plain
+from matplot.function.draw_user_function import DrawUserFunction
 from matplot.latex.latex import latex_ui
 
 from basic.app_str import UString
@@ -13,6 +16,8 @@ from basic.app_str import UString
 
 class FitPolyUi:
     def __init__(self, bs, page):
+        self.uuid = uuid.uuid1()
+        print(self.uuid)
         self.function = None
         self.plot = None
         self._popt = None
@@ -258,16 +263,21 @@ class FitPolyUi:
             _width = self._page.width
             __width = self._page.width
             _height = ((self._page.height - 150) / 7) * 4.5
-        ax = UString.matplot_chart.return_ax()
         x1, x2, y1, y2 = -(_width / UString.step) / 2, (_width / UString.step) / 2, -(_height / UString.step) / 2, (
                 _height / UString.step) / 2
         x = np.linspace(int(x1) - 1, int(x2) + 1, int(_width))
         y = [self.function(a, *self._popt) for a in x]
-        self.plot = ax.plot(x, y)[-1]
-        self._page.update()
+        content = {
+            "x": x,
+            "y": y
+        }
+        UString.draw_class.update({self.uuid: DrawUserFunction(content, self._page, "list")})
+        UString.draw_class[self.uuid].draw()  # 绘制新函数的图像
+        UString.matplot_chart.update_draw()  # 更新图像
 
     def disable_draw(self):
-        self.plot.remove()
+        UString.draw_class[self.uuid].delete()  # 清除函数图像
+        self.plot.visible()
         self._page.update()
 
     def create_ui(self, element, lists, running_class):
@@ -295,7 +305,7 @@ class FitPolyUi:
                                     height=self.max_height,
                                 )
                             ], scroll=ScrollMode.AUTO,
-                            width=(((self._page.width - 100) / 7) * 1.8 - 35) if self._page.width > 550 else (
+                               width=(((self._page.width - 100) / 7) * 1.8 - 35) if self._page.width > 550 else (
                                     self._page.width - 55)
                         )
                         ], top=5
@@ -307,7 +317,7 @@ class FitPolyUi:
                                 on_click=lambda e: self.delete(element, lists, running_class)
                             ),
                             PopupMenuItem(
-                                text="Draw",
+                                text="绘制",
                                 on_click=lambda e: self.draw()
                             )
                         ]
@@ -322,6 +332,8 @@ class FitPolyUi:
         )
 
     def delete(self, element, lists, running_class):
+        UString.draw_class.pop(self.uuid)
+        UString.draw_class[self.uuid].delete()  # 清除函数图像
         element.controls.remove(self.return_ui)
         lists.remove(self.return_ui)
         running_class.remove(self)

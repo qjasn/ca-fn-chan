@@ -61,7 +61,8 @@ def main_page(_page, navbar):
         equals.content = UString.math_list.create_ui()
         UString.matplot_chart.draw()
         matplot_chart = _control.matplot_ui()  # 函数图像UI
-        tools_container = MainPage.tools.create_ui()
+        MainPage.tools.create_ui()
+        tools_container = MainPage.tools.update_ui()
 
     def add(e, mode="fx"):
         UString.math_list.show_bs(None, mode)
@@ -110,44 +111,40 @@ def main_page(_page, navbar):
     tools_ui = Column(
         controls=[
             Container(
-                tools_container,
-                expand=True
-            ),
-            Container(
                 Column(
                     [
+                        tools_container,
                         Divider(height=1),
-                        Container(
-                            Row(
-                                controls=[
-                                    # 函数工具相关
-                                    PopupMenuButton(
-                                        content=Container(
-                                            content=Text("函数"),
-                                            width=70,
-                                            border=border.all(1, colors.BLUE),
-                                            padding=10,
-                                            border_radius=10,
-                                            alignment=alignment.center
-                                        ),
-                                        items=[
-                                            PopupMenuItem(
-                                                content=Text("多项式拟合曲线"),
-                                                on_click=lambda x: MainPage.tools.open_bs("fit_poly")
-                                            )
-                                        ]
-                                    )
-                                ],
-                                scroll=ScrollMode.ALWAYS,
-                                height=40
-                            )
-                        )
-                    ]
+                        Row(
+                            controls=[
+                                # 函数工具相关
+                                PopupMenuButton(
+                                    content=Container(
+                                        content=Text("函数"),
+                                        width=70,
+                                        border=border.all(1, colors.BLUE),
+                                        padding=10,
+                                        border_radius=10,
+                                        alignment=alignment.center
+                                    ),
+                                    items=[
+                                        PopupMenuItem(
+                                            content=Text("多项式拟合曲线"),
+                                            on_click=lambda x: MainPage.tools.open_bs("fit_poly")
+                                        )
+                                    ]
+                                )
+                            ],
+                            scroll=ScrollMode.ALWAYS,
+                            ),
+                    ],
+                    expand=True,
+                    alignment=MainAxisAlignment.END
                 )
             )
         ],
         expand=True,
-        alignment=MainAxisAlignment.END
+        alignment=MainAxisAlignment.START,
     )
     content = [Row(
 
