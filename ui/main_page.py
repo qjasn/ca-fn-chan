@@ -63,6 +63,11 @@ def main_page(_page, navbar):
         matplot_chart = _control.matplot_ui()  # 函数图像UI
         MainPage.tools.create_ui()
         tools_container = MainPage.tools.update_ui()
+        if _page.width < 550:
+            MainPage.tools.element.height = ((_page.height - 150) / 7) * 2.5 - 80
+        else:
+            MainPage.tools.element.height = _page.height - 140
+
 
     def add(e, mode="fx"):
         UString.math_list.show_bs(None, mode)
@@ -131,12 +136,56 @@ def main_page(_page, navbar):
                                         PopupMenuItem(
                                             content=Text("多项式拟合曲线"),
                                             on_click=lambda x: MainPage.tools.open_bs("fit_poly")
-                                        )
+                                        ),
+                                        PopupMenuItem(
+                                            content=Text("根据Y求X"),
+                                            on_click=lambda x: MainPage.tools.open_bs("x-call")
+                                        ),
+                                        PopupMenuItem(
+                                            content=Text("根据X求Y"),
+                                            on_click=lambda x: MainPage.tools.open_bs("y-call")
+                                        ),
+                                        PopupMenuItem(
+                                            content=Text("求函数交点"),
+                                            on_click=lambda x: MainPage.tools.open_bs("intersection")
+                                        ),
+                                        PopupMenuItem(
+                                            content=Text("求函数根"),
+                                            on_click=lambda x: MainPage.tools.open_bs("root")
+                                        ),
+                                    ]
+                                ),
+                                PopupMenuButton(
+                                    content=Container(
+                                        content=Text("代数"),
+                                        width=70,
+                                        border=border.all(1, colors.BLUE),
+                                        padding=10,
+                                        border_radius=10,
+                                        alignment=alignment.center
+                                    ),
+                                    items=[
+                                        PopupMenuItem(
+                                            content=Text("多项式展开"),
+                                            on_click=lambda x: MainPage.tools.open_bs("expand")
+                                        ),
+                                        PopupMenuItem(
+                                            content=Text("因式分解"),
+                                            on_click=lambda x: MainPage.tools.open_bs("factor")
+                                        ),
+                                        PopupMenuItem(
+                                            content=Text("合并同类项"),
+                                            on_click=lambda x: MainPage.tools.open_bs("collect")
+                                        ),
+                                        PopupMenuItem(
+                                            content=Text("分式化简"),
+                                            on_click=lambda x: MainPage.tools.open_bs("cancel")
+                                        ),
                                     ]
                                 )
                             ],
                             scroll=ScrollMode.ALWAYS,
-                            ),
+                        ),
                     ],
                     expand=True,
                     alignment=MainAxisAlignment.END

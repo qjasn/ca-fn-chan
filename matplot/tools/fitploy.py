@@ -17,7 +17,6 @@ from basic.app_str import UString
 class FitPolyUi:
     def __init__(self, bs, page):
         self.uuid = uuid.uuid1()
-        print(self.uuid)
         self.function = None
         self.plot = None
         self._popt = None
@@ -35,6 +34,11 @@ class FitPolyUi:
         polynomial = self._page.client_storage.get("fx.polynomial")
         self.points = TextField(label="点", width=200)
         self.degree_ui = TextField(label="最高次", width=100)
+        self.checkbox = Checkbox(
+                                    value=True,
+                                    on_change=self.on_change,
+                                    visible=False
+                                )
         if liner.startswith("liner-num") and polynomial.startswith("polynomial-num"):
             self.input_ui = Row(
                 [
@@ -248,6 +252,22 @@ class FitPolyUi:
             self._content = latex_ui(self._page, "f(x) = {}".format(function_text))
             self.solve_img = latex_ui(self._page, result_text)[0]
             self.max_height = latex_ui(self._page, result_text)[1]
+        elif options == "tangent_function":
+            _popt, _ = curve_fit(MathFunction.tangent_function, x_l, y_l)
+            self.result_function = "a = {}, b = {}, c = {}, d = {}".format(_popt[0], _popt[1], _popt[2], _popt[3])
+            function_text = self.function_text
+            result_text = self.result_function
+            self._content = latex_ui(self._page, "f(x) = {}".format(function_text))
+            self.solve_img = latex_ui(self._page, result_text)[0]
+            self.max_height = latex_ui(self._page, result_text)[1]
+        elif options == "hook_function":
+            _popt, _ = curve_fit(MathFunction.hook_function, x_l, y_l)
+            self.result_function = "a = {}, b = {}".format(_popt[0], _popt[1])
+            function_text = self.function_text
+            result_text = self.result_function
+            self._content = latex_ui(self._page, "f(x) = {}".format(function_text))
+            self.solve_img = latex_ui(self._page, result_text)[0]
+            self.max_height = latex_ui(self._page, result_text)[1]
         self._popt = _popt
         self.create_ui(element, lists, running_class)
         return self.return_ui
@@ -274,10 +294,12 @@ class FitPolyUi:
         UString.draw_class.update({self.uuid: DrawUserFunction(content, self._page, "list")})
         UString.draw_class[self.uuid].draw()  # 绘制新函数的图像
         UString.matplot_chart.update_draw()  # 更新图像
+        self.checkbox.visible = True
+        self._page.update()
 
-    def disable_draw(self):
-        UString.draw_class[self.uuid].delete()  # 清除函数图像
-        self.plot.visible()
+    def on_change(self,e):
+        UString.draw_class[self.uuid].visible(e.control.value)  # 清除函数图像
+        UString.matplot_chart.update_draw()  # 更新图像
         self._page.update()
 
     def create_ui(self, element, lists, running_class):
@@ -287,6 +309,7 @@ class FitPolyUi:
                     Column(
                         [
                             Row([
+                                self.checkbox,
                                 Container(
                                     content=self._content[0],
                                     height=self._content[1],
@@ -305,7 +328,7 @@ class FitPolyUi:
                                     height=self.max_height,
                                 )
                             ], scroll=ScrollMode.AUTO,
-                               width=(((self._page.width - 100) / 7) * 1.8 - 35) if self._page.width > 550 else (
+                            width=(((self._page.width - 100) / 7) * 1.8 - 35) if self._page.width > 550 else (
                                     self._page.width - 55)
                         )
                         ], top=5
@@ -332,8 +355,10 @@ class FitPolyUi:
         )
 
     def delete(self, element, lists, running_class):
-        UString.draw_class.pop(self.uuid)
-        UString.draw_class[self.uuid].delete()  # 清除函数图像
+        if self.uuid in UString.draw_class.keys():
+            UString.draw_class[self.uuid].delete()  # 清除函数图像
+            UString.draw_class.pop(self.uuid)
+            UString.matplot_chart.update_draw()  # 更新图像
         element.controls.remove(self.return_ui)
         lists.remove(self.return_ui)
         running_class.remove(self)

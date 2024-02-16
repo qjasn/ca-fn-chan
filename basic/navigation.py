@@ -3,6 +3,7 @@ import flet as ft
 
 from basic.app_str import UString
 from ui.main_page import main_page
+from ui.python_page import python_page
 from ui.settings import settings_page
 
 
@@ -12,7 +13,6 @@ class Navigation:
         self.index = 0  # 导航栏的选定值
         self.navbar = None  # 导航栏的定义，在self.nav_init_ui中得到具体的值
         self.content = "root"  # 当前页面的名称
-        print("Load navigation class")
         self.page = page  # 获取页面page控制的引用
         self.root_view = ft.View(
             '/',
@@ -58,7 +58,13 @@ class Navigation:
             self.content = "settings"
             _root_view.update()
             self.root_view = _root_view
-
+        elif _t_route.match("/python"):
+            # 页面设置目录的渲染
+            settings = python_page(_page, self.nav_ui_init())
+            _root_view.controls = settings
+            self.content = "python"
+            _root_view.update()
+            self.root_view = _root_view
         else:
             # 该情况只会在网页端出现，用来反馈不存在该页面
             print("404 not found")
@@ -80,6 +86,9 @@ class Navigation:
         elif _content == "home":
             _root_view.controls = main_page(_page, self.nav_ui_init())
             _root_view.update()
+        elif _content == "python":
+            _root_view.controls = python_page(_page, self.nav_ui_init())
+            _root_view.update()
         elif _content == "settings":
             _root_view.controls = settings_page(_page, self.nav_ui_init())
             _root_view.update()
@@ -91,6 +100,8 @@ class Navigation:
         self.index = self.navbar.selected_index
         if self.navbar.selected_index == 0:
             self.page.go("/home")
+        elif self.navbar.selected_index == 1:
+            self.page.go("/python")
         else:
             self.page.go("/settings")
         UString.nav_change = False
@@ -103,6 +114,7 @@ class Navigation:
                 selected_index=self.index,
                 destinations=[
                     ft.NavigationDestination(icon=ft.icons.FUNCTIONS, label="f(x)"),
+                    ft.NavigationDestination(icon=ft.icons.CODE, label="Python"),
                     ft.NavigationDestination(icon=ft.icons.SETTINGS, label="设置")
                 ],
                 on_change=self.nav_change
@@ -119,6 +131,7 @@ class Navigation:
                 height=self.page.height,
                 destinations=[
                     ft.NavigationRailDestination(icon=ft.icons.FUNCTIONS, label="f(x)"),
+                    ft.NavigationRailDestination(icon=ft.icons.CODE, label="Python"),
                     ft.NavigationRailDestination(icon=ft.icons.SETTINGS, label="设置")
                 ]
             )

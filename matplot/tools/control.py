@@ -18,8 +18,6 @@ class Tools:
     running_class = []
 
     def __init__(self, _page: Page):
-        self.uuid = uuid.uuid1()
-        print(self.uuid)
         self.ok = True
         self.page = _page
         self.ok_button = TextButton("确认")
@@ -33,6 +31,7 @@ class Tools:
         )
         self.element = Column(
             alignment=MainAxisAlignment.START,
+            height=self.page.height-140,
             controls=[]
         )
 
@@ -56,13 +55,11 @@ class Tools:
         _page.overlay.append(self.bs)
 
     def close_bs(self, e, cancel=False):
-        if cancel:
-            Tools.running_class.remove(Tools.running_class[-1])
         self.bs.open = False
         self.bs.update()
 
     def dismiss(self, e):
-        if self.ok:
+        if not self.ok:
             Tools.running_class.remove(Tools.running_class[-1])
 
     def ok_button_click(self):
@@ -90,16 +87,13 @@ class Tools:
         self.bs.update()
 
     def create_ui(self):
-        print(Tools.running_class)
         self.element.controls = []
         for i in Tools.tool_lists:
             self.element.controls.append(i)
-        print(Tools.tool_lists)
         return self.element
 
     def update_ui(self):
         Tools.tool_lists = []
-        print(Tools.running_class)
         for i in Tools.running_class:
             Tools.tool_lists.append(i.update_ui(self.element, Tools.tool_lists, Tools.running_class))
         self.element.controls = []
