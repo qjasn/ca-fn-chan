@@ -68,7 +68,6 @@ def main_page(_page, navbar):
         else:
             MainPage.tools.element.height = _page.height - 140
 
-
     def add(e, mode="fx"):
         UString.math_list.show_bs(None, mode)
 
@@ -178,7 +177,7 @@ def main_page(_page, navbar):
                                             on_click=lambda x: MainPage.tools.open_bs("collect")
                                         ),
                                         PopupMenuItem(
-                                            content=Text("分式化简"),
+                                            content=Text("有理分式化简"),
                                             on_click=lambda x: MainPage.tools.open_bs("cancel")
                                         ),
                                     ]

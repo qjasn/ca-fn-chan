@@ -2,6 +2,7 @@ import uuid
 
 from flet import *
 
+from matplot.tools.algebra import *
 from matplot.tools.fitploy import FitPolyUi
 
 """
@@ -73,6 +74,62 @@ class Tools:
             Tools.running_class.append(FitPolyUi(self.bs, self.page))
             self.bs_content.controls[0].content = Row(
                 controls=Tools.running_class[-1].fit_poly_ui()
+            )
+            self.ok = False
+            self.ok_button.on_click = lambda x: (
+                Tools.tool_lists.append(Tools.running_class[-1].onclick(self.element, Tools.tool_lists,
+                                                                        Tools.running_class)),
+                self.create_ui(),
+                self.element.update(),
+                self.ok_button_click(),
+                self.close_bs(None),
+            )
+        elif mode == "expand":
+            Tools.running_class.append(Expand(self.bs, self.page))
+            self.bs_content.controls[0].content = Row(
+                controls=Tools.running_class[-1].expand_ui()
+            )
+            self.ok = False
+            self.ok_button.on_click = lambda x: (
+                Tools.tool_lists.append(Tools.running_class[-1].onclick(self.element, Tools.tool_lists,
+                                                                        Tools.running_class)),
+                self.create_ui(),
+                self.element.update(),
+                self.ok_button_click(),
+                self.close_bs(None),
+            )
+        elif mode == "factor":
+            Tools.running_class.append(Factor(self.bs, self.page))
+            self.bs_content.controls[0].content = Row(
+                controls=Tools.running_class[-1].expand_ui()
+            )
+            self.ok = False
+            self.ok_button.on_click = lambda x: (
+                Tools.tool_lists.append(Tools.running_class[-1].onclick(self.element, Tools.tool_lists,
+                                                                        Tools.running_class)),
+                self.create_ui(),
+                self.element.update(),
+                self.ok_button_click(),
+                self.close_bs(None),
+            )
+        elif mode == "collect":
+            Tools.running_class.append(Collect(self.bs, self.page))
+            self.bs_content.controls[0].content = Row(
+                controls=Tools.running_class[-1].expand_ui()
+            )
+            self.ok = False
+            self.ok_button.on_click = lambda x: (
+                Tools.tool_lists.append(Tools.running_class[-1].onclick(self.element, Tools.tool_lists,
+                                                                        Tools.running_class)),
+                self.create_ui(),
+                self.element.update(),
+                self.ok_button_click(),
+                self.close_bs(None),
+            )
+        elif mode == "cancel":
+            Tools.running_class.append(Cancel(self.bs, self.page))
+            self.bs_content.controls[0].content = Row(
+                controls=Tools.running_class[-1].expand_ui()
             )
             self.ok = False
             self.ok_button.on_click = lambda x: (

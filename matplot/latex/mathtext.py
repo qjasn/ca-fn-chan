@@ -39,6 +39,7 @@ def math_to_image(s, filename_or_obj, prop=None, dpi=None, format=None,
     # 预处理不能渲染的latex关键字（即直接移除）
     s = s.replace(r"\mathopen{}\left", r"\left")
     s = s.replace(r"\mathclose{}\right", r"\right")
+    s = s.replace(r"\text", r"")
     parser = MathTextParser('path')
     width, height, depth, _, _ = parser.parse(s, dpi=72, prop=prop)
 
