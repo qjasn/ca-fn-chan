@@ -152,6 +152,14 @@ def main_page(_page, navbar):
                                             content=Text("求函数根"),
                                             on_click=lambda x: MainPage.tools.open_bs("root")
                                         ),
+                                        PopupMenuItem(
+                                            content=Text("求函数最大值"),
+                                            on_click=lambda x: MainPage.tools.open_bs("max")
+                                        ),
+                                        PopupMenuItem(
+                                            content=Text("求函数最小值"),
+                                            on_click=lambda x: MainPage.tools.open_bs("min")
+                                        )
                                     ]
                                 ),
                                 PopupMenuButton(

@@ -4,7 +4,7 @@ from flet_core import Page, ThemeMode
 # 此Class用来存放全局变量，以保证不同功能的Class可以访问相同的变量
 class UString:
     lists = []  # 所有的结构化函数/方程，内部item形如：
-    # {"mode":"fx"."name":"f","args":"x",text:"return x",color:"white"}
+    # {"mode":"fx"."name":"f","args":"x",text:"x",color:"white"}
     # {"mode":"equ","equ":"x = 1","args":"x"}
     # mode为fx时，其中name是函数名称，args为函数参数，即f（x）中的x，text为函数返回的表达式，即f(x)=x中等号右侧的部分
     t = 0  # 为默认函数下表，即每次新建函数时函数名称的下标，0为空

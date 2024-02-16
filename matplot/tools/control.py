@@ -3,6 +3,7 @@ import uuid
 from flet import *
 
 from matplot.tools.algebra import *
+from matplot.tools.calc_function import *
 from matplot.tools.fitploy import FitPolyUi
 
 """
@@ -128,6 +129,20 @@ class Tools:
             )
         elif mode == "cancel":
             Tools.running_class.append(Cancel(self.bs, self.page))
+            self.bs_content.controls[0].content = Row(
+                controls=Tools.running_class[-1].expand_ui()
+            )
+            self.ok = False
+            self.ok_button.on_click = lambda x: (
+                Tools.tool_lists.append(Tools.running_class[-1].onclick(self.element, Tools.tool_lists,
+                                                                        Tools.running_class)),
+                self.create_ui(),
+                self.element.update(),
+                self.ok_button_click(),
+                self.close_bs(None),
+            ),
+        elif mode == "x-call":
+            Tools.running_class.append(XCall(self.bs, self.page))
             self.bs_content.controls[0].content = Row(
                 controls=Tools.running_class[-1].expand_ui()
             )
