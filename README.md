@@ -33,7 +33,7 @@
     2. 英文名Ca为Calc，Fn为function，Chan即为中文”阐“的音译
     3. 实际上在现代数学的理解中，”算“可以理解为“计算”，“方“可以理解为“方程”，“阐”理解为“阐述”，方程与函数关系密切，考虑的种种因素，这种理解也算合理
 
-* 注：该应用的latexify库与mathtext函数都是经过作者修改过的，latexify与mathtext函数已经内嵌进了本项目（位于matplot/mathtext.py），其中latexify-py库的fork在qjasn/latexify_get_from_code中
+* 注：该应用的latexify库与mathtext函数都是经过作者修改过的，latexify与mathtext函数已经内嵌进了本项目（位于./matplot/latex/），其中latexify-py库的fork在qjasn/latexify_get_from_code中
 
 ## 调试说明
 请确保你已经安装了python3.11,pip与git
