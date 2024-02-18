@@ -144,7 +144,35 @@ class Tools:
         elif mode == "x-call":
             Tools.running_class.append(XCall(self.bs, self.page))
             self.bs_content.controls[0].content = Row(
-                controls=Tools.running_class[-1].expand_ui()
+                controls=Tools.running_class[-1].xcall_ui()
+            )
+            self.ok = False
+            self.ok_button.on_click = lambda x: (
+                Tools.tool_lists.append(Tools.running_class[-1].onclick(self.element, Tools.tool_lists,
+                                                                        Tools.running_class)),
+                self.create_ui(),
+                self.element.update(),
+                self.ok_button_click(),
+                self.close_bs(None),
+            )
+        elif mode == "y-call":
+            Tools.running_class.append(YCall(self.bs, self.page))
+            self.bs_content.controls[0].content = Row(
+                controls=Tools.running_class[-1].ycall_ui()
+            )
+            self.ok = False
+            self.ok_button.on_click = lambda x: (
+                Tools.tool_lists.append(Tools.running_class[-1].onclick(self.element, Tools.tool_lists,
+                                                                        Tools.running_class)),
+                self.create_ui(),
+                self.element.update(),
+                self.ok_button_click(),
+                self.close_bs(None),
+            )
+        elif mode == "intersection":
+            Tools.running_class.append(Intersection(self.bs, self.page))
+            self.bs_content.controls[0].content = Row(
+                controls=Tools.running_class[-1].intersection_ui()
             )
             self.ok = False
             self.ok_button.on_click = lambda x: (

@@ -20,6 +20,7 @@ class Latex:
         self.args = args
         self.latex = None
         _text = "".join(text.split("return")[1].split(" "))
+        print(_text)
         _text = _text.replace("pi", "0")
         if all(["=" not in text, args in text]):
             self.text = text
@@ -59,9 +60,11 @@ class Latex:
             return self.latex
 
     def output_plain(self):
+        self.init()
         print(self.latex)
 
     def output_svg(self):
+        self.init()
         color = "white" if is_dark(self.page) else "black"
         prop = mfm.FontProperties(family='DejaVu Sans Mono', size=64, style="normal")
         string = io.StringIO()
