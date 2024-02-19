@@ -28,6 +28,7 @@ class UString:
     math_list = None  # 数学公式的添加与UI构建控制
     change_dark = False  # 在页面显示模式更改时为True
     draw_class = {}  # 所有的实例化函数
+    python_repl = None
 
     def __init__(self, page: Page):
         UString.width = page.width

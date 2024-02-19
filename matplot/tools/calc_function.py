@@ -8,7 +8,7 @@ from matplot.latex.latex import latex_ui, Latex
 
 
 def warning(_page, tip: str):
-    page.dialog = AlertDialog(
+    _page.dialog = AlertDialog(
         modal=False,
         title=Text("错误"),
         content=Text(tip),
