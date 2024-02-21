@@ -30,30 +30,16 @@ class FitPolyUi:
         self.option = None
         self.bs = bs
         self._page = page
-        liner = self._page.client_storage.get("fx.liner")
-        polynomial = self._page.client_storage.get("fx.polynomial")
         self.points = TextField(label="点", width=200)
         self.degree_ui = TextField(label="最高次", width=100)
         self.checkbox = Checkbox(
-                                    value=True,
-                                    on_change=self.on_change,
-                                    visible=False
-                                )
-        if liner.startswith("liner-num") and polynomial.startswith("polynomial-num"):
-            self.input_ui = Row(
-                [
-                    self.degree_ui,
-                    self.points
-                ]
-            )
-        else:
-            self.input_ui = Row(
-                [
-                    self.points
-                ]
-            )
+            value=True,
+            on_change=self.on_change,
+            visible=False
+        )
+        
 
-    def fit_ploy_input_ui(self, e):
+    async def fit_ploy_input_ui(self, e):
         if e.control.value != "custom_function" and e.control.value != "polynomial_function":
             self.input_ui.controls = [
                 self.points
@@ -69,12 +55,27 @@ class FitPolyUi:
                 TextField(label="求解参数", width=130),
                 TextField(label="求解函数"),
             ]
-        self.bs.update()
+        await self.bs.update_async()
 
-    def fit_poly_ui(self):
+    async def fit_poly_ui(self):
+        liner = await self._page.client_storage.get_async("fx.liner")
+        polynomial = await self._page.client_storage.get_async("fx.polynomial")
+        if liner.startswith("liner-num") and polynomial.startswith("polynomial-num"):
+            self.input_ui = Row(
+                [
+                    self.degree_ui,
+                    self.points
+                ]
+            )
+        else:
+            self.input_ui = Row(
+                [
+                    self.points
+                ]
+            )
         options = []
-        liner = self._page.client_storage.get("fx.liner")
-        polynomial = self._page.client_storage.get("fx.polynomial")
+        liner = await self._page.client_storage.get_async("fx.liner")
+        polynomial = await self._page.client_storage.get_async("fx.polynomial")
         if liner.startswith("liner-num") and polynomial.startswith("polynomial-num"):
             options = [
                 dropdown.Option("polynomial_function", "多项式函数")
@@ -110,33 +111,33 @@ class FitPolyUi:
         ]
         return self.ui
 
-    def warning(self, tip: str):
+    async def warning(self, tip: str):
         self._page.dialog = AlertDialog(
             modal=False,
             title=Text("错误"),
             content=Text(tip),
             open=True
         )
-        self._page.update()
+        await self._page.update_async()
 
-    def onclick(self, element, lists, running_class):
+    async def onclick(self, element, lists, running_class):
         points = self.points.value
         options = self.option.value
-        liner = self._page.client_storage.get("fx.liner")
-        polynomial = self._page.client_storage.get("fx.polynomial")
+        liner = await self._page.client_storage.get_async("fx.liner")
+        polynomial = await self._page.client_storage.get_async("fx.polynomial")
         for i in self.input_ui.controls:
             if i.value == "":
-                self.warning("任何值均不能为空")
+                await self.warning("任何值均不能为空")
         x_l = []
         y_l = []
         # 点的数量与对应函数处理
         if options == "polynomial_function":
             if len(points.split(",")) < int(self.input_ui.controls[0].value):
-                self.warning("函数最高次大于输入点的数量")
+                await self.warning("函数最高次大于输入点的数量")
                 raise KeyError
         elif options == "linear_function":
             if len(points.split(",")) < 2:
-                self.warning("函数最高次大于输入点的数量")
+                await self.warning("函数最高次大于输入点的数量")
                 raise KeyError
         for i in points.split(","):
             for p in UString.lists:
@@ -174,13 +175,13 @@ class FitPolyUi:
             try:
                 _degree = int(degree)
             except ValueError:
-                self.warning("请输入数字")
+                await self.warning("请输入数字")
                 raise KeyError
             if _degree < 1:
-                self.warning("请输入不小于1的数字")
+                await self.warning("请输入不小于1的数字")
                 raise KeyError
             if _degree > 10:
-                self.warning("请输入不大于10的数字")
+                await self.warning("请输入不大于10的数字")
                 raise KeyError
             for i, c in enumerate(character[:(_degree + 1)]):
                 if _degree - i == 1:
@@ -226,7 +227,7 @@ class FitPolyUi:
             else:
                 self.function_text = "a cos(b x + c) + d"
                 self.function = MathFunction.cosine_function
-            if self._page.client_storage.get("fx.fourier").startswith("enable"):
+            if await self._page.client_storage.get_async("fx.fourier").startswith("enable"):
                 fs = np.fft.fftfreq(len(x_l), x_l[1] - x_l[0])
                 abs_y = abs(np.fft.fft(y_l))
                 freq = abs(fs[np.argmax(abs_y[1:]) + 1])
@@ -272,7 +273,7 @@ class FitPolyUi:
         self.create_ui(element, lists, running_class)
         return self.return_ui
 
-    def draw(self):
+    async def draw(self, e):
         ax = UString.matplot_chart.return_ax()
         if self._page.width > 550:
             _width = UString.width
@@ -293,14 +294,14 @@ class FitPolyUi:
         }
         UString.draw_class.update({self.uuid: DrawUserFunction(content, self._page, "list")})
         UString.draw_class[self.uuid].draw()  # 绘制新函数的图像
-        UString.matplot_chart.update_draw()  # 更新图像
+        await UString.matplot_chart.update_draw()  # 更新图像
         self.checkbox.visible = True
-        self._page.update()
+        await self._page.update_async()
 
-    def on_change(self,e):
-        UString.draw_class[self.uuid].visible(e.control.value)  # 清除函数图像
-        UString.matplot_chart.update_draw()  # 更新图像
-        self._page.update()
+    async def on_change(self,e):
+        await UString.draw_class[self.uuid].visible(e.control.value)  # 函数图像
+        await UString.matplot_chart.update_draw()  # 更新图像
+        await self._page.update_async()
 
     def create_ui(self, element, lists, running_class):
         self.return_ui = Row(
@@ -337,11 +338,12 @@ class FitPolyUi:
                         content=PopupMenuButton(items=[
                             PopupMenuItem(
                                 text="删除",
-                                on_click=lambda e: self.delete(element, lists, running_class)
+                                on_click=self.delete,
+                                data=[element, lists, running_class]
                             ),
                             PopupMenuItem(
                                 text="绘制",
-                                on_click=lambda e: self.draw()
+                                on_click=self.draw
                             )
                         ]
 
@@ -354,15 +356,16 @@ class FitPolyUi:
             height=(self._content[1] + self.max_height) + 45
         )
 
-    def delete(self, element, lists, running_class):
+    async def delete(self, e):
+        element, lists, running_class = e.control.data
         if self.uuid in UString.draw_class.keys():
             UString.draw_class[self.uuid].delete()  # 清除函数图像
             UString.draw_class.pop(self.uuid)
-            UString.matplot_chart.update_draw()  # 更新图像
+            await UString.matplot_chart.update_draw()  # 更新图像
         element.controls.remove(self.return_ui)
         lists.remove(self.return_ui)
         running_class.remove(self)
-        self._page.update()
+        await self._page.update_async()
 
     def update_ui(self, element, lists, running_class):
         function_text = self.function_text

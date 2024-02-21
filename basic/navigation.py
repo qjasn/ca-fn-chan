@@ -1,3 +1,5 @@
+import asyncio
+
 from flet import TemplateRoute
 import flet as ft
 
@@ -60,8 +62,8 @@ class Navigation:
             self.root_view = _root_view
         elif _t_route.match("/python"):
             # 页面设置目录的渲染
-            settings = await python_page(_page, self.nav_ui_init())
-            _root_view.controls = settings
+            python = python_page(_page, self.nav_ui_init())
+            _root_view.controls = python
             self.content = "python"
             await _root_view.update_async()
             self.root_view = _root_view

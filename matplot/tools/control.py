@@ -10,7 +10,7 @@ from matplot.tools.fitploy import FitPolyUi
 通用说明：
 对于构建工具的Class说明：
 1. 要有构建输入框UI的函数（即下面的fit_poly_ui）
-2. 要有onclick函数，需要返回一个flet ui实例,其中存储结果相关内容至self
+2. 要有onclick(async)函数，需要返回一个flet ui实例,其中存储结果相关内容至self
 3. 要有update_ui函数，返回一个flet ui实例，内容与onclick返回的内容相同，但使用的是self已经算好的内容
 """
 
@@ -33,7 +33,7 @@ class Tools:
         )
         self.element = Column(
             alignment=MainAxisAlignment.START,
-            height=self.page.height-140,
+            height=self.page.height - 140,
             controls=[]
         )
 
@@ -44,7 +44,7 @@ class Tools:
                     self.bs_content,
                     Row(
                         [
-                            TextButton("取消", on_click=lambda e: (self.close_bs(None, True), self.cancel_button())),
+                            TextButton("取消", on_click=self.cancel_button),
                             self.ok_button
                         ]
                     )
@@ -56,135 +56,89 @@ class Tools:
         )
         _page.overlay.append(self.bs)
 
-    def close_bs(self, e, cancel=False):
+    async def close_bs(self, e, cancel=False):
         self.bs.open = False
-        self.bs.update()
+        await self.bs.update_async()
 
-    def dismiss(self, e):
+    async def dismiss(self, e):
         if not self.ok:
             Tools.running_class.remove(Tools.running_class[-1])
 
     def ok_button_click(self):
         self.ok = True
 
-    def cancel_button(self):
+    async def cancel_button(self, e):
         self.ok = False
+        await self.close_bs(None, False)
 
-    def open_bs(self, mode):
+    async def onclick(self, e):
+        Tools.tool_lists.append(await Tools.running_class[-1].onclick(self.element, Tools.tool_lists,
+                                                                      Tools.running_class))
+        self.create_ui()
+        await self.element.update_async()
+        self.ok_button_click()
+        await self.close_bs(None)
+
+    async def open_bs(self, e):
+        mode = e.control.data
         if mode == "fit_poly":
             Tools.running_class.append(FitPolyUi(self.bs, self.page))
             self.bs_content.controls[0].content = Row(
-                controls=Tools.running_class[-1].fit_poly_ui()
+                controls=await Tools.running_class[-1].fit_poly_ui()
             )
             self.ok = False
-            self.ok_button.on_click = lambda x: (
-                Tools.tool_lists.append(Tools.running_class[-1].onclick(self.element, Tools.tool_lists,
-                                                                        Tools.running_class)),
-                self.create_ui(),
-                self.element.update(),
-                self.ok_button_click(),
-                self.close_bs(None),
-            )
+            self.ok_button.on_click = self.onclick
         elif mode == "expand":
             Tools.running_class.append(Expand(self.bs, self.page))
             self.bs_content.controls[0].content = Row(
                 controls=Tools.running_class[-1].expand_ui()
             )
             self.ok = False
-            self.ok_button.on_click = lambda x: (
-                Tools.tool_lists.append(Tools.running_class[-1].onclick(self.element, Tools.tool_lists,
-                                                                        Tools.running_class)),
-                self.create_ui(),
-                self.element.update(),
-                self.ok_button_click(),
-                self.close_bs(None),
-            )
+            self.ok_button.on_click = self.onclick
         elif mode == "factor":
             Tools.running_class.append(Factor(self.bs, self.page))
             self.bs_content.controls[0].content = Row(
                 controls=Tools.running_class[-1].expand_ui()
             )
             self.ok = False
-            self.ok_button.on_click = lambda x: (
-                Tools.tool_lists.append(Tools.running_class[-1].onclick(self.element, Tools.tool_lists,
-                                                                        Tools.running_class)),
-                self.create_ui(),
-                self.element.update(),
-                self.ok_button_click(),
-                self.close_bs(None),
-            )
+            self.ok_button.on_click = self.onclick
         elif mode == "collect":
             Tools.running_class.append(Collect(self.bs, self.page))
             self.bs_content.controls[0].content = Row(
                 controls=Tools.running_class[-1].expand_ui()
             )
             self.ok = False
-            self.ok_button.on_click = lambda x: (
-                Tools.tool_lists.append(Tools.running_class[-1].onclick(self.element, Tools.tool_lists,
-                                                                        Tools.running_class)),
-                self.create_ui(),
-                self.element.update(),
-                self.ok_button_click(),
-                self.close_bs(None),
-            )
+            self.ok_button.on_click = self.onclick
         elif mode == "cancel":
             Tools.running_class.append(Cancel(self.bs, self.page))
             self.bs_content.controls[0].content = Row(
                 controls=Tools.running_class[-1].expand_ui()
             )
             self.ok = False
-            self.ok_button.on_click = lambda x: (
-                Tools.tool_lists.append(Tools.running_class[-1].onclick(self.element, Tools.tool_lists,
-                                                                        Tools.running_class)),
-                self.create_ui(),
-                self.element.update(),
-                self.ok_button_click(),
-                self.close_bs(None),
-            ),
+            self.ok_button.on_click = self.onclick,
         elif mode == "x-call":
             Tools.running_class.append(XCall(self.bs, self.page))
             self.bs_content.controls[0].content = Row(
                 controls=Tools.running_class[-1].xcall_ui()
             )
             self.ok = False
-            self.ok_button.on_click = lambda x: (
-                Tools.tool_lists.append(Tools.running_class[-1].onclick(self.element, Tools.tool_lists,
-                                                                        Tools.running_class)),
-                self.create_ui(),
-                self.element.update(),
-                self.ok_button_click(),
-                self.close_bs(None),
-            )
+            self.ok_button.on_click = self.onclick
         elif mode == "y-call":
             Tools.running_class.append(YCall(self.bs, self.page))
             self.bs_content.controls[0].content = Row(
                 controls=Tools.running_class[-1].ycall_ui()
             )
             self.ok = False
-            self.ok_button.on_click = lambda x: (
-                Tools.tool_lists.append(Tools.running_class[-1].onclick(self.element, Tools.tool_lists,
-                                                                        Tools.running_class)),
-                self.create_ui(),
-                self.element.update(),
-                self.ok_button_click(),
-                self.close_bs(None),
-            )
+            self.ok_button.on_click = self.onclick
         elif mode == "intersection":
             Tools.running_class.append(Intersection(self.bs, self.page))
             self.bs_content.controls[0].content = Row(
                 controls=Tools.running_class[-1].intersection_ui()
             )
             self.ok = False
-            self.ok_button.on_click = lambda x: (
-                Tools.tool_lists.append(Tools.running_class[-1].onclick(self.element, Tools.tool_lists,
-                                                                        Tools.running_class)),
-                self.create_ui(),
-                self.element.update(),
-                self.ok_button_click(),
-                self.close_bs(None),
-            )
+            self.ok_button.on_click = self.onclick
         self.bs.open = True
-        self.bs.update()
+        await self.bs.update_async()
 
     def create_ui(self):
         self.element.controls = []

@@ -75,7 +75,6 @@ async def main_page(_page, navbar):
     def tab_change(e):
         MainPage.s_index = e.control.selected_index
 
-
     input_ui = Column(
         controls=[
             Container(
@@ -139,31 +138,38 @@ async def main_page(_page, navbar):
                                     items=[
                                         PopupMenuItem(
                                             content=Text("多项式拟合曲线"),
-                                            on_click=lambda x: MainPage.tools.open_bs("fit_poly")
+                                            on_click=MainPage.tools.open_bs,
+                                            data="fit_poly"
                                         ),
                                         PopupMenuItem(
                                             content=Text("根据Y求X"),
-                                            on_click=lambda x: MainPage.tools.open_bs("x-call")
+                                            on_click=MainPage.tools.open_bs,
+                                            data="x-call"
                                         ),
                                         PopupMenuItem(
                                             content=Text("根据X求Y"),
-                                            on_click=lambda x: MainPage.tools.open_bs("y-call")
+                                            on_click=MainPage.tools.open_bs,
+                                            data="y-call"
                                         ),
                                         PopupMenuItem(
                                             content=Text("求函数交点"),
-                                            on_click=lambda x: MainPage.tools.open_bs("intersection")
+                                            on_click=MainPage.tools.open_bs,
+                                            data="intersection"
                                         ),
                                         PopupMenuItem(
                                             content=Text("求函数根"),
-                                            on_click=lambda x: MainPage.tools.open_bs("root")
+                                            on_click=MainPage.tools.open_bs,
+                                            data="roo"
                                         ),
                                         PopupMenuItem(
                                             content=Text("求函数最大值"),
-                                            on_click=lambda x: MainPage.tools.open_bs("max")
+                                            on_click=MainPage.tools.open_bs,
+                                            data="max"
                                         ),
                                         PopupMenuItem(
                                             content=Text("求函数最小值"),
-                                            on_click=lambda x: MainPage.tools.open_bs("min")
+                                            on_click=MainPage.tools.open_bs,
+                                            data="min"
                                         )
                                     ]
                                 ),
@@ -179,19 +185,23 @@ async def main_page(_page, navbar):
                                     items=[
                                         PopupMenuItem(
                                             content=Text("多项式展开"),
-                                            on_click=lambda x: MainPage.tools.open_bs("expand")
+                                            on_click=MainPage.tools.open_bs,
+                                            data="expand"
                                         ),
                                         PopupMenuItem(
                                             content=Text("因式分解"),
-                                            on_click=lambda x: MainPage.tools.open_bs("factor")
+                                            on_click=MainPage.tools.open_bs,
+                                            data="factor"
                                         ),
                                         PopupMenuItem(
                                             content=Text("合并同类项"),
-                                            on_click=lambda x: MainPage.tools.open_bs("collect")
+                                            on_click=MainPage.tools.open_bs,
+                                            data="collect"
                                         ),
                                         PopupMenuItem(
                                             content=Text("有理分式化简"),
-                                            on_click=lambda x: MainPage.tools.open_bs("cancel")
+                                            on_click=MainPage.tools.open_bs,
+                                            data="cancel"
                                         ),
                                     ]
                                 )

@@ -7,14 +7,14 @@ from basic.app_str import UString
 from matplot.latex.latex import latex_ui, Latex
 
 
-def warning(_page, tip: str):
+async def warning(_page, tip: str):
     _page.dialog = AlertDialog(
         modal=False,
         title=Text("错误"),
         content=Text(tip),
         open=True
     )
-    _page.update()
+    await _page.update_async()
 
 
 class XCall:
@@ -39,7 +39,7 @@ class XCall:
             self.input_y
         ]
 
-    def onclick(self, element, lists, running_class):
+    async def onclick(self, element, lists, running_class):
         function_name = self.f_name.value
         try:
             y_value = sympy.sympify(self.input_y.value)
@@ -69,11 +69,12 @@ class XCall:
         self.create_ui(element, lists, running_class)
         return self.ui
 
-    def delete(self, element, lists, running_class):
+    async def delete(self, e):
+        element, lists, running_class = e.control.data
         lists.remove(self.ui)
         running_class.remove(self)
         element.controls.remove(self.ui)
-        self._page.update()
+        await self._page.update_async()
 
     def update_ui(self, element, lists, running_class):
         y_value = sympy.sympify(self.input_y.value)
@@ -121,7 +122,8 @@ class XCall:
                         content=PopupMenuButton(items=[
                             PopupMenuItem(
                                 text="删除",
-                                on_click=lambda e: self.delete(element, lists, running_class)
+                                on_click=self.delete,
+                                data=[element, lists, running_class]
                             )
                         ]
 
@@ -155,7 +157,7 @@ class YCall:
             self.input_x
         ]
 
-    def onclick(self, element, lists, running_class):
+    async def onclick(self, element, lists, running_class):
         function_name = self.f_name.value
         try:
             x_value = sympy.sympify(self.input_x.value)
@@ -181,11 +183,12 @@ class YCall:
         self.create_ui(element, lists, running_class)
         return self.ui
 
-    def delete(self, element, lists, running_class):
+    async def delete(self, e):
+        element, lists, running_class = e.control.data
         lists.remove(self.ui)
         running_class.remove(self)
         element.controls.remove(self.ui)
-        self._page.update()
+        await self._page.update_async()
 
     def update_ui(self, element, lists, running_class):
         function_name = self.f_name.value
@@ -218,7 +221,8 @@ class YCall:
                         content=PopupMenuButton(items=[
                             PopupMenuItem(
                                 text="删除",
-                                on_click=lambda e: self.delete(element, lists, running_class)
+                                on_click=self.delete,
+                                data=[element, lists, running_class]
                             )
                         ]
 
@@ -250,7 +254,7 @@ class Intersection:
             self.f_name_2
         ]
 
-    def onclick(self, element, lists, running_class):
+    async def onclick(self, element, lists, running_class):
         function_1 = self.f_name_1.value
         function_2 = self.f_name_2.value
         equ_1 = equ_2 = 0
@@ -282,17 +286,18 @@ class Intersection:
         self.create_ui(element, lists, running_class)
         return self.ui
 
-    def delete(self, element, lists, running_class):
+    async def delete(self, e):
+        element, lists, running_class = e.control.data
         lists.remove(self.ui)
         running_class.remove(self)
         element.controls.remove(self.ui)
-        self._page.update()
+        await self._page.update_async()
 
     def update_ui(self, element, lists, running_class):
         function_1 = self.f_name_1.value
         function_2 = self.f_name_2.value
-        self.latex_image = Latex("return " + str(self.equ_1), str(function_1), self.args, self._page).output_svg()
-        self.latex_image_2 = Latex("return " + str(self.equ_2), str(function_2), self.args, self._page).output_svg()
+        self.latex_image = Latex("return " + str(self.equ_1), str(function_1), self.args_1, self._page).output_svg()
+        self.latex_image_2 = Latex("return " + str(self.equ_2), str(function_2), self.args_2, self._page).output_svg()
         r_latex = ""
         for i in self.result:
             r_latex += "({},{})".format(sympy.latex(i[0]), sympy.latex(i[1]))
@@ -301,8 +306,7 @@ class Intersection:
         self.create_ui(element, lists, running_class)
         return self.ui
 
-    def draw(self):
-        print(self.result)
+    async def draw(self, e):
         for i in self.result:
             UString.math_list.textInputs["point"]["x"].value = str(i[0])
             UString.math_list.textInputs["point"]["y"].value = str(i[1])
@@ -315,7 +319,7 @@ class Intersection:
                     UString.p_n.append("{}_{}".format(a, UString.p_t))
                 _value = list(set(UString.p_n) - set(UString.p_e))  # 扩展完后再更新一下
             UString.math_list.textInputs["point"]["name"].value = _value[0]
-            UString.math_list.add_point(None)
+            await UString.math_list.add_point(None)
 
     def create_ui(self, element, lists, running_class):
         self.ui = Row(
@@ -355,11 +359,11 @@ class Intersection:
                         content=PopupMenuButton(items=[
                             PopupMenuItem(
                                 text="删除",
-                                on_click=lambda e: self.delete(element, lists, running_class)
-                            ),
+                                on_click=self.delete,
+                                data=[element, lists, running_class]),
                             PopupMenuItem(
                                 text="为每个点注册",
-                                on_click=lambda e: self.draw()
+                                on_click=self.draw
                             )
                         ]
 

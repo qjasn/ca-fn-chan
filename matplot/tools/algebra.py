@@ -24,7 +24,7 @@ class Expand:
             self.input
         ]
 
-    def onclick(self, element, lists, running_class):
+    async def onclick(self, element, lists, running_class):
         self.value = self.input.value
         equ = sympy.sympify(self.value)
         self.latex_image = latex_ui(self._page, sympy.latex(equ))
@@ -35,11 +35,12 @@ class Expand:
         self.create_ui(element, lists, running_class)
         return self.ui
 
-    def delete(self, element, lists, running_class):
+    async def delete(self, e):
+        element, lists, running_class = e.control.data
         lists.remove(self.ui)
         running_class.remove(self)
         element.controls.remove(self.ui)
-        self._page.update()
+        await self._page.update_async()
 
     def update_ui(self, element, lists, running_class):
         self.value = self.input.value
@@ -85,7 +86,8 @@ class Expand:
                         content=PopupMenuButton(items=[
                             PopupMenuItem(
                                 text="删除",
-                                on_click=lambda e: self.delete(element, lists, running_class)
+                                on_click=self.delete,
+                                data=[element, lists, running_class]
                             )
                         ]
 
@@ -118,7 +120,7 @@ class Factor:
             self.input
         ]
 
-    def onclick(self, element, lists, running_class):
+    async def onclick(self, element, lists, running_class):
         self.value = self.input.value
         equ = sympy.sympify(self.value)
         self.latex_image = latex_ui(self._page, sympy.latex(equ))
@@ -129,11 +131,11 @@ class Factor:
         self.create_ui(element, lists, running_class)
         return self.ui
 
-    def delete(self, element, lists, running_class):
-        lists.remove(self.ui)
+    async def delete(self, e):
+        element, lists, running_class = e.control.data
         running_class.remove(self)
         element.controls.remove(self.ui)
-        self._page.update()
+        await self._page.update_async()
 
     def update_ui(self, element, lists, running_class):
         self.value = self.input.value
@@ -179,8 +181,8 @@ class Factor:
                         content=PopupMenuButton(items=[
                             PopupMenuItem(
                                 text="删除",
-                                on_click=lambda e: self.delete(element, lists, running_class)
-                            )
+                                on_click=self.delete,
+                                data=[element, lists, running_class])
                         ]
 
                         ), right=0 if self._page.width > 550 else 20,
@@ -214,7 +216,7 @@ class Collect:
             self.input
         ]
 
-    def onclick(self, element, lists, running_class):
+    async def onclick(self, element, lists, running_class):
         self.value = self.input.value
         equ = sympy.sympify(self.value)
         self.latex_image = latex_ui(self._page, sympy.latex(equ))
@@ -226,11 +228,11 @@ class Collect:
         self.create_ui(element, lists, running_class)
         return self.ui
 
-    def delete(self, element, lists, running_class):
-        lists.remove(self.ui)
+    async def delete(self, e):
+        element, lists, running_class = e.control.data
         running_class.remove(self)
         element.controls.remove(self.ui)
-        self._page.update()
+        await self._page.update_async()
 
     def update_ui(self, element, lists, running_class):
         self.value = self.input.value
@@ -276,8 +278,8 @@ class Collect:
                         content=PopupMenuButton(items=[
                             PopupMenuItem(
                                 text="删除",
-                                on_click=lambda e: self.delete(element, lists, running_class)
-                            )
+                                on_click=self.delete,
+                                data=[element, lists, running_class])
                         ]
 
                         ), right=0 if self._page.width > 550 else 20,
@@ -309,7 +311,7 @@ class Cancel:
             self.input
         ]
 
-    def onclick(self, element, lists, running_class):
+    async def onclick(self, element, lists, running_class):
         self.value = self.input.value
         equ = sympy.sympify(self.value)
         self.latex_image = latex_ui(self._page, sympy.latex(equ))
@@ -320,11 +322,11 @@ class Cancel:
         self.create_ui(element, lists, running_class)
         return self.ui
 
-    def delete(self, element, lists, running_class):
-        lists.remove(self.ui)
+    async def delete(self, e):
+        element, lists, running_class = e.control.data
         running_class.remove(self)
         element.controls.remove(self.ui)
-        self._page.update()
+        await self._page.update_async()
 
     def update_ui(self, element, lists, running_class):
         self.value = self.input.value
@@ -370,8 +372,8 @@ class Cancel:
                         content=PopupMenuButton(items=[
                             PopupMenuItem(
                                 text="删除",
-                                on_click=lambda e: self.delete(element, lists, running_class)
-                            )
+                                on_click=self.delete,
+                                data=[element, lists, running_class])
                         ]
 
                         ), right=0 if self._page.width > 550 else 20,
