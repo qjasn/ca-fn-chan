@@ -4,18 +4,20 @@ from basic.app_str import UString
 from basic.control import AppControl
 
 
-def main(page: ft.Page):
+async def main(page: ft.Page):
     # 实例化总控类
     _AppControl = AppControl(page)
-    _AppControl.init()
+    await _AppControl.init()
     UString(page)
     # 分别设置flet的响应项目
     page.on_route_change = _AppControl.route.change_route
     page.on_view_pop = _AppControl.route.view_pop
-    page.on_resize = lambda e: (
-        _AppControl.on_resize(None),
+
+    async def on_resize(e):
+        await _AppControl.on_resize(None)
         UString(page)
-    )
+
+    page.on_resize = on_resize
 
     def dark_change(e):
         UString.change_dark = True

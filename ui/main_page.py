@@ -17,25 +17,25 @@ class MainPage:
         self.lists = UString.lists
         self.page = page
 
-    def matplot_ui(self):
+    async def matplot_ui(self):
         # 从全局变量中构建函数图像的UI，该方法在初始化/页面分辨率改变时会触发
         for content in UString.lists:
             if content["mode"] == "fx":
                 DrawUserFunction(content, self.page).draw()
             if content["mode"] == "point":
                 DrawUserFunction(content, self.page, "point").draw()
-        self.matplot_chart = UString.matplot_chart.update_draw()
+        self.matplot_chart = await UString.matplot_chart.update_draw()
         return self.matplot_chart
 
     def nav_change(self):
         return self.matplot_chart
 
-    def dark_mode_change(self):
-        self.matplot_chart = UString.matplot_chart.update_draw()
+    async def dark_mode_change(self):
+        self.matplot_chart = await UString.matplot_chart.update_draw()
         return self.matplot_chart
 
 
-def main_page(_page, navbar):
+async def main_page(_page, navbar):
     equals = Container()  # latex公式
     if any([UString.main_page_control is None, UString.math_list is None, MainPage.tools is None]):
         # 初次进入调用
@@ -60,7 +60,7 @@ def main_page(_page, navbar):
         _control = UString.main_page_control
         equals.content = UString.math_list.create_ui()
         UString.matplot_chart.draw()
-        matplot_chart = _control.matplot_ui()  # 函数图像UI
+        matplot_chart = await _control.matplot_ui()  # 函数图像UI
         MainPage.tools.create_ui()
         tools_container = MainPage.tools.update_ui()
         if _page.width < 550:
@@ -68,11 +68,13 @@ def main_page(_page, navbar):
         else:
             MainPage.tools.element.height = _page.height - 140
 
-    def add(e, mode="fx"):
-        UString.math_list.show_bs(None, mode)
+    async def add(e):
+        mode = e.control.data
+        await UString.math_list.show_bs(None, mode)
 
     def tab_change(e):
         MainPage.s_index = e.control.selected_index
+
 
     input_ui = Column(
         controls=[
@@ -88,15 +90,18 @@ def main_page(_page, navbar):
                                     items=[
                                         PopupMenuItem(
                                             text="函数",
-                                            on_click=lambda e: add(e, "fx")
+                                            on_click=add,
+                                            data="fx"
                                         ),
                                         PopupMenuItem(
                                             text="方程",
-                                            on_click=lambda e: add(e, "equ")
+                                            on_click=add,
+                                            data="equ"
                                         ),
                                         PopupMenuItem(
                                             text="点",
-                                            on_click=lambda e: add(e, "point")
+                                            on_click=add,
+                                            data="point"
                                         )
                                     ]
                                 )

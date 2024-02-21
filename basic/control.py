@@ -13,32 +13,32 @@ class AppControl:
         # 实例化导航Class
         self.route = Navigation(page)
 
-    def init(self):
+    async def init(self):
         # 初始化整个页面
         _page = self.page
         UString.width = self.page.width
         UString.height = self.page.height
         _page.title = "graphical calc"  # 设置应用标题
         # 查看是否自定义设置了UI显示类型
-        if _page.client_storage.get("fx.darkMode") is None:
-            _page.client_storage.set("fx.darkMode", "SYSTEM")
-        if _page.client_storage.get("fx.liner") is None:
-            _page.client_storage.set("fx.liner", "liner-sci-liner")
-        if _page.client_storage.get("fx.polynomial") is None:
-            _page.client_storage.set("fx.polynomial", "polynomial-num-polyfit")
-        if _page.client_storage.get("fx.fourier") is None:
-            _page.client_storage.set("fx.fourier", "enable-fourier")
-        _page.theme_mode = UString.darkMode[_page.client_storage.get("fx.darkMode")]
+        if await _page.client_storage.get_async("fx.darkMode") is None:
+            await _page.client_storage.set_async("fx.darkMode", "SYSTEM")
+        if await _page.client_storage.get_async("fx.liner") is None:
+            await _page.client_storage.set_async("fx.liner", "liner-sci-liner")
+        if await _page.client_storage.get_async("fx.polynomial") is None:
+            await _page.client_storage.set_async("fx.polynomial", "polynomial-num-polyfit")
+        if await _page.client_storage.get_async("fx.fourier") is None:
+            await _page.client_storage.set_async("fx.fourier", "enable-fourier")
+        _page.theme_mode = UString.darkMode[await _page.client_storage.get_async("fx.darkMode")]
         # 初始化路由
-        self.route.init_route()
-        _page.update()
+        await self.route.init_route()
+        await _page.update_async()
 
-    def on_resize(self, resize):
+    async def on_resize(self, resize):
         # 页面分辨率更新时触发
         UString.resize = True  # 设置 分辨率更新模式 为True
         UString.width = self.page.width
         UString.height = self.page.height
         _page = self.page
-        self.route.update_ui()  # 更新页面UI
+        await self.route.update_ui()  # 更新页面UI
         UString.resize = False
-        _page.update()
+        await _page.update_async()

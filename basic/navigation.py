@@ -9,7 +9,7 @@ from ui.settings import settings_page
 
 # 该Class负责应用整体的导航（路由），即多页面的切换
 class Navigation:
-    def __init__(self, page):
+    def __init__(self, page:ft.Page):
         self.index = 0  # 导航栏的选定值
         self.navbar = None  # 导航栏的定义，在self.nav_init_ui中得到具体的值
         self.content = "root"  # 当前页面的名称
@@ -19,14 +19,14 @@ class Navigation:
             controls=[ft.Text("Loading Page")]
         )  # 根视图的ui与其引用
 
-    def init_route(self):
+    async def init_route(self):
         # 初始化路由
         _page = self.page
         _t_route = TemplateRoute(_page.route)
         # 进入主页面
-        self.change_route(None)
+        await self.change_route(None)
 
-    def change_route(self, route):
+    async def change_route(self, route):
         # 路由被改变时触发的函数
         _page = self.page
         # flet提供的路由模版
@@ -36,74 +36,74 @@ class Navigation:
             # 页面根目录的渲染
             _page.views.clear()
             _page.views.append(_root_view)
-            _page.update()
+            await _page.update_async()
             self.root_view = _root_view
-            home = main_page(_page, self.nav_ui_init())  # 调用main_page构建ui
+            home = await main_page(_page, self.nav_ui_init())  # 调用main_page构建ui
             self.root_view.controls = home
             self.content = "home"  # 设置目前页面名称
-            self.root_view.update()
+            await self.root_view.update_async()
             self.root_view = _root_view
-            _page.update()
+            await _page.update_async()
         elif _t_route.match("/home"):
             # 页面home目录的渲染，实际与根目录一致
-            home = main_page(_page, self.nav_ui_init())
+            home = await main_page(_page, self.nav_ui_init())
             _root_view.controls = home
             self.content = "home"
-            _root_view.update()
+            await _root_view.update_async()
             self.root_view = _root_view
         elif _t_route.match("/settings"):
             # 页面设置目录的渲染
-            settings = settings_page(_page, self.nav_ui_init())
+            settings = await settings_page(_page, self.nav_ui_init())
             _root_view.controls = settings
             self.content = "settings"
-            _root_view.update()
+            await _root_view.update_async()
             self.root_view = _root_view
         elif _t_route.match("/python"):
             # 页面设置目录的渲染
-            settings = python_page(_page, self.nav_ui_init())
+            settings = await python_page(_page, self.nav_ui_init())
             _root_view.controls = settings
             self.content = "python"
-            _root_view.update()
+            await _root_view.update_async()
             self.root_view = _root_view
         else:
             # 该情况只会在网页端出现，用来反馈不存在该页面
             print("404 not found")
-        _page.update()
+        await _page.update_async()
 
-    def view_pop(self, view):
+    async def view_pop(self, view):
         # 返回上一个页面的函数
         self.page.views.pop()
         top_view = self.page.views[-1]
-        self.page.go(top_view.route)
+        await self.page.go_async(top_view.route)
 
-    def update_ui(self):
+    async def update_ui(self):
         # 更新页面UI，该函数只会在应用分辨率改变时触发，为了使UI适应新的分辨率
         _page = self.page
         _content = self.content
         _root_view = self.root_view
         if _content == "root":
-            _root_view.update()
+            await _root_view.update_async()
         elif _content == "home":
             _root_view.controls = main_page(_page, self.nav_ui_init())
-            _root_view.update()
+            await _root_view.update_async()
         elif _content == "python":
             _root_view.controls = python_page(_page, self.nav_ui_init())
-            _root_view.update()
+            await _root_view.update_async()
         elif _content == "settings":
             _root_view.controls = settings_page(_page, self.nav_ui_init())
-            _root_view.update()
-        _page.update()
+            await _root_view.update_async()
+        await _page.update_async()
 
-    def nav_change(self, e):
+    async def nav_change(self, e):
         # 在导航栏的选项改变时触发
         UString.nav_change = True
         self.index = self.navbar.selected_index
         if self.navbar.selected_index == 0:
-            self.page.go("/home")
+            await self.page.go_async("/home")
         elif self.navbar.selected_index == 1:
-            self.page.go("/python")
+            await self.page.go_async("/python")
         else:
-            self.page.go("/settings")
+            await self.page.go_async("/settings")
         UString.nav_change = False
 
     def nav_ui_init(self):

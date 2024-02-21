@@ -54,10 +54,12 @@ class EquationUI:
         h = float(re.findall(r"\d+", root.attrib["height"])[0])
         return [Image(src=svg, aspect_ratio=w / h, fit=ImageFit.FILL), (15 / 58) * h]
 
-    def on_click(self, _list=None, element=None):
+    async def on_click(self, e):
+        _list = e.control.data[0]
+        element = e.control.data[1]
         UString.lists.remove(_list)
         element.content.controls.remove(self.ui)
-        self.page.update()
+        await self.page.update_async()
 
     def create_ui(self, element, _list):
         self.ui = Row(
@@ -93,7 +95,8 @@ class EquationUI:
                         content=PopupMenuButton(items=[
                             PopupMenuItem(
                                 text="删除",
-                                on_click=lambda e: self.on_click(_list, element)
+                                on_click=self.on_click,
+                                data=[_list, element]
                             )
                         ]
 

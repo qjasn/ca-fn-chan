@@ -69,7 +69,7 @@ class AddMath:
     def bs_dismissed(self, e):
         pass
 
-    def show_bs(self, e, mode="fx"):
+    async def show_bs(self, e, mode="fx"):
         if mode == "fx":
             self.button.on_click = self.add_function
             _value = list(set(UString.f_n) - set(UString.a_e))  # 取补集查看默认的能用的函数名称
@@ -102,11 +102,11 @@ class AddMath:
                                    self.textInputs["point"]["x"], Text(","),
                                    self.textInputs["point"]["y"], Text(")")]
 
-        self.page.update()
+        await self.page.update_async()
         self.bs.open = True
-        self.bs.update()
+        await self.bs.update_async()
 
-    def add_point(self, e):
+    async def add_point(self, e):
         x = self.textInputs["point"]["x"]
         y = self.textInputs["point"]["y"]
         name = self.textInputs["point"]["name"]
@@ -126,7 +126,7 @@ class AddMath:
                 content=Text("函数名称已经存在"),
                 open=True
             )
-            self.page.update()
+            await self.page.update_async()
         else:
             content = {
                 "x": x.value,
@@ -138,13 +138,13 @@ class AddMath:
             UString.p_e.append(name.value)
             UString.draw_class.update({name.value: DrawUserFunction(content, self.page, "point")})
             UString.draw_class[name.value].draw()  # 绘制新函数的图像
-            self.close_bs(None)
-            UString.matplot_chart.update_draw()  # 更新图像
-        self.close_bs(None)
+            await self.close_bs(None)
+            await UString.matplot_chart.update_draw()  # 更新图像
+        await self.close_bs(None)
         self.equals.content = self.create_ui()
-        self.page.update()
+        await self.page.update_async()
 
-    def add_equation(self, e):
+    async def add_equation(self, e):
         _equ = self.textInputs["equ"]["equ"]
         _args = self.textInputs["equ"]["args"]
         if any([_equ.value == "", _args.value == ""]):
@@ -162,15 +162,15 @@ class AddMath:
                 "mode": "equ"
             }
             UString.lists.append(content)
-            self.close_bs(None)
+            await self.close_bs(None)
             self.equals.content = self.create_ui()
-            self.page.update()
+            await self.page.update_async()
 
-    def close_bs(self, e):
+    async def close_bs(self, e):
         self.bs.open = False
-        self.bs.update()
+        await self.bs.update_async()
 
-    def add_function(self, e):
+    async def add_function(self, e):
         _text = self.textInputs["fx"]
         if any([
             _text["name"].value == "",
@@ -184,7 +184,7 @@ class AddMath:
                 content=Text("任何一个输入值都不能为空"),
                 open=True
             )
-            self.page.update()
+            await self.page.update_async()
         elif _text["name"].value in UString.a_e:
             # 判断函数名称是否存在
             self.page.dialog = AlertDialog(
@@ -193,7 +193,7 @@ class AddMath:
                 content=Text("函数名称已经存在"),
                 open=True
             )
-            self.page.update()
+            await self.page.update_async()
         else:
             # 将输入的值结构化，具体规范见app_str.py
             content = {
@@ -207,10 +207,10 @@ class AddMath:
             UString.a_e.append(_text["name"].value)
             UString.draw_class.update({_text["name"].value: DrawUserFunction(content, self.page)})
             UString.draw_class[_text["name"].value].draw()  # 绘制新函数的图像
-            UString.matplot_chart.update_draw()  # 更新图像
-        self.close_bs(None)
+            await UString.matplot_chart.update_draw()  # 更新图像
+        await self.close_bs(None)
         self.equals.content = self.create_ui()
-        self.page.update()
+        await self.page.update_async()
 
     def create_ui(self):
         # 构建函数显示UI

@@ -96,7 +96,7 @@ class MatPlotUi:
     def return_ax(self):
         return self.ax
 
-    def update_draw(self):
+    async def update_draw(self):
         color = "white" if is_dark(self.page) else "black"
         if self.page.width > 550:
             _width = UString.width
@@ -148,7 +148,7 @@ class MatPlotUi:
         self.ui.height = _height
         self.ui.width = __width
         try:
-            self.ui.update()
+            await self.ui.update_async()
             return self.ui
         except Exception:
             return self.ui

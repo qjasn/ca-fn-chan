@@ -56,6 +56,6 @@ class DrawUserFunction:
     def delete(self):
         self.plot.remove()
 
-    def visible(self, _bool):
+    async def visible(self, _bool):
         self.plot.set_visible(_bool)
-        self.page.update()
+        await self.page.update_async()

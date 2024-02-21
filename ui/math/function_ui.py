@@ -22,20 +22,22 @@ class FunctionUI:
         self.latex_image = self.latex.output_svg()[0]  # 获取渲染后的svg图像
         self.h = self.latex.output_svg()[1]
 
-    def on_change(self, e):
-        UString.draw_class[self.equation["name"]].visible(e.control.value)
-        UString.matplot_chart.update_draw()  # 更新UI
-        self.page.update()
+    async def on_change(self, e):
+        await UString.draw_class[self.equation["name"]].visible(e.control.value)
+        await UString.matplot_chart.update_draw()  # 更新UI
+        await self.page.update_async()
 
-    def on_click(self, _list=None, element=None):
+    async def on_click(self, e):
+        _list = e.control.data[0]
+        element = e.control.data[1]
         # 该函数在点击 删除 时调用
         UString.lists.remove(_list)  # 从lists删除对应的结构化函数
         UString.draw_class[_list["name"]].delete()  # 清除函数图像
         UString.a_e.remove(_list["name"])  # 删除存在的函数名称
         UString.draw_class.pop(_list["name"])
         element.content.controls.remove(self.ui)  # 从页面删除此元素
-        UString.matplot_chart.update_draw()  # 更新UI
-        self.page.update()
+        await UString.matplot_chart.update_draw()  # 更新UI
+        await self.page.update_async()
 
     def create_ui(self, _list, element):
         # 构建UI
@@ -61,7 +63,8 @@ class FunctionUI:
                         content=PopupMenuButton(items=[
                             PopupMenuItem(
                                 text="删除",
-                                on_click=lambda e: self.on_click(_list, element)
+                                on_click=self.on_click,
+                                data=[_list, element]
                             )
                         ]
 

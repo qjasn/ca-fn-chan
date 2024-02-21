@@ -20,7 +20,6 @@ class Latex:
         self.args = args
         self.latex = None
         _text = "".join(text.split("return")[1].split(" "))
-        print(_text)
         _text = _text.replace("pi", "0")
         if all(["=" not in text, args in text]):
             self.text = text
@@ -30,7 +29,7 @@ class Latex:
             self.text = text
             self.warning("Make sure your symbol in the equation")
 
-    def warning(self, e: str):
+    async def warning(self, e: str):
         self.error = True
         page = self.page
         page.dialog = ft.AlertDialog(
@@ -39,7 +38,7 @@ class Latex:
             modal=False,
             open=True
         )
-        page.update()
+        await page.update_async()
 
     def init(self, subscript=False, use_math_symbols=False):
         _name = self.name
