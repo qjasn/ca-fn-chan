@@ -44,7 +44,7 @@ class XCall:
         try:
             y_value = sympy.sympify(self.input_y.value)
         except Exception:
-            warning(self._page, "请输入数字")
+            await warning(self._page, "请输入数字")
             raise KeyError
         find = False
         for i in UString.lists:
@@ -55,10 +55,10 @@ class XCall:
                 try:
                     self.result = sympy.solve(sympy.Eq(equ, y_value))
                 except Exception as e:
-                    warning(self._page, str(e))
+                    await warning(self._page, str(e))
                     raise KeyError
         if not find:
-            warning(self._page, "未找见函数名称")
+            await warning(self._page, "未找见函数名称")
             raise KeyError
         self.latex_image = Latex("return " + str(y_value), self.f_name.value, self.args, self._page).output_svg()
         r_latex = ""
@@ -162,7 +162,7 @@ class YCall:
         try:
             x_value = sympy.sympify(self.input_x.value)
         except Exception:
-            warning(self._page, "请输入数字")
+            await warning(self._page, "请输入数字")
             raise KeyError
         find = False
         for i in UString.lists:
@@ -173,10 +173,10 @@ class YCall:
                 try:
                     self.result = equ.subs(sympy.symbols(self.args), x_value)
                 except Exception as e:
-                    warning(self._page, str(e))
+                    await warning(self._page, str(e))
                     raise KeyError
         if not find:
-            warning(self._page, "未找见函数名称")
+            await warning(self._page, "未找见函数名称")
             raise KeyError
         self.latex_image = latex_ui(self._page, r"{}({}) = {}".format(function_name, sympy.latex(x_value),
                                                                       sympy.latex(self.result)))
@@ -270,7 +270,7 @@ class Intersection:
                 equ_2 = sympy.sympify(i["text"]).subs(sympy.symbols(i["args"]), sympy.symbols("x"))
                 self.args_2 = i["args"]
         if not all(find):
-            warning(self._page, "未找见函数名称")
+            await warning(self._page, "未找见函数名称")
             raise KeyError
         result_x = sympy.solve(sympy.Eq(equ_1, equ_2))
         for i in result_x:
