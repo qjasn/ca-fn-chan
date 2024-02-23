@@ -4,6 +4,7 @@ from flet import TemplateRoute
 import flet as ft
 
 from basic.app_str import UString
+from ui.guide.input_teach import teach_ui
 from ui.guide.license import license_ui
 from ui.guide.welcome import welcome_ui
 from ui.main_page import main_page
@@ -75,6 +76,12 @@ class Navigation:
         elif _t_route.match("/license"):
             _page.views.clear()
             _page.views.append(await license_ui(_page))
+        elif _t_route.match("/license"):
+            _page.views.clear()
+            _page.views.append(await license_ui(_page))
+        elif _t_route.match("/teach"):
+            _page.views.clear()
+            _page.views.append(await teach_ui(_page))
         else:
             # 该情况只会在网页端出现，用来反馈不存在该页面
             print("404 not found")
