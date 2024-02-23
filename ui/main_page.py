@@ -236,8 +236,27 @@ async def main_page(_page, navbar):
         )
         await _page.update_async()
 
-    def load_config(e):
-        pass
+    async def load_config(e):
+        async def operate(config):
+            config = json.loads(config)
+            for i in config:
+                if i["mode"] == "point":
+                    UString.math_list.textInputs["point"]["name"].value = i["name"]
+                    UString.math_list.textInputs["point"]["x"].value = i["x"]
+                    UString.math_list.textInputs["point"]["y"].value = i["y"]
+                    await UString.math_list.add_point(None)
+                elif i["mode"] == "fx":
+                    UString.math_list.textInputs["fx"]["name"].value = i["name"]
+                    UString.math_list.textInputs["fx"]["args"].value = i["args"]
+                    UString.math_list.textInputs["fx"]["text"].value = i["text"]
+                    await UString.math_list.add_function(None)
+                elif i["mode"] == "equ":
+                    UString.math_list.textInputs["equ"]["name"].value = i["name"]
+                    UString.math_list.textInputs["equ"]["equ"].value = i["equ"]
+                    UString.math_list.textInputs["equ"]["args"].value = i["args"]
+                    await UString.math_list.add_equation(None)
+
+        await file_io(_page, "load", read_m="w", fn=operate)
 
     input_ui = Column(
         controls=[

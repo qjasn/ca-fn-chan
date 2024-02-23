@@ -11,8 +11,8 @@ async def welcome_ui(e, page: Page):
             Column([
                 Row(
                     [
-                      Text("欢迎使用",theme_style=TextThemeStyle.TITLE_LARGE),
-                      ElevatedButton("进入引导",on_click=next)
+                        Text("欢迎使用", theme_style=TextThemeStyle.TITLE_LARGE),
+                        ElevatedButton("进入引导", on_click=next)
                     ],
                     alignment=MainAxisAlignment.CENTER,
                     expand=True
