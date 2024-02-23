@@ -131,7 +131,7 @@ class Navigation:
                 selected_index=self.index,
                 destinations=[
                     ft.NavigationDestination(icon=ft.icons.FUNCTIONS, label="f(x)"),
-                    ft.NavigationDestination(icon=ft.icons.CODE, label="Python"),
+                    # ft.NavigationDestination(icon=ft.icons.CODE, label="Python"),
                     ft.NavigationDestination(icon=ft.icons.SETTINGS, label="设置")
                 ],
                 on_change=self.nav_change
@@ -148,7 +148,7 @@ class Navigation:
                 height=self.page.height,
                 destinations=[
                     ft.NavigationRailDestination(icon=ft.icons.FUNCTIONS, label="f(x)"),
-                    ft.NavigationRailDestination(icon=ft.icons.CODE, label="Python"),
+                    # ft.NavigationRailDestination(icon=ft.icons.CODE, label="Python"),
                     ft.NavigationRailDestination(icon=ft.icons.SETTINGS, label="设置")
                 ]
             )

@@ -76,7 +76,7 @@ class Tools:
         Tools.tool_lists.append(await Tools.running_class[-1].onclick(self.element, Tools.tool_lists,
                                                                       Tools.running_class))
         self.create_ui()
-        await self.element.update_async()
+        await self.page.update_async()
         self.ok_button_click()
         await self.close_bs(None)
 

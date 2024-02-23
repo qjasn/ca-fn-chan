@@ -1,3 +1,5 @@
+from typing import Union
+
 import flet as ft
 from flet_core import AlertDialog, Text
 
@@ -38,7 +40,7 @@ def is_closed(text: str) -> bool:
     return True
 
 
-async def file_io(page: ft.Page, method: str, content: str | bytes, name="save", read_m="w", fn=None):
+async def file_io(page: ft.Page, method: str, content: Union[str, bytes], name="save", read_m="w", fn=None):
     async def on_result(e):
         path = e.path
         method = e.control.data

@@ -1,6 +1,7 @@
 import io
 import re
 import xml.etree.ElementTree as ET
+from typing import Union
 
 import matplotlib
 from flet_core import Image, ImageFit, Container
@@ -162,7 +163,7 @@ class MatPlotUi:
         except Exception:
             return self.ui
 
-    def get_pic(self, format="svg") -> bytes | str:
+    def get_pic(self, format="svg") -> Union[bytes, str]:
         color = "black"
         plt.xticks(color=color)
         self.ax.spines[["left", "bottom"]].set_color(color)

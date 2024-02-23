@@ -7,6 +7,6 @@ async def teach_ui(page):
     return View(
         route="/teach",
         controls=[
-            ElevatedButton("next",on_click=next)
+            ElevatedButton("Next",on_click=next)
         ]
     )

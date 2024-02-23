@@ -1,6 +1,7 @@
 import asyncio
 
 from flet import *
+import json
 
 from basic.app_str import UString
 from basic.tiny_fn import alert, file_io
@@ -144,7 +145,7 @@ async def main_page(_page, navbar):
         equals.content = UString.math_list.create_ui()
         UString.change_dark = False
         MainPage.tools.update_ui()
-        tools_container = MainPage.tools.element
+        tools_container = MainPage.tools.create_ui()
     else:
         # 初次进入调用
         UString.main_page_control = MainPage(_page)
@@ -207,8 +208,33 @@ async def main_page(_page, navbar):
         )
         await _page.update_async()
 
-    def save_config(e):
-        pass
+    async def save_config(e):
+        file_name = TextField(border=InputBorder.UNDERLINE, filled=True)
+
+        async def ok(e):
+            _page.dialog.open = False
+            await _page.update_async()
+            name = file_name.value
+            data = json.dumps(UString.lists)
+            await file_io(_page, "save", data, "{}.json".format(name), read_m="w")
+
+        async def cancel(e):
+            _page.dialog.open = False
+            await _page.update_async()
+            await alert(_page, "提示", "您取消了保存")
+
+        _page.dialog = AlertDialog(
+            modal=True,
+            title=Text("輸入保存文件名称"),
+            content=file_name,
+            actions=[
+                TextButton("确认", on_click=ok),
+                TextButton("取消", on_click=cancel)
+            ],
+            actions_alignment=MainAxisAlignment.END,
+            open=True
+        )
+        await _page.update_async()
 
     def load_config(e):
         pass
