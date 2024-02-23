@@ -40,9 +40,10 @@ def is_closed(text: str) -> bool:
     return True
 
 
-async def file_io(page: ft.Page, method: str, content: Union[str, bytes], name="save", read_m="w", fn=None):
+async def file_io(page: ft.Page, method: str, content: Union[str, bytes] = "", name="save", read_m="w", fn=None):
     async def on_result(e):
         path = e.path
+        files = e.files
         method = e.control.data
         if method == "save":
             if path is not None:
@@ -50,16 +51,17 @@ async def file_io(page: ft.Page, method: str, content: Union[str, bytes], name="
                 f.write(content)
                 f.close()
             else:
-                await alert(page, "提示", "您取消了保存")
+                await alert(page, "提示", "您取消了保存文件")
         elif method == "load":
-            if path is not None:
-                f = open(r"{}/{}".format(path, name), read_m)
+            if files is not None:
+                files = e.files[0].path
+                f = open(r"{}".format(files))
                 result = f.read()
                 if fn is not None:
                     opr = fn
-                    opr(result)
+                    await opr(result)
             else:
-                await alert(page, "提示", "您取消了加載")
+                await alert(page, "提示", "您取消了加載文件")
         page.overlay.remove(file)
         await page.update_async()
 

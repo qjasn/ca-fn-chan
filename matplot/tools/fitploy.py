@@ -105,7 +105,7 @@ class FitPolyUi:
             width=170
         )
         self.ui = [
-            Text("拟合曲线"),
+            Text("拟合曲线(点使用逗号隔开)"),
             self.option,
             self.input_ui
         ]

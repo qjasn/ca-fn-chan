@@ -19,10 +19,10 @@ async def main(page: ft.Page):
 
     page.on_resize = on_resize
 
-    def dark_change(e):
+    async def dark_change(e):
         UString.change_dark = True
         _AppControl.route.update_ui()
-        page.update()
+        await page.update_async()
 
     page.on_platform_brightness_change = dark_change
 
