@@ -1,4 +1,5 @@
 import flet as ft
+from flet_core import AlertDialog, Text
 
 
 # 该函数用来确认页面是否处于暗黑模式状态
@@ -12,6 +13,16 @@ def is_dark(page: ft.Page):
         return True
     else:
         return False
+
+
+async def alert(_page, title: str, tip: str):
+    _page.dialog = AlertDialog(
+        modal=False,
+        title=Text(title),
+        content=Text(tip),
+        open=True
+    )
+    await _page.update_async()
 
 
 def is_closed(text: str) -> bool:

@@ -28,6 +28,8 @@ class AppControl:
             await _page.client_storage.set_async("fx.polynomial", "polynomial-num-polyfit")
         if await _page.client_storage.get_async("fx.fourier") is None:
             await _page.client_storage.set_async("fx.fourier", "enable-fourier")
+        if await _page.client_storage.get_async("fx.limit") is None:
+            await _page.client_storage.set_async("fx.limit", "sym-derivative")
         _page.theme_mode = UString.darkMode[await _page.client_storage.get_async("fx.darkMode")]
         # 初始化路由
         await self.route.init_route()

@@ -1,9 +1,11 @@
 from flet import *
 
 from basic.app_str import UString
+from basic.tiny_fn import alert
+from matplot.tools.calc_function import warning
 
 
-async def settings_page(_page:Page, navbar):
+async def settings_page(_page: Page, navbar):
     async def dark_mode_change(e):
         # 单选更新后触发
         _mode = await _page.client_storage.get_async("fx.darkMode")
@@ -23,6 +25,21 @@ async def settings_page(_page:Page, navbar):
     async def fourier_update(e):
         _mode = await _page.client_storage.get_async("fx.fourier")
         await _page.client_storage.set_async("fx.fourier", e.control.value)
+
+    async def limit_update(e):
+        _mode = await _page.client_storage.get_async("fx.limit")
+        await _page.client_storage.set_async("fx.limit", e.control.value)
+
+    async def refresh(e):
+        await _page.client_storage.set_async("fx.darkMode", "SYSTEM")
+        await _page.client_storage.set_async("fx.liner", "liner-sci-liner")
+        await _page.client_storage.set_async("fx.polynomial", "polynomial-num-polyfit")
+        await _page.client_storage.set_async("fx.fourier", "enable-fourier")
+        await _page.client_storage.set_async("fx.limit", "sym-derivative")
+        _page.theme_mode = UString.darkMode["SYSTEM"]
+        UString.change_dark = True
+        await _page.update_async()
+        await alert(_page,"提示", "更改已应用,重新切入该页面即可查看")
 
     dark_mode_ui = RadioGroup(Column([
         Radio(value="SYSTEM", label="跟随系统"),
@@ -58,6 +75,14 @@ async def settings_page(_page:Page, navbar):
         value=await _page.client_storage.get_async("fx.fourier"),
         on_change=fourier_update
     )
+    the_limit_set = Dropdown(
+        options=[
+            dropdown.Option("sci-simplex", text="(SCIPY)下降单纯法"),
+            dropdown.Option("sym-derivative", text="(SYMPY)二阶导求极值[默认]")
+        ],
+        value=await _page.client_storage.get_async("fx.limit"),
+        on_change=limit_update
+    )
     content = Column(
         [
             Column([
@@ -68,7 +93,6 @@ async def settings_page(_page:Page, navbar):
                 Divider(height=1),
                 ListTile(title=Text("数学设置")),
                 Divider(height=1),
-                ListTile(title=Text("拟合函数相关")),
                 Row(
                     [
                         Text("一次函数拟合算法:"),
@@ -88,6 +112,18 @@ async def settings_page(_page:Page, navbar):
                         Text("正余弦函数傅立叶变换预处理:"),
                         fourier_transform_set
                     ]
+                ),
+                Row(
+                    [
+                        Text("求极值方法:"),
+                        the_limit_set
+                    ]
+                ),
+                Divider(height=1),
+                ListTile(title=Text("其它")),
+                Divider(height=1),
+                Row(
+                    [ElevatedButton("还原所有设置",on_click=refresh)]
                 )
             ],
                 alignment=MainAxisAlignment.START,

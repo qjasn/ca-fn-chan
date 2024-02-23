@@ -8,7 +8,7 @@ from threading import Thread
 from flet import *
 
 from basic.app_str import UString
-from basic.is_dark import is_closed
+from basic.tiny_fn import is_closed
 
 
 class PythonRepl(UserControl):

@@ -7,7 +7,7 @@ from flet import *
 from sympy import latex, sympify
 
 from basic.app_str import UString
-from basic.is_dark import is_dark
+from basic.tiny_fn import is_dark
 from matplot.latex.mathtext import math_to_image
 
 

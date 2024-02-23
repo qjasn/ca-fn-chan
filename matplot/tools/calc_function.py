@@ -4,17 +4,12 @@ from flet import *
 import sympy
 
 from basic.app_str import UString
+from basic.tiny_fn import alert
 from matplot.latex.latex import latex_ui, Latex
 
 
-async def warning(_page, tip: str):
-    _page.dialog = AlertDialog(
-        modal=False,
-        title=Text("错误"),
-        content=Text(tip),
-        open=True
-    )
-    await _page.update_async()
+async def warning(_page, tip):
+    await alert(_page, "错误", tip)
 
 
 class XCall:
@@ -336,6 +331,132 @@ class Intersection:
                                     content=self.latex_image_2[0],
                                     height=self.latex_image_2[1],
                                 )
+                            ], scroll=ScrollMode.AUTO,
+                                width=(((self._page.width - 100) / 7) * 1.8 - 35) if self._page.width > 550 else (
+                                        self._page.width - 55),
+
+                            ), Row(
+                            [
+                                Icon(icons.SUBDIRECTORY_ARROW_RIGHT),
+                                Container(
+                                    content=Row(
+                                        [self.solve_img]
+                                    ),
+                                    height=self.max_height,
+                                )
+                            ], scroll=ScrollMode.AUTO,
+                            width=(((self._page.width - 100) / 7) * 1.8 - 35) if self._page.width > 550 else (
+                                    self._page.width - 55)
+                        )
+                        ], top=5
+                    ),
+                    Container(
+                        content=PopupMenuButton(items=[
+                            PopupMenuItem(
+                                text="删除",
+                                on_click=self.delete,
+                                data=[element, lists, running_class]),
+                            PopupMenuItem(
+                                text="为每个点注册",
+                                on_click=self.draw
+                            )
+                        ]
+
+                        ), right=0 if self._page.width > 550 else 20,
+
+                    )
+                ], width=(((self._page.width - 100) / 7) * 1.8) if self._page.width > 550 else self._page.width,
+                )
+            ],
+            height=(self.latex_image[1] + self.max_height) + 45
+        )
+
+
+class Root:
+    def __init__(self, bs, page):
+        self.equ = self.args = self.latex_image_2 = self.args = self.solve_img = self.max_height = None
+        self.result = []
+        self.value = self.ui = self.latex_image = None
+        self.equation = ""
+        self._page = page
+        self.bs = bs
+        self.f_name = TextField(label="函数名称1", width=130)
+
+    def root_ui(self):
+        return [
+            Text("求根"),
+            self.f_name,
+        ]
+
+    async def onclick(self, element, lists, running_class):
+        function = self.f_name.value
+        equ = 0
+        find = [False] * 2
+        for i in UString.lists:
+            if i["mode"] == "fx" and i["name"] == function:
+                find[0] = True
+                equ = sympy.sympify(i["text"]).subs(sympy.symbols(i["args"]), sympy.symbols("x"))
+                self.args = i["args"]
+        if not find:
+            await warning(self._page, "未找见函数名称")
+            raise KeyError
+        result_x = sympy.solve(sympy.Eq(equ, 0))
+        for i in result_x:
+            self.result.append([i, equ.subs(sympy.symbols("x"), i)])
+        self.latex_image = Latex("return " + str(equ), str(function), self.args, self._page).output_svg()
+        self.equ = equ
+        r_latex = ""
+        for i in self.result:
+            r_latex += "({},{})".format(sympy.latex(i[0]), sympy.latex(i[1]))
+        self.solve_img = latex_ui(self._page, r_latex)[0]
+        self.max_height = latex_ui(self._page, r_latex)[1]
+        self.create_ui(element, lists, running_class)
+        return self.ui
+
+    async def delete(self, e):
+        element, lists, running_class = e.control.data
+        lists.remove(self.ui)
+        running_class.remove(self)
+        element.controls.remove(self.ui)
+        await self._page.update_async()
+
+    def update_ui(self, element, lists, running_class):
+        function = self.f_name.value
+        self.latex_image = Latex("return " + str(self.equ), str(function), self.args, self._page).output_svg()
+        r_latex = ""
+        for i in self.result:
+            r_latex += "({},{})".format(sympy.latex(i[0]), sympy.latex(i[1]))
+        self.solve_img = latex_ui(self._page, r_latex)[0]
+        self.max_height = latex_ui(self._page, r_latex)[1]
+        self.create_ui(element, lists, running_class)
+        return self.ui
+
+    async def draw(self, e):
+        for i in self.result:
+            UString.math_list.textInputs["point"]["x"].value = str(i[0])
+            UString.math_list.textInputs["point"]["y"].value = str(i[1])
+            _value = list(set(UString.p_n) - set(UString.p_e))  # 取补集查看默认的能用的函数名称
+            _p_n = copy(UString.p_n)
+            if not _value:
+                # 如果没有可用的函数名称了，就加上下表，扩展默认函数名称列表
+                UString.p_t += 1
+                for a in _p_n:
+                    UString.p_n.append("{}_{}".format(a, UString.p_t))
+                _value = list(set(UString.p_n) - set(UString.p_e))  # 扩展完后再更新一下
+            UString.math_list.textInputs["point"]["name"].value = _value[0]
+            await UString.math_list.add_point(None)
+
+    def create_ui(self, element, lists, running_class):
+        self.ui = Row(
+            [
+                Stack([
+                    Column(
+                        [
+                            Row([
+                                Container(
+                                    content=self.latex_image[0],
+                                    height=self.latex_image[1],
+                                ),
                             ], scroll=ScrollMode.AUTO,
                                 width=(((self._page.width - 100) / 7) * 1.8 - 35) if self._page.width > 550 else (
                                         self._page.width - 55),

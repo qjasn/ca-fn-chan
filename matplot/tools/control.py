@@ -5,6 +5,7 @@ from flet import *
 from matplot.tools.algebra import *
 from matplot.tools.calc_function import *
 from matplot.tools.fitploy import FitPolyUi
+from matplot.tools.limit_fn import Limit
 
 """
 通用说明：
@@ -134,6 +135,20 @@ class Tools:
             Tools.running_class.append(Intersection(self.bs, self.page))
             self.bs_content.controls[0].content = Row(
                 controls=Tools.running_class[-1].intersection_ui()
+            )
+            self.ok = False
+            self.ok_button.on_click = self.onclick
+        elif mode == "root":
+            Tools.running_class.append(Root(self.bs, self.page))
+            self.bs_content.controls[0].content = Row(
+                controls=Tools.running_class[-1].root_ui()
+            )
+            self.ok = False
+            self.ok_button.on_click = self.onclick
+        elif mode == "limit":
+            Tools.running_class.append(Limit(self.bs, self.page))
+            self.bs_content.controls[0].content = Row(
+                controls=await Tools.running_class[-1].limit_ui()
             )
             self.ok = False
             self.ok_button.on_click = self.onclick

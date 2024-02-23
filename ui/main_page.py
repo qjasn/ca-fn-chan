@@ -46,7 +46,7 @@ async def main_page(_page, navbar):
     if any([UString.nav_change, UString.change_dark]):
         # 导航更换与暗黑模式切换调用
         if UString.change_dark:
-            matplot_chart = _control.dark_mode_change()
+            matplot_chart = await _control.dark_mode_change()
         if UString.nav_change:
             matplot_chart = _control.nav_change()
         equals.content = UString.math_list.create_ui()
@@ -159,18 +159,13 @@ async def main_page(_page, navbar):
                                         PopupMenuItem(
                                             content=Text("求函数根"),
                                             on_click=MainPage.tools.open_bs,
-                                            data="roo"
+                                            data="root"
                                         ),
                                         PopupMenuItem(
-                                            content=Text("求函数最大值"),
+                                            content=Text("求函数极值"),
                                             on_click=MainPage.tools.open_bs,
-                                            data="max"
+                                            data="limit"
                                         ),
-                                        PopupMenuItem(
-                                            content=Text("求函数最小值"),
-                                            on_click=MainPage.tools.open_bs,
-                                            data="min"
-                                        )
                                     ]
                                 ),
                                 PopupMenuButton(
