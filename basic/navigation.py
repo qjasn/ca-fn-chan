@@ -117,8 +117,9 @@ class Navigation:
         self.index = self.navbar.selected_index
         if self.navbar.selected_index == 0:
             await self.page.go_async("/home")
-        elif self.navbar.selected_index == 1:
-            await self.page.go_async("/python")
+
+        # elif self.navbar.selected_index == 1:
+        #    await self.page.go_async("/python")
         else:
             await self.page.go_async("/settings")
         UString.nav_change = False

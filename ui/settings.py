@@ -41,6 +41,10 @@ async def settings_page(_page: Page, navbar):
         await _page.update_async()
         await alert(_page,"提示", "更改已应用,重新切入该页面即可查看")
 
+    async def start_again(e):
+        await _page.client_storage.remove_async("fx.start")
+        await alert(_page, "提示", "更改已应用,重新进入应用查看更改")
+
     dark_mode_ui = RadioGroup(Column([
         Radio(value="SYSTEM", label="跟随系统"),
         Radio(value="LIGHT", label="明亮"),
@@ -123,7 +127,10 @@ async def settings_page(_page: Page, navbar):
                 ListTile(title=Text("其它")),
                 Divider(height=1),
                 Row(
-                    [ElevatedButton("还原所有设置",on_click=refresh)]
+                    [
+                        ElevatedButton("还原所有设置",on_click=refresh),
+                        ElevatedButton("重新启动引导界面", on_click=start_again)
+                    ]
                 )
             ],
                 alignment=MainAxisAlignment.START,

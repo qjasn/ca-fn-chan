@@ -209,7 +209,7 @@ async def main_page(_page, navbar):
         await _page.update_async()
 
     async def save_config(e):
-        file_name = TextField(border=InputBorder.UNDERLINE, filled=True)
+        file_name = TextField(border=InputBorder.UNDERLINE, filled=True, suffix_text=".json")
 
         async def ok(e):
             _page.dialog.open = False
