@@ -1,6 +1,9 @@
+import asyncio
+
 from flet import *
 
 from basic.app_str import UString
+from basic.tiny_fn import alert, file_io
 from matplot.basic_graphic import MatPlotUi
 from matplot.function.draw_user_function import DrawUserFunction
 from matplot.tools.control import Tools
@@ -12,10 +15,58 @@ class MainPage:
     tools = None
 
     def __init__(self, page):
+        self.chart = None
         self.matplot_chart = None
         UString.matplot_chart = MatPlotUi(page)
+        self.display_step_input = TextField(width=40, height=40, on_submit=self.on_d_step_change,
+                                            border=InputBorder.NONE,
+                                            filled=True,
+                                            value=UString.display_step)
+        self.step_input = TextField(width=70, height=40, on_submit=self.on_step_change, suffix_text="%",
+                                    border=InputBorder.NONE,
+                                    filled=True,
+                                    value=str(UString.step * 4))
+        self.x_offset_input = TextField(width=40, height=40, on_submit=self.on_offset_change,
+                                        border=InputBorder.NONE,
+                                        filled=True,
+                                        value=str(UString.x_offset),
+                                        data="x")
+        self.y_offset_input = TextField(width=40, height=40, on_submit=self.on_offset_change,
+                                        border=InputBorder.NONE,
+                                        filled=True,
+                                        value=str(UString.y_offset),
+                                        data="y")
         self.lists = UString.lists
         self.page = page
+
+    @staticmethod
+    async def on_offset_change(e):
+        data = e.control.data
+        if data == "x":
+            UString.x_offset = float(e.control.value)
+        elif data == "y":
+            UString.y_offset = float(e.control.value)
+        await UString.matplot_chart.update_draw()
+
+    async def on_d_step_change(self, e):
+        if float(e.control.value) <= 0:
+            await alert(self.page, "错误", "间隔不能小于等于0")
+        if float(e.control.value) < 0.5:
+            await alert(self.page, "警告", "您将间隔调到了0.5一下,可能会导致设备卡顿,渲染时间长的问题")
+            await asyncio.sleep(3)
+        UString.display_step = float(e.control.value)
+        await UString.matplot_chart.update_draw()
+
+    async def on_step_change(self, e):
+        if float(e.control.value) <= 0:
+            await alert(self.page, "错误", "缩放不能小于等于0")
+        """
+        if float(e.control.value) < 0.5:
+            await alert(self.page, "警告", "您将间隔调到了0.5一下,可能会导致设备卡顿,渲染时间长的问题")
+            await asyncio.sleep(3)
+        """
+        UString.step = float(e.control.value) / 4
+        await UString.matplot_chart.update_draw()
 
     async def matplot_ui(self):
         # 从全局变量中构建函数图像的UI，该方法在初始化/页面分辨率改变时会触发
@@ -25,14 +76,55 @@ class MainPage:
             if content["mode"] == "point":
                 DrawUserFunction(content, self.page, "point").draw()
         self.matplot_chart = await UString.matplot_chart.update_draw()
-        return self.matplot_chart
+        self.chart = Column(
+            [
+                Stack(
+                    [
+                        self.matplot_chart,
+                        Row([Row(
+                            [
+                                Text("显示间隔"),
+                                self.display_step_input,
+                                Text("缩放"),
+                                self.step_input,
+                                Text("X偏移"),
+                                self.x_offset_input,
+                                Text("Y偏移"),
+                                self.y_offset_input
+                            ],
+                            scroll=ScrollMode.ALWAYS,
+                            alignment=MainAxisAlignment.CENTER,
+                        )], expand=True, bottom=20, scroll=ScrollMode.ALWAYS)
+                    ]
+                )
+            ]
+        )
+        return self.chart
 
     def nav_change(self):
-        return self.matplot_chart
+        return self.chart
 
     async def dark_mode_change(self):
         self.matplot_chart = await UString.matplot_chart.update_draw()
-        return self.matplot_chart
+        self.chart = Column(
+            [
+                Stack(
+                    [
+                        self.matplot_chart,
+                        Row(
+                            [
+                                Text("显示间隔"),
+                                self.display_step_input,
+                                Text("缩放"),
+                                self.step_input
+                            ],
+                            bottom=20,
+                        )
+                    ]
+                )
+            ]
+        )
+        return self.chart
 
 
 async def main_page(_page, navbar):
@@ -74,6 +166,52 @@ async def main_page(_page, navbar):
 
     def tab_change(e):
         MainPage.s_index = e.control.selected_index
+
+    async def save_canvas(e):
+        file_name = TextField(border=InputBorder.UNDERLINE, filled=True)
+        type = RadioGroup(Column(
+            [
+                Radio(value="svg", label="SVG(矢量图)"),
+                Radio(value="png", label="PNG"),
+                Radio(value="jpeg", label="JPEG"),
+            ]
+        ), value="png")
+
+        async def ok(e):
+            data = type.value
+            _page.dialog.open = False
+            await _page.update_async()
+            name = file_name.value
+            pic = UString.matplot_chart.get_pic(data)
+            await file_io(_page, "save", pic, "{}.{}".format(name, data), read_m="w" if data == "svg" else "wb")
+
+        async def cancel(e):
+            _page.dialog.open = False
+            await _page.update_async()
+            await alert(_page, "提示", "您取消了保存")
+
+        _page.dialog = AlertDialog(
+            modal=True,
+            title=Text("輸入保存文件名称"),
+            content=Column([
+                file_name,
+                Text("类型"),
+                type
+            ]),
+            actions=[
+                TextButton("确认", on_click=ok),
+                TextButton("取消", on_click=cancel)
+            ],
+            actions_alignment=MainAxisAlignment.END,
+            open=True
+        )
+        await _page.update_async()
+
+    def save_config(e):
+        pass
+
+    def load_config(e):
+        pass
 
     input_ui = Column(
         controls=[
@@ -212,6 +350,13 @@ async def main_page(_page, navbar):
         expand=True,
         alignment=MainAxisAlignment.START,
     )
+    operate_ui = Column(
+        [
+            ElevatedButton("存储配置", on_click=save_config),
+            ElevatedButton("加载配置", on_click=load_config),
+            ElevatedButton("存储图像", on_click=save_canvas)
+        ],
+    )
     content = [Row(
 
         [
@@ -231,6 +376,10 @@ async def main_page(_page, navbar):
                             Tab(
                                 text="工具",
                                 content=tools_ui
+                            ),
+                            Tab(
+                                text="操作",
+                                content=operate_ui
                             )
                         ]
                     )
@@ -279,6 +428,10 @@ async def main_page(_page, navbar):
                                 Tab(
                                     text="工具",
                                     content=tools_ui
+                                ),
+                                Tab(
+                                    text="操作",
+                                    content=operate_ui
                                 )
                             ]
                         )

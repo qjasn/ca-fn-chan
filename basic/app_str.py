@@ -3,6 +3,9 @@ from flet_core import Page, ThemeMode
 
 # 此Class用来存放全局变量，以保证不同功能的Class可以访问相同的变量
 class UString:
+    y_offset = 0
+    x_offset = 0
+    display_step = 2
     lists = []  # 所有的结构化函数/方程，内部item形如：
     # {"mode":"fx"."name":"f","args":"x",text:"x",color:"white"}
     # {"mode":"equ","equ":"x = 1","args":"x"}

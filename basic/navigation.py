@@ -4,6 +4,8 @@ from flet import TemplateRoute
 import flet as ft
 
 from basic.app_str import UString
+from ui.guide.license import license_ui
+from ui.guide.welcome import welcome_ui
 from ui.main_page import main_page
 from ui.python_page import python_page
 from ui.settings import settings_page
@@ -67,6 +69,12 @@ class Navigation:
             self.content = "python"
             await _root_view.update_async()
             self.root_view = _root_view
+        elif _t_route.match("/welcome"):
+            _page.views.clear()
+            _page.views.append(await welcome_ui(None,page=_page))
+        elif _t_route.match("/license"):
+            _page.views.clear()
+            _page.views.append(await license_ui(_page))
         else:
             # 该情况只会在网页端出现，用来反馈不存在该页面
             print("404 not found")
@@ -86,13 +94,13 @@ class Navigation:
         if _content == "root":
             await _root_view.update_async()
         elif _content == "home":
-            _root_view.controls = main_page(_page, self.nav_ui_init())
+            _root_view.controls = await main_page(_page, self.nav_ui_init())
             await _root_view.update_async()
         elif _content == "python":
             _root_view.controls = python_page(_page, self.nav_ui_init())
             await _root_view.update_async()
         elif _content == "settings":
-            _root_view.controls = settings_page(_page, self.nav_ui_init())
+            _root_view.controls = await settings_page(_page, self.nav_ui_init())
             await _root_view.update_async()
         await _page.update_async()
 

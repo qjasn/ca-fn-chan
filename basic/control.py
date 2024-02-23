@@ -33,6 +33,8 @@ class AppControl:
         _page.theme_mode = UString.darkMode[await _page.client_storage.get_async("fx.darkMode")]
         # 初始化路由
         await self.route.init_route()
+        if await _page.client_storage.get_async("fx.start") is None:
+            await _page.go_async("/welcome")
         await _page.update_async()
 
     async def on_resize(self, resize):

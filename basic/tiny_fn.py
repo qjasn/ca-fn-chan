@@ -20,7 +20,8 @@ async def alert(_page, title: str, tip: str):
         modal=False,
         title=Text(title),
         content=Text(tip),
-        open=True
+        open=True,
+
     )
     await _page.update_async()
 
@@ -35,3 +36,37 @@ def is_closed(text: str) -> bool:
             if brackets[char] != stack.pop():
                 return False
     return True
+
+
+async def file_io(page: ft.Page, method: str, content: str | bytes, name="save", read_m="w", fn=None):
+    async def on_result(e):
+        path = e.path
+        method = e.control.data
+        if method == "save":
+            if path is not None:
+                f = open(r"{}".format(path), read_m)
+                f.write(content)
+                f.close()
+            else:
+                await alert(page, "提示", "您取消了保存")
+        elif method == "load":
+            if path is not None:
+                f = open(r"{}/{}".format(path, name), read_m)
+                result = f.read()
+                if fn is not None:
+                    opr = fn
+                    opr(result)
+            else:
+                await alert(page, "提示", "您取消了加載")
+        page.overlay.remove(file)
+        await page.update_async()
+
+    file = ft.FilePicker(on_result=on_result, data=method)
+    page.overlay.append(file)
+    await page.update_async()
+    if method == "save":
+        await file.save_file_async(file_name=name)
+    elif method == "choose":
+        await file.get_directory_path_async()
+    elif method == "load":
+        await file.pick_files_async()
