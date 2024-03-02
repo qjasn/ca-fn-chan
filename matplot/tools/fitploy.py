@@ -141,9 +141,10 @@ class FitPolyUi:
                 raise KeyError
         for i in points.split(","):
             for p in UString.lists:
-                if all([p["name"] == i, p["mode"] == "point"]):
-                    x_l.append(float(p["x"]))
-                    y_l.append(float(p["y"]))
+                if p["mode"] == "point":
+                    if p["name"] == i:
+                        x_l.append(float(p["x"]))
+                        y_l.append(float(p["y"]))
         _popt = []
         # 线性函数
         if options == "linear_function":
