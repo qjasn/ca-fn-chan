@@ -5,3 +5,5 @@ lxml
 sympy
 latexify-py
 scipy
+pillow
+pyinstaller
