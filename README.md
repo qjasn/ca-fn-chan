@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/qjasn/ca-fn-chan/">
-    <img width="200" height="200" src="https://github.com/qjasn/ca-fn-chan/blob/main/assets/icon.jpg" alt="TAICHI-flet">
+    <img width="200" height="200" src="https://github.com/qjasn/ca-fn-chan/blob/main/assets/icon.jpg" alt="ca-fn-chan">
   </a>
 </p>
 
